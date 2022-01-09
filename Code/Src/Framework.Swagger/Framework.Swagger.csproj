@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+	  <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore"  />
+    <PackageReference Include="Swashbuckle.AspNetCore.Annotations"  />
+    <PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft"  />
+    <PackageReference Include="Swashbuckle.AspNetCore.Swagger"  />
+  </ItemGroup>
+
+</Project>

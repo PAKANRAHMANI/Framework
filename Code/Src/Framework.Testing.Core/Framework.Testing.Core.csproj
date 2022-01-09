@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+	  <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Data.SqlClient" />
+    <PackageReference Include="NHibernate" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Framework.Messages\Framework.Messages.csproj" />
+    <ProjectReference Include="..\Framework.Core\Framework.Core.csproj">
+	    <IncludeAssets>all</IncludeAssets>
+	    <ExcludeAssets>all</ExcludeAssets>
+	    <PrivateAssets>all</PrivateAssets>
+    </ProjectReference>
+    <ProjectReference Include="..\Framework.DataAccess.NH\Framework.DataAccess.NH.csproj">
+	    <IncludeAssets>all</IncludeAssets>
+	    <ExcludeAssets>all</ExcludeAssets>
+	    <PrivateAssets>all</PrivateAssets>
+    </ProjectReference>
+
+  </ItemGroup>
+
+</Project>
