@@ -16,7 +16,7 @@ namespace Framework.Logging.SeriLog
         {
             var adapter = new SeriLogAdapter(_logger);
             dependencyRegister.RegisterSingleton<Core.Logging.ILogger, SeriLogAdapter>(adapter);
-            dependencyRegister.RegisterDecorator(typeof(LoggingCommandHandlerDecorator<>), typeof(ICommandHandler<>));
+            dependencyRegister.RegisterDecorator(typeof(ICommandHandler<>), typeof(LoggingCommandHandlerDecorator<>));
         }
     }
 }
