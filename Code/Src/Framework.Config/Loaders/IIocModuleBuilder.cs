@@ -1,6 +1,4 @@
-﻿using Framework.Config;
-
-namespace Framework.Build
+﻿namespace Framework.Config.Loaders
 {
     public interface IIocModuleBuilder
     {
