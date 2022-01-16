@@ -374,3 +374,6 @@ BuildScript/coverage-results
 artifacts/
 *.DotSettings
 nCrunchTemp*
+
+#nuspec files
+*.nuspec
