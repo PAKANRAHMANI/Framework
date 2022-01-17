@@ -14,19 +14,32 @@ namespace Framework.EasyNetQ
 {
     public class EasyNetQMessageSender : IMessageSender
     {
+        #region Fields
+
         private readonly IBus _bus;
+
+        #endregion
+
+        #region Constructors
+
         public EasyNetQMessageSender(IBus bus)
         {
-            this._bus = bus;
+            _bus = bus;
         }
+
+        #endregion
+
+        #region SendMethods
 
         public async Task Send(IMessage message, string queueName, Priority priority)
         {
+            //TODO:Refactor use TemplateMethod
+
             var jsonBody = SetupMessage(message);
 
             await _bus.Advanced.PublishAsync(
                 new Exchange(queueName),
-                "",
+                string.Empty,
                 false,
                messageProperties: new MessageProperties
                {
@@ -42,12 +55,9 @@ namespace Framework.EasyNetQ
 
             await _bus.Advanced.PublishAsync(
                 new Exchange(queueName),
-                "",
+                string.Empty,
                 false,
-                messageProperties: new MessageProperties
-                {
-
-                },
+                messageProperties: new MessageProperties { },
                 Encoding.UTF8.GetBytes(jsonBody)
             );
         }
@@ -68,12 +78,27 @@ namespace Framework.EasyNetQ
             return jsonBody;
         }
 
+        #endregion
+
+        #region BatchMethods
+
         public async Task SendBatch(IEnumerable<IMessage> messages, string queueName, Priority priority)
         {
             foreach (var message in messages)
             {
-                await this.Send(message, queueName, priority);
+                await Send(message, queueName, priority);
             }
         }
+
+        public async Task SendBatch(IEnumerable<IMessage> messages, string queueName)
+        {
+            foreach (var message in messages)
+            {
+                await Send(message, queueName);
+            }
+        }
+
+        #endregion
+
     }
 }
