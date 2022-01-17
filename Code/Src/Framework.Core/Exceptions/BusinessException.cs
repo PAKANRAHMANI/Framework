@@ -4,17 +4,17 @@ using System.Text;
 
 namespace Framework.Core.Exceptions
 {
-    public class FrameworkException: Exception
+    public class BusinessException: Exception
     {
         public long Code { get; private set; }
         public string ExceptionMessage { get; private set; }
-        protected FrameworkException() { }
-        public FrameworkException(long code, string message)
+        protected BusinessException() { }
+        public BusinessException(long code, string message)
         {
             this.Code = code;
             this.ExceptionMessage = message;
         }
-        public FrameworkException(Enum errorCode, string errorMessage)
+        public BusinessException(Enum errorCode, string errorMessage)
         {
             this.Code = Convert.ToInt32(errorCode);
             this.ExceptionMessage = errorMessage;
