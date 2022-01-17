@@ -29,14 +29,14 @@ namespace Framework.AspNetCore.MiddleWares
 
         private async Task HandleException(HttpContext context,Exception exception)
         {
-            if (exception is FrameworkException FrameworkException)
-                await HandleBusinessException(context, FrameworkException);
+            if (exception is BusinessException businessException)
+                await HandleBusinessException(context, businessException);
             else await UnhandledException(context, exception);
         }
 
-        private async Task HandleBusinessException(HttpContext context, FrameworkException FrameworkException)
+        private async Task HandleBusinessException(HttpContext context, BusinessException businessException)
         {
-            var error = ExceptionDetails.Create(FrameworkException.ExceptionMessage, FrameworkException.Code);
+            var error = ExceptionDetails.Create(businessException.ExceptionMessage, businessException.Code);
             await WriteExceptionToResponse(context, error);
         }
 
