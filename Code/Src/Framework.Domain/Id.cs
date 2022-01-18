@@ -25,5 +25,10 @@ namespace Framework.Domain
         {
             return HashCode.Combine(base.GetHashCode(), DbId);
         }
+
+        protected override IEnumerable<object> GetEqualityComponents()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
