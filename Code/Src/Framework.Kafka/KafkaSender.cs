@@ -27,7 +27,7 @@ namespace Framework.Kafka
         }
 
         public async Task SendAsync(T message, MetaData metaData, CancellationToken cancellationToken = default)
-        {  //TODO:
+        {  //TODO:exception handling
             _ = await _producer.ProduceAsync(_topic, new Message<Null, string>
             {
                 Value = JsonConvert.SerializeObject(new Message<T>

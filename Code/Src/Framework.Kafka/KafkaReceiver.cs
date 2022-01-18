@@ -29,12 +29,10 @@ namespace Framework.Kafka
         }
 
         public void Receive(Action<T, MetaData> action)
-        {
+        {//TODO:exception handling
             CancellationTokenSource cts = new CancellationTokenSource();
             var cancellationToken = cts.Token;
 
-            Task.Factory.StartNew(() =>
-            {
                 try
                 {
                     StartReceiving(action, cancellationToken);
@@ -44,11 +42,10 @@ namespace Framework.Kafka
                     Console.WriteLine("Closing consumer.");
                     _consumer.Close();
                 }
-            });
         }
 
         private void StartReceiving(Action<T, MetaData> action, CancellationToken cancellationToken)
-        {
+        {//TODO:exception handling
             while (true)
             {
                 try
