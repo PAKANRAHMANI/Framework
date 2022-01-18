@@ -2,7 +2,7 @@
 using System;
 using System.Text.Json;
 using System.Threading;
-using System.Threading.Tasks;
+using System.Collections.Concurrent;
 
 namespace Framework.Kafka
 {
@@ -10,14 +10,12 @@ namespace Framework.Kafka
     {
         private readonly IConsumer<Ignore, string> _consumer;
 
-        public KafkaReceiver(string bootstrapServers, string topic, string groupId)
+        public KafkaReceiver(string bootstrapServers, string topic, string groupId, bool enableAutoOffsetStore = false, AutoOffsetReset autoOffsetReset = Confluent.Kafka.AutoOffsetReset.Latest)
         {
-            var config = new ConsumerConfig
-            {
-                GroupId = groupId,
-                BootstrapServers = bootstrapServers,
-                AutoOffsetReset = AutoOffsetReset.Earliest,
-            };
+
+            var config = GetConsumerConfig(groupId, bootstrapServers, enableAutoOffsetStore, autoOffsetReset);
+            var builder = new ConsumerBuilder<string, byte[]>(config);
+            builder.SetErrorHandler(OnError);
 
             _consumer = new ConsumerBuilder<Ignore, string>(config).Build();
             _consumer.Subscribe(topic);
@@ -33,15 +31,15 @@ namespace Framework.Kafka
             CancellationTokenSource cts = new CancellationTokenSource();
             var cancellationToken = cts.Token;
 
-                try
-                {
-                    StartReceiving(action, cancellationToken);
-                }
-                catch (OperationCanceledException)
-                {
-                    Console.WriteLine("Closing consumer.");
-                    _consumer.Close();
-                }
+            try
+            {
+                StartReceiving(action, cancellationToken);
+            }
+            catch (OperationCanceledException)
+            {
+                Console.WriteLine("Closing consumer.");
+                _consumer.Close();
+            }
         }
 
         private void StartReceiving(Action<T, MetaData> action, CancellationToken cancellationToken)
@@ -62,9 +60,20 @@ namespace Framework.Kafka
                 }
                 catch (ConsumeException e)
                 {
-                    Console.WriteLine($"Consume error: {e.Error.Reason}");
                 }
             }
+        }
+        internal static ConsumerConfig GetConsumerConfig(string groupId, string bootstrapServers, bool enableAutoOffsetStore, AutoOffsetReset autoOffsetReset) =>
+            new ConsumerConfig
+            {
+                GroupId = groupId,
+                BootstrapServers = bootstrapServers,
+                EnableAutoOffsetStore = enableAutoOffsetStore,
+                AutoOffsetReset = autoOffsetReset
+            };
+
+        private void OnError(IConsumer<string, byte[]> consumer, Error error)
+        {
         }
     }
 }
