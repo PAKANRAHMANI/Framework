@@ -51,7 +51,7 @@ namespace Framework.AspNetCore.MiddleWares
 
         private async Task HandleBusinessException(HttpContext context, BusinessException businessException)
         {
-            var error = ExceptionDetails.Create(businessException.ExceptionMessage, businessException.Code);
+            var error = ExceptionDetails.Create(businessException.ExceptionMessage, businessException.ErrorCode);
             await WriteExceptionToResponse(context, error);
         }
 
