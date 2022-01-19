@@ -1,5 +1,4 @@
-﻿using Framework.Core.Constants;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -7,6 +6,7 @@ namespace Framework.Core.Exceptions
 {
     public class BusinessException : Exception
     {
+        private const long BoundedContextCodesDefault = -1000;
         #region Properties
 
         public long ErrorCode { get; private set; }
@@ -20,7 +20,7 @@ namespace Framework.Core.Exceptions
         protected BusinessException() { }
         public BusinessException(long code,
             string message,
-            long boundedContextCode = BoundedContextCodes.Default)
+            long boundedContextCode = BoundedContextCodesDefault)
         {
             this.ErrorCode = code;
             this.ExceptionMessage = message;
@@ -29,7 +29,7 @@ namespace Framework.Core.Exceptions
 
         public BusinessException(Enum errorCode,
             string errorMessage,
-            long boundedContextCode = BoundedContextCodes.Default)
+            long boundedContextCode = BoundedContextCodesDefault)
         {
             this.ErrorCode = Convert.ToInt32(errorCode);
             this.ExceptionMessage = errorMessage;

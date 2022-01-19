@@ -28,7 +28,7 @@ namespace Framework.Domain
 
         protected override IEnumerable<object> GetEqualityComponents()
         {
-            throw new NotImplementedException();
+            yield return DbId;
         }
     }
 }
