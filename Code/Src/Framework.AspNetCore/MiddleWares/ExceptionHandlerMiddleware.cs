@@ -10,25 +10,20 @@ namespace Framework.AspNetCore.MiddleWares
 {
     public class ExceptionHandlerMiddleware
     {
-        #region Fields
-
         private readonly RequestDelegate _next;
 
         private readonly SentryConfiguration _sentryConfiguration;
 
-        #endregion
-
-        #region Constructors
+        public ExceptionHandlerMiddleware(RequestDelegate next)
+        {
+            _next = next;
+        }
 
         public ExceptionHandlerMiddleware(RequestDelegate next, SentryConfiguration sentryConfiguration)
         {
             _next = next;
             _sentryConfiguration = sentryConfiguration;
         }
-
-        #endregion
-
-        #region Methods
 
         public async Task InvokeAsync(HttpContext context)
         {
@@ -64,10 +59,16 @@ namespace Framework.AspNetCore.MiddleWares
 
         private async Task UnhandledException(HttpContext httpContext, Exception exception)
         {
-            CaptureOnSentry(exception);
+            if (IsUnhandledExceptionsCapturedBySentry())
+                CaptureOnSentry(exception);
 
             var error = ExceptionDetails.Create(exception.Message, -1000);
             await WriteExceptionToResponse(httpContext, error);
+        }
+
+        private bool IsUnhandledExceptionsCapturedBySentry()
+        {
+            return _sentryConfiguration != null;
         }
 
         private void CaptureOnSentry(Exception exception)
@@ -77,7 +78,5 @@ namespace Framework.AspNetCore.MiddleWares
                 SentrySdk.CaptureException(exception);
             }
         }
-
-        #endregion
     }
 }
