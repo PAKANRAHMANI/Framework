@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
@@ -8,4 +8,8 @@
 		<PackageReference Include="FluentFTP" Version="36.1.0" />
 		<PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
 	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Framework.Config\Framework.Config.csproj" />
+	</ItemGroup>
+
 </Project>
