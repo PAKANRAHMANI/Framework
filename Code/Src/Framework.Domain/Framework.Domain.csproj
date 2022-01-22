@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Framework.Core\Framework.Core.csproj" >
+    <ProjectReference Include="..\Framework.Core\Framework.Core.csproj">
 	    <IncludeAssets>all</IncludeAssets>
 	    <ExcludeAssets>all</ExcludeAssets>
 	    <PrivateAssets>all</PrivateAssets>
