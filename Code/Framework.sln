@@ -68,6 +68,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Framework.Messages", "Src\F
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Framework.FileUpload", "Src\Framework.FileUpload\Framework.FileUpload.csproj", "{A93164F9-30DC-4C47-92A9-411B1EF00C12}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Framework.Kafka", "Src\Framework.Kafka\Framework.Kafka.csproj", "{55540178-A247-4588-9085-69B8A1C61D68}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -180,6 +182,10 @@ Global
 		{A93164F9-30DC-4C47-92A9-411B1EF00C12}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A93164F9-30DC-4C47-92A9-411B1EF00C12}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A93164F9-30DC-4C47-92A9-411B1EF00C12}.Release|Any CPU.Build.0 = Release|Any CPU
+		{55540178-A247-4588-9085-69B8A1C61D68}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{55540178-A247-4588-9085-69B8A1C61D68}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{55540178-A247-4588-9085-69B8A1C61D68}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{55540178-A247-4588-9085-69B8A1C61D68}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -212,6 +218,7 @@ Global
 		{2354D154-3C8F-4DD5-B698-8EF7D37238A8} = {25A183FD-7661-4697-96E4-895E57A64352}
 		{2A2489ED-CDB0-4CA6-BB40-30FFD24D900F} = {25A183FD-7661-4697-96E4-895E57A64352}
 		{A93164F9-30DC-4C47-92A9-411B1EF00C12} = {25A183FD-7661-4697-96E4-895E57A64352}
+		{55540178-A247-4588-9085-69B8A1C61D68} = {25A183FD-7661-4697-96E4-895E57A64352}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {FD22E860-CCCE-47C1-B1BE-51511F2D9BF8}

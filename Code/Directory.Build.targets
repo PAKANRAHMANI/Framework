@@ -1,6 +1,7 @@
 <Project>
 	<ItemGroup>
 		<PackageReference Update="Microsoft.AspNetCore" Version="2.2.0" />
+		<PackageReference Update="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
 		<PackageReference Update="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
 		<PackageReference Update="Microsoft.AspNetCore.Http" Version="2.2.2" />
 		<PackageReference Update="System.Drawing.Common" Version="5.0.2" />
@@ -20,6 +21,8 @@
 		<PackageReference Update="Swashbuckle.AspNetCore.Newtonsoft" Version="6.1.5" />
 		<PackageReference Update="Swashbuckle.AspNetCore.Swagger" Version="6.1.5" />
 		<PackageReference Update="FluentAssertions" Version="5.10.3" />
+		<PackageReference Update="Confluent.Kafka" Version="1.8.2" />
+		<PackageReference Update="Newtonsoft.Json" Version="13.0.1" />
 		<PackageReference Update="xunit" Version="2.4.1" />
 		<PackageReference Update="xunit.runner.visualstudio" Version="2.4.3">
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
