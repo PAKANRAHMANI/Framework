@@ -4,23 +4,23 @@ using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.IO;
-using System.Net;
-using System.Text;
+
 
 namespace Framework.Kafka
 {
-    public class KafkaSender<T> : IMessageSender<T>, IDisposable
+    public class KafkaSender : IKafkaSender, IDisposable
     {
-        private readonly string _topic;
+        private readonly KafkaSenderConfiguration _configuration;
         private readonly IProducer<Null, string> _producer;
-        private readonly int _messageTimeoutMs;
-
-        public KafkaSender(string bootstrapServers, string topic, int messageTimeoutMs = 10000)
+        public event EventHandler<ErrorEventArgs> Error;
+        public KafkaSender(KafkaSenderConfiguration configuration)
         {
-            _topic = topic;
-            _messageTimeoutMs = messageTimeoutMs;
-
-            var config = GetProducerConfig(bootstrapServers, messageTimeoutMs);
+            _configuration = configuration;
+            var config = new ProducerConfig()
+            {
+                BootstrapServers = configuration.BootstrapServers,
+                MessageTimeoutMs = configuration.MessageTimeoutMs
+            };
 
             var producerBuilder = new ProducerBuilder<string, byte[]>(config);
 
@@ -29,38 +29,23 @@ namespace Framework.Kafka
             _producer = new ProducerBuilder<Null, string>(config).Build();
         }
 
+
+        public async Task Send<T>(T message, KafkaSenderConfiguration configuration, CancellationToken cancellationToken = default)
+        {
+            await _producer.ProduceAsync(_configuration.TopicName, new Message<Null, string>
+            {
+                Value = JsonConvert.SerializeObject(message),
+            }, cancellationToken);
+        }
+        
+        private void OnError(IProducer<string, byte[]> producer, Error error)
+        {
+            Error?.Invoke(this, new ErrorEventArgs(new KafkaException(error)));
+        }
         public void Dispose()
         {
             _producer.Flush(TimeSpan.FromSeconds(10));
             _producer.Dispose();
         }
-
-        public async Task SendAsync(T message, MetaData metaData, CancellationToken cancellationToken = default)
-        {  
-            _ = await _producer.ProduceAsync(_topic, new Message<Null, string>
-            {
-                Value = JsonConvert.SerializeObject(new Message<T>
-                {
-                    Data = message,
-                    MetaData = metaData,
-                }),
-            }, cancellationToken);
-        }
-
-        internal static ProducerConfig GetProducerConfig(string bootstrapServers, int messageTimeoutMs)
-        {
-            return new ProducerConfig()
-            {
-                BootstrapServers = bootstrapServers,
-                MessageTimeoutMs = messageTimeoutMs
-            };
-        }
-
-        private void OnError(IProducer<string, byte[]> producer, Error error)
-        {
-            Error?.Invoke(this, new ErrorEventArgs(new KafkaException(error)));
-        }
-
-        public event EventHandler<ErrorEventArgs> Error;
     }
 }
