@@ -3,6 +3,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using Framework.Core.Exceptions;
+using Framework.AspNetCore.Configurations;
+using Sentry;
 
 namespace Framework.AspNetCore.MiddleWares
 {
@@ -10,9 +12,17 @@ namespace Framework.AspNetCore.MiddleWares
     {
         private readonly RequestDelegate _next;
 
+        private readonly SentryConfiguration _sentryConfiguration;
+
         public ExceptionHandlerMiddleware(RequestDelegate next)
         {
             _next = next;
+        }
+
+        public ExceptionHandlerMiddleware(RequestDelegate next, SentryConfiguration sentryConfiguration)
+        {
+            _next = next;
+            _sentryConfiguration = sentryConfiguration;
         }
 
         public async Task InvokeAsync(HttpContext context)
@@ -23,33 +33,50 @@ namespace Framework.AspNetCore.MiddleWares
             }
             catch (Exception exception)
             {
-                await HandleException(context,exception);
+                await HandleException(context, exception);
             }
         }
 
-        private async Task HandleException(HttpContext context,Exception exception)
+        private async Task HandleException(HttpContext context, Exception exception)
         {
-            if (exception is FrameworkException FrameworkException)
-                await HandleBusinessException(context, FrameworkException);
+            if (exception is BusinessException businessException)
+                await HandleBusinessException(context, businessException);
             else await UnhandledException(context, exception);
         }
 
-        private async Task HandleBusinessException(HttpContext context, FrameworkException FrameworkException)
+        private async Task HandleBusinessException(HttpContext context, BusinessException businessException)
         {
-            var error = ExceptionDetails.Create(FrameworkException.ExceptionMessage, FrameworkException.Code);
+            var error = ExceptionDetails.Create(businessException.ExceptionMessage, businessException.ErrorCode);
             await WriteExceptionToResponse(context, error);
         }
 
-        private async Task WriteExceptionToResponse(HttpContext context,ExceptionDetails error)
+        private async Task WriteExceptionToResponse(HttpContext context, ExceptionDetails error)
         {
             context.Response.StatusCode = (int)error.Code;
             context.Response.ContentType = "application/json";
             await context.Response.WriteAsync(JsonConvert.SerializeObject(error));
         }
+
         private async Task UnhandledException(HttpContext httpContext, Exception exception)
         {
-            var error =  ExceptionDetails.Create(exception.Message, -1000);
+            if (IsUnhandledExceptionsCapturedBySentry())
+                CaptureOnSentry(exception);
+
+            var error = ExceptionDetails.Create(exception.Message, -1000);
             await WriteExceptionToResponse(httpContext, error);
+        }
+
+        private bool IsUnhandledExceptionsCapturedBySentry()
+        {
+            return _sentryConfiguration != null;
+        }
+
+        private void CaptureOnSentry(Exception exception)
+        {
+            using (SentrySdk.Init(_sentryConfiguration.Dsn))
+            {
+                SentrySdk.CaptureException(exception);
+            }
         }
     }
 }

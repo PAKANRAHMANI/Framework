@@ -1,8 +1,9 @@
-﻿using System;
+﻿using Framework.Core.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Framework.Core.Utilities
+namespace Framework.Domain.CommonValueObjects.Factories
 {
     public static class MoneyFactory
     {

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Framework.Core.Exceptions
 {
-    public class EndDateShouldBeGreaterThanStartDateException : FrameworkException
+    public class EndDateShouldBeGreaterThanStartDateException : BusinessException
     {
         public EndDateShouldBeGreaterThanStartDateException():base(-1, "EndDate should be greater than StartDate")
         {

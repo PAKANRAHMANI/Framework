@@ -1,19 +1,51 @@
-﻿using Framework.Core;
-using Framework.Core.Equality;
+﻿using System.Linq;
+using System.Collections.Generic;
 
 namespace Framework.Domain
 {
-    public class ValueObject : IValueObject
-    {
-        public override bool Equals(object obj)
-        {
-            if (obj == null) return false;
-            if (obj.GetType() != this.GetType()) return false;
-            return EqualsBuilder.ReflectionEquals(this, obj);
-        }
-        public override int GetHashCode()
-        {
-            return HashCodeBuilder.ReflectionHashCode(this);
-        }
-    }
+	public abstract class ValueObject : IValueObject
+	{
+		protected abstract IEnumerable<object> GetEqualityComponents();
+
+		public override bool Equals(object obj)
+		{
+			if (obj == null)
+				return false;
+
+			if (GetType() != obj.GetType())
+				return false;
+
+			var valueObject = (ValueObject)obj;
+
+			return GetEqualityComponents().SequenceEqual(valueObject.GetEqualityComponents());
+		}
+
+		public override int GetHashCode()
+		{
+			return GetEqualityComponents()
+				.Aggregate(1, (current, obj) =>
+				{
+					unchecked
+					{
+						return current * 23 + (obj?.GetHashCode() ?? 0);
+					}
+				});
+		}
+
+		public static bool operator ==(ValueObject a, ValueObject b)
+		{
+			if (ReferenceEquals(a, null) && ReferenceEquals(b, null))
+				return true;
+
+			if (ReferenceEquals(a, null) || ReferenceEquals(b, null))
+				return false;
+
+			return a.Equals(b);
+		}
+
+		public static bool operator !=(ValueObject a, ValueObject b)
+		{
+			return !(a == b);
+		}
+	}
 }
