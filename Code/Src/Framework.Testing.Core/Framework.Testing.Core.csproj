@@ -7,6 +7,7 @@
   <ItemGroup>
     <PackageReference Include="System.Data.SqlClient" />
     <PackageReference Include="NHibernate" />
+    <PackageReference Include="MongoDB.Driver"  />
   </ItemGroup>
 
   <ItemGroup>
