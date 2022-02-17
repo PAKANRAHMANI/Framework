@@ -6,6 +6,5 @@ namespace Framework.Messages
     {
         Guid MessageId { get; }
         DateTime PublishDateTime { get; }
-        //TODO: add Priority
     }
 }

@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Framework.DataAccess.EF.Mapping;
+using Framework.Domain.Events;
 
 namespace Framework.DataAccess.EF
 {

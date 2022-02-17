@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Newtonsoft.Json;
 using Framework.Core.Events;
+using Newtonsoft.Json;
 
-namespace Framework.DataAccess.EF
+namespace Framework.Domain.Events
 {
     public static class DomainEventStructureFactory
     {

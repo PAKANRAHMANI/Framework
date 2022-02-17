@@ -1,13 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
-using Framework.Core;
-using Framework.Core.Events;
 using Framework.Domain;
+using Framework.Domain.Events;
 
 namespace Framework.DataAccess.EF
 {

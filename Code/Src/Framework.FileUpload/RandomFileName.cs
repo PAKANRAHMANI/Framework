@@ -17,7 +17,6 @@ namespace Framework.FileUpload
                                                         .Append(fileName[3].ToString())
                                                         .ToString()
                                                         .ToLower();
-            //todo:use string builder
             var randomDirectory = Path.Combine(lowerFileName);
 
             return new PathInfo()
