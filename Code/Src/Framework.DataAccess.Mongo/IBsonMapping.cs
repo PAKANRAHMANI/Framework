@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Framework.MongoDb
+﻿namespace Framework.DataAccess.Mongo
 {
     public interface IBsonMapping
     {

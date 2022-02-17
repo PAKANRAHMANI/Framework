@@ -56,6 +56,14 @@ namespace Framework.Config.Autofac
             _container.RegisterType<TImplementation>().As<TService>().InstancePerLifetimeScope();
         }
 
+        public void RegisterSingleton<TService>(Func<TService> factory, Action<TService> release = null)
+        {
+            var registration = _container.Register(a => factory.Invoke()).SingleInstance();
+
+            if (release != null)
+                registration.OnRelease(release);
+        }
+
         public void RegisterSingleton<TService, TImplementation>() where TImplementation : TService
         {
             _container.RegisterType<TImplementation>().As<TService>().SingleInstance();

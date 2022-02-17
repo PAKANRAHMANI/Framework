@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using MongoDB.Driver;
+﻿using System.Threading.Tasks;
 using Framework.Domain;
+using MongoDB.Driver;
 
-namespace Framework.MongoDb
+namespace Framework.DataAccess.Mongo
 {
     public abstract class MongoDbRepository<TKey, T> : IRepository<TKey, T> where T :  AggregateRoot<TKey>
     {

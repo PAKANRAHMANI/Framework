@@ -16,6 +16,7 @@ namespace Framework.Config
         void RegisterScoped<TService>(Type implementationType);
         void RegisterScoped(Type implementationType);
         void RegisterScoped<TService, TImplementation>() where TImplementation : TService;
+        void RegisterSingleton<TService>(Func<TService> factory, Action<TService> release = null);
         void RegisterSingleton<TService, TImplementation>() where TImplementation : TService;
         void RegisterSingleton<TService, TInstance>(TInstance instance) where TService : class where TInstance : TService;
         void RegisterTransient<TService, TImplementation>() where TImplementation : TService;

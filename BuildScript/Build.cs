@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Nuke.Common;
 using Nuke.Common.Execution;
@@ -77,25 +80,47 @@ namespace _build
                     .SetNoDependencies(true)
                     .SetOutputDirectory(ArtifactsDirectory / "NugetPackages"));
             });
-
         Target Push => _ => _
-                .DependsOn(Pack)
-                .Requires(() => NugetApiUrl)
-                .Requires(() => NugetApiKey)
-                .Requires(() => Configuration.Equals(Configuration.Debug))
-                .Executes(() =>
+            //.DependsOn(Pack)
+            .Executes(() =>
+            {
+                var nugetPackages = Directory.GetFiles(ArtifactsDirectory / "NugetPackages", "*.nupkg", SearchOption.AllDirectories).ToList();
+
+
+                foreach (var nupkg in nugetPackages)
                 {
-                    GlobFiles(ArtifactsDirectory / "NugetPackages", "*.nupkg")
-                        .NotEmpty()
-                        .Where(x => !x.EndsWith(".nupkg"))
-                        .ForEach(x =>
-                        {
-                            DotNetNuGetPush(s => s
-                                .SetTargetPath(x)
-                                .SetSource(NugetApiUrl)
+                    
+                        Logger.Info($"Nuget Push : {nupkg}");
+
+                        DotNetNuGetPush(a =>
+                            a.SetSource(NugetApiUrl)
                                 .SetApiKey(NugetApiKey)
-                            );
-                        });
-                });
+                                .SetTargetPath(nupkg)
+                                .SetSkipDuplicate(true)
+                        );
+                    
+                }
+
+            
+            });
+        //Target Push => _ => _
+        //        .DependsOn(Pack)
+        //        .Requires(() => NugetApiUrl)
+        //        .Requires(() => NugetApiKey)
+        //        .Requires(() => Configuration.Equals(Configuration.Debug))
+        //        .Executes(() =>
+        //        {
+        //            GlobFiles(ArtifactsDirectory / "NugetPackages", "*.nupkg")
+        //                .NotEmpty()
+        //                .Where(x => !x.EndsWith(".nupkg"))
+        //                .ForEach(x =>
+        //                {
+        //                    DotNetNuGetPush(s => s
+        //                        .SetTargetPath(x)
+        //                        .SetSource(NugetApiUrl)
+        //                        .SetApiKey(NugetApiKey)
+        //                    );
+        //                });
+        //        });
     }
 }

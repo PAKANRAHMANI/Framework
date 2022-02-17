@@ -43,7 +43,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Framework.Restful", "Src\Fr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Framework.Utility", "Src\Framework.Utility\Framework.Utility.csproj", "{66710C5F-2BD9-45EC-823C-DD1266AF3985}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Framework.MongoDb", "Src\Framework.MongoDb\Framework.MongoDb.csproj", "{BF0260CF-CCF5-4BAC-90F9-BF811B092A15}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Framework.DataAccess.Mongo", "Src\Framework.DataAccess.Mongo\Framework.DataAccess.Mongo.csproj", "{BF0260CF-CCF5-4BAC-90F9-BF811B092A15}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Framework.Swagger", "Src\Framework.Swagger\Framework.Swagger.csproj", "{6C4B2A4F-97F4-41BA-8CC0-BF0167A1BFAF}"
 EndProject
@@ -66,9 +66,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Framework.Redis", "Src\Fram
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Framework.Messages", "Src\Framework.Messages\Framework.Messages.csproj", "{2A2489ED-CDB0-4CA6-BB40-30FFD24D900F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Framework.FileUpload", "Src\Framework.FileUpload\Framework.FileUpload.csproj", "{A93164F9-30DC-4C47-92A9-411B1EF00C12}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Framework.FileUpload", "Src\Framework.FileUpload\Framework.FileUpload.csproj", "{A93164F9-30DC-4C47-92A9-411B1EF00C12}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Framework.Kafka", "Src\Framework.Kafka\Framework.Kafka.csproj", "{55540178-A247-4588-9085-69B8A1C61D68}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Framework.Kafka", "Src\Framework.Kafka\Framework.Kafka.csproj", "{55540178-A247-4588-9085-69B8A1C61D68}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

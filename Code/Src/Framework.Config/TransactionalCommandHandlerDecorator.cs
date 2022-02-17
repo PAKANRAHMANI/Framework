@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Framework.Application.Contracts;
 using Framework.Core;
 
-namespace Framework.DataAccess.EF
+namespace Framework.Config
 {
     public class TransactionalCommandHandlerDecorator<T> : ICommandHandler<T> where T : ICommand
     {

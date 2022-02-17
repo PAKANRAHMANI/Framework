@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 
-namespace Framework.MongoDb
+namespace Framework.DataAccess.Mongo
 {
     public static class MappingInitializer
     {

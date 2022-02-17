@@ -1,10 +1,9 @@
-﻿using Framework.Domain.CommonValueObjects.Factories;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
-namespace Framework.Domain.CommonValueObjects
+namespace Framework.Core.Utilities
 {
-    public class Money : ValueObject
+    public class Money 
     {
         protected Money()
         {
@@ -37,11 +36,7 @@ namespace Framework.Domain.CommonValueObjects
             return HashCode.Combine(base.GetHashCode(), Amount, Currency);
         }
 
-        protected override IEnumerable<object> GetEqualityComponents()
-        {
-            yield return new { Amount, Currency };
-        }
-
+ 
         public static bool operator ==(Money firstMoney, Money secondMoney)
         {
             var amount = secondMoney?.Amount;
