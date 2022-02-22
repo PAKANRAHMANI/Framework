@@ -20,13 +20,13 @@ namespace Framework.DataAccess.Mongo
         {
             dependencyRegister.RegisterSingleton<IMongoDatabase>(CreateMongoDb);
 
-            if (_config.IsDecorateTransactionForCommands)
-            {
-                dependencyRegister.RegisterScoped<IUnitOfWork, MongoUnitOfWork>();
+            dependencyRegister.RegisterScoped<IUnitOfWork, MongoUnitOfWork>();
 
+            if (_config.IsDecorateTransactionForCommands)
                 dependencyRegister.RegisterDecorator(typeof(ICommandHandler<>), typeof(TransactionalCommandHandlerDecorator<>));
-            }
         }
+
+
         private IMongoDatabase CreateMongoDb()
         {
            var client = new MongoClient(_config.ConnectionString);

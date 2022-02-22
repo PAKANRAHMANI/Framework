@@ -7,6 +7,7 @@ using Nuke.Common.Execution;
 using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
 using Nuke.Common.Tools.DotNet;
+using Nuke.Common.Tools.GitVersion;
 using Nuke.Common.Utilities.Collections;
 using static Nuke.Common.IO.FileSystemTasks;
 using static Nuke.Common.IO.PathConstruction;
@@ -25,7 +26,7 @@ namespace _build
         [Solution] readonly Solution Solution;
         AbsolutePath ArtifactsDirectory => RootDirectory / "artifacts";
         [Parameter] string _nugetApiUrl = "https://azure.charisma.tech/Brokerage/Framework/_packaging/Charisma_Framework_Backend/nuget/v3/index.json";
-
+        [GitVersion] readonly GitVersion GitVersion;
         Target Clean => _ => _
             .Before(Restore)
             .Executes(() =>
