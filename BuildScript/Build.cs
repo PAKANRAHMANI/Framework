@@ -81,7 +81,7 @@ namespace _build
                     .SetOutputDirectory(ArtifactsDirectory / "NugetPackages"));
             });
         Target Push => _ => _
-            //.DependsOn(Pack)
+            .DependsOn(Pack)
             .Executes(() =>
             {
                 var nugetPackages = Directory.GetFiles(ArtifactsDirectory / "NugetPackages", "*.nupkg", SearchOption.AllDirectories).ToList();
@@ -103,24 +103,6 @@ namespace _build
 
             
             });
-        //Target Push => _ => _
-        //        .DependsOn(Pack)
-        //        .Requires(() => NugetApiUrl)
-        //        .Requires(() => NugetApiKey)
-        //        .Requires(() => Configuration.Equals(Configuration.Debug))
-        //        .Executes(() =>
-        //        {
-        //            GlobFiles(ArtifactsDirectory / "NugetPackages", "*.nupkg")
-        //                .NotEmpty()
-        //                .Where(x => !x.EndsWith(".nupkg"))
-        //                .ForEach(x =>
-        //                {
-        //                    DotNetNuGetPush(s => s
-        //                        .SetTargetPath(x)
-        //                        .SetSource(NugetApiUrl)
-        //                        .SetApiKey(NugetApiKey)
-        //                    );
-        //                });
-        //        });
+   
     }
 }
