@@ -24,9 +24,8 @@ namespace _build
 
         [Solution] readonly Solution Solution;
         AbsolutePath ArtifactsDirectory => RootDirectory / "artifacts";
-        [Parameter] string NugetApiUrl = "http://172.16.10.23:8123/repository/nuget-hosted/";
+        [Parameter] string _nugetApiUrl = "https://azure.charisma.tech/Brokerage/Framework/_packaging/Charisma_Framework_Backend/nuget/v3/index.json";
 
-        [Parameter] string NugetApiKey = "179e4329-478a-373f-b5f8-ff3003585e1c";
         Target Clean => _ => _
             .Before(Restore)
             .Executes(() =>
@@ -93,8 +92,8 @@ namespace _build
                         Logger.Info($"Nuget Push : {nupkg}");
 
                         DotNetNuGetPush(a =>
-                            a.SetSource(NugetApiUrl)
-                                .SetApiKey(NugetApiKey)
+                            a.SetSource(_nugetApiUrl)
+                                .SetApiKey("az")
                                 .SetTargetPath(nupkg)
                                 .SetSkipDuplicate(true)
                         );
