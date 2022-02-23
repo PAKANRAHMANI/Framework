@@ -89,6 +89,11 @@ namespace Framework.Config.Autofac
             _container.RegisterGenericDecorator(decorator, service);
         }
 
+        public void RegisterScoped(Type implementationType, object config)
+        {
+            _container.Register(p => config).As(implementationType).InstancePerLifetimeScope();
+        }
+
         public void RegisterRepositories(Assembly assembly)
         {
             _container.RegisterAssemblyTypes(assembly)

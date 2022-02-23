@@ -18,12 +18,16 @@ namespace Framework.DataAccess.Mongo
         }
         public void Register(IDependencyRegister dependencyRegister)
         {
+            dependencyRegister.RegisterScoped(typeof(MongoDbConfig),_config);
+
             dependencyRegister.RegisterSingleton<IMongoDatabase>(CreateMongoDb);
+
+            dependencyRegister.RegisterScoped<IMongoContext, MongoContext>();
 
             dependencyRegister.RegisterScoped<IUnitOfWork, MongoUnitOfWork>();
 
-            if (_config.IsDecorateTransactionForCommands)
-                dependencyRegister.RegisterDecorator(typeof(ICommandHandler<>), typeof(TransactionalCommandHandlerDecorator<>));
+            dependencyRegister.RegisterDecorator(typeof(ICommandHandler<>), typeof(TransactionalCommandHandlerDecorator<>));
+
         }
 
 

@@ -8,9 +8,9 @@ namespace Framework.DataAccess.Mongo
     {
         private readonly IClientSessionHandle _transaction;
 
-        public MongoUnitOfWork(IMongoClient client)
+        public MongoUnitOfWork(IMongoContext context)
         {
-            this._transaction = client.StartSession();
+            this._transaction = context.GetSession();
         }
         public async Task Begin()
         {

@@ -12,10 +12,10 @@ namespace Framework.DataAccess.Mongo
         private readonly IClientSessionHandle _session;
         private readonly MongoDbConfig _config;
 
-        protected MongoDbRepository(IMongoDatabase database, IClientSessionHandle session, MongoDbConfig config)
+        protected MongoDbRepository(IMongoDatabase database, IMongoContext mongoContext, MongoDbConfig config)
         {
             Database = database;
-            _session = session;
+            _session = mongoContext.GetSession();
             _config = config;
         }
         public abstract Task<TKey> GetNextId();

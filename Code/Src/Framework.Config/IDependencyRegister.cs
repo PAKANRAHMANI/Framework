@@ -22,5 +22,6 @@ namespace Framework.Config
         void RegisterTransient<TService, TImplementation>() where TImplementation : TService;
         void RegisterDecorator<TService, TDecorator>() where TDecorator : TService;
         void RegisterDecorator(Type service, Type decorator);
+        void RegisterScoped(Type implementationType, object config);
     }
 }
