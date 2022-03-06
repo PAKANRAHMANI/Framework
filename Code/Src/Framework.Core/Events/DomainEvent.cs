@@ -7,12 +7,14 @@ namespace Framework.Core.Events
         public Guid EventId { get; protected set; }
         public DateTime PublishDateTime { get; protected set; }
         public bool IsUsed { get; protected set; }
+        public string AggregateName { get; }
 
         protected DomainEvent()
         {
             this.EventId = Guid.NewGuid();
             this.PublishDateTime = DateTime.Now;
             this.IsUsed = false;
+            this.AggregateName = string.Empty;
         }
     }
 }

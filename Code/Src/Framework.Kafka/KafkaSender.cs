@@ -30,7 +30,7 @@ namespace Framework.Kafka
         }
 
 
-        public async Task Send<T>(T message, KafkaSenderConfiguration configuration, CancellationToken cancellationToken = default)
+        public async Task Send<T>(T message, CancellationToken cancellationToken = default)
         {
             await _producer.ProduceAsync(_configuration.TopicName, new Message<Null, string>
             {
