@@ -18,7 +18,8 @@ namespace Framework.Domain.Events
                 Body = JsonConvert.SerializeObject(domainEvent),
                 EventId = domainEvent.EventId,
                 EventType = domainEvent.GetType().ToString(),
-                PublishDateTime = domainEvent.PublishDateTime
+                PublishDateTime = domainEvent.PublishDateTime,
+                IsUsed=domainEvent.IsUsed
             };
         }
     }

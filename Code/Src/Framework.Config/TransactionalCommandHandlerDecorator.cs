@@ -20,12 +20,20 @@ namespace Framework.Config
             try
             {
                 await _unitOfWork.Begin();
+
                 await _commandHandler.Handle(command);
+
                 await _unitOfWork.Commit();
             }
             catch (Exception)
             {
-                await _unitOfWork.RollBack();
+                try
+                {
+                    await _unitOfWork.RollBack();
+                }
+                catch (Exception) { }
+
+                throw;
             }
         }
     }

@@ -6,5 +6,6 @@ namespace Framework.Core.Events
     {
         Guid EventId { get; }
         DateTime PublishDateTime { get; }
+        public bool IsUsed { get; }
     }
 }
