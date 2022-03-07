@@ -35,18 +35,7 @@ namespace Framework.Config.Autofac
                 .AsImplementedInterfaces()
                 .InstancePerLifetimeScope();
         }
-        public void RegisterKafka()
-        {
-            _container
-                .RegisterGeneric(typeof(KafkaProducer<,>))
-                .As(typeof(IKafkaProducer<,>))
-                .SingleInstance();
 
-            _container
-                .RegisterGeneric(typeof(KafkaConsumer<,>))
-                .As(typeof(IKafkaConsumer<,>))
-                .SingleInstance();
-        }
         public void RegisterScoped<TService>(Func<TService> factory, Action<TService> release = null)
         {
             var registration = _container.Register(a => factory.Invoke()).InstancePerLifetimeScope();
@@ -130,6 +119,19 @@ namespace Framework.Config.Autofac
                 .Where(a => typeof(IDomainService).IsAssignableFrom(a))
                 .AsImplementedInterfaces()
                 .InstancePerLifetimeScope();
+        }
+
+        public void RegisterKafka()
+        {
+            _container
+                .RegisterGeneric(typeof(KafkaProducer<,>))
+                .As(typeof(IKafkaProducer<,>))
+                .SingleInstance();
+
+            _container
+                .RegisterGeneric(typeof(KafkaConsumer<,>))
+                .As(typeof(IKafkaConsumer<,>))
+                .SingleInstance();
         }
     }
 }

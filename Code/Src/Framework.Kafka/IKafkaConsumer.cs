@@ -6,7 +6,7 @@ namespace Framework.Kafka
 {
     public interface IKafkaConsumer<TKey, TMessage>
     {
-        void Receive(Action<TMessage> action);
-        void Receive(Action<TMessage> action, int partitionNumber);
+        void Consume(Action<Message<TKey, TMessage>> action);
+        void Consume(Action<Message<TKey, TMessage>> action, int partitionNumber);
     }
 }
