@@ -2,7 +2,7 @@
 
 	<PropertyGroup>
 		<TargetFramework>net5.0</TargetFramework>
-		<Version>1.0.5</Version>
+		<Version>1.0.6</Version>
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="autofac" />
@@ -13,6 +13,7 @@
 		<ProjectReference Include="..\Framework.Config\Framework.Config.csproj" />
 		<ProjectReference Include="..\Framework.Core\Framework.Core.csproj" />
 		<ProjectReference Include="..\Framework.Domain\Framework.Domain.csproj" />
+		<ProjectReference Include="..\Framework.Kafka\Framework.Kafka.csproj" />
 		<ProjectReference Include="..\Framework.Query\Framework.Query.csproj" />
 	</ItemGroup>
 

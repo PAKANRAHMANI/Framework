@@ -6,6 +6,7 @@ using Autofac.Extras.DynamicProxy;
 using Framework.Application.Contracts;
 using Framework.Core;
 using Framework.Domain;
+using Framework.Kafka;
 using Framework.Query;
 
 namespace Framework.Config.Autofac
@@ -22,18 +23,30 @@ namespace Framework.Config.Autofac
         {
             _container.RegisterAssemblyTypes(assembly)
                 .As(type => type.GetInterfaces()
-                    .Where(interfaceType => interfaceType.IsClosedTypeOf(typeof(ICommandHandler<>))))
+                .Where(interfaceType => interfaceType.IsClosedTypeOf(typeof(ICommandHandler<>))))
                 .InstancePerLifetimeScope();
         }
 
         public void RegisterQueryHandlers(Assembly assembly)
         {
-            _container.RegisterAssemblyTypes(assembly)
+            _container
+                .RegisterAssemblyTypes(assembly)
                 .AsClosedTypesOf(typeof(IQueryHandler<,>))
                 .AsImplementedInterfaces()
                 .InstancePerLifetimeScope();
         }
+        public void RegisterKafka()
+        {
+            _container
+                .RegisterGeneric(typeof(KafkaProducer<,>))
+                .As(typeof(IKafkaProducer<,>))
+                .SingleInstance();
 
+            _container
+                .RegisterGeneric(typeof(KafkaConsumer<,>))
+                .As(typeof(IKafkaConsumer<,>))
+                .SingleInstance();
+        }
         public void RegisterScoped<TService>(Func<TService> factory, Action<TService> release = null)
         {
             var registration = _container.Register(a => factory.Invoke()).InstancePerLifetimeScope();

@@ -8,33 +8,35 @@ using System.IO;
 
 namespace Framework.Kafka
 {
-    public class KafkaSender : IKafkaSender, IDisposable
+    public class KafkaProducer<TKey, TMessage> : IKafkaProducer<TKey,TMessage>, IDisposable
     {
-        private readonly KafkaSenderConfiguration _configuration;
-        private readonly IProducer<Null, string> _producer;
+        private readonly KafkaConfiguration _configuration;
+        private readonly IProducer<TKey, TMessage> _producer;
         public event EventHandler<ErrorEventArgs> Error;
-        public KafkaSender(KafkaSenderConfiguration configuration)
+        public KafkaProducer(KafkaConfiguration configuration)
         {
             _configuration = configuration;
             var config = new ProducerConfig()
             {
                 BootstrapServers = configuration.BootstrapServers,
-                MessageTimeoutMs = configuration.MessageTimeoutMs
+                MessageTimeoutMs = configuration.MessageTimeoutMs,
+                Acks = Acks.All
             };
 
             var producerBuilder = new ProducerBuilder<string, byte[]>(config);
 
             producerBuilder.SetErrorHandler(OnError);
 
-            _producer = new ProducerBuilder<Null, string>(config).Build();
+            _producer = new ProducerBuilder<TKey, TMessage>(config).Build();
         }
 
 
-        public async Task Send<T>(T message, CancellationToken cancellationToken = default)
+        public async Task<DeliveryResult<TKey, TMessage>> Send(TKey tKey,TMessage message, CancellationToken cancellationToken = default)
         {
-            await _producer.ProduceAsync(_configuration.TopicName, new Message<Null, string>
+            return  await _producer.ProduceAsync(_configuration.TopicName, new Message<TKey, TMessage>
             {
-                Value = JsonConvert.SerializeObject(message),
+                Value = message,
+                Key = tKey
             }, cancellationToken);
         }
         
@@ -47,5 +49,8 @@ namespace Framework.Kafka
             _producer.Flush(TimeSpan.FromSeconds(10));
             _producer.Dispose();
         }
+
+
+       
     }
 }
