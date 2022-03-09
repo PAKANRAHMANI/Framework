@@ -22,7 +22,7 @@ namespace Framework.Kafka
             _consumerBuilder = new ConsumerBuilder<TKey, TMessage>(config).Build();
         }
 
-        public void Consume(Action<Message<TKey, TMessage>> action)
+        public void Consume(Action<ConsumeResult<TKey, TMessage>> action)
         {
 
             _consumerBuilder.Subscribe(_configuration.ConsumerTopicName);
@@ -33,11 +33,11 @@ namespace Framework.Kafka
             {
                 var consumeResult = _consumerBuilder.Consume(cancellationTokenSource.Token);
 
-                action(consumeResult.Message);
+                action(consumeResult);
             }
         }
 
-        public void Consume(Action<Message<TKey,TMessage>> action, int partitionNumber)
+        public void Consume(Action<ConsumeResult<TKey,TMessage>> action, int partitionNumber)
         {
 
             _consumerBuilder.Assign(new TopicPartition(_configuration.ConsumerTopicName, new Partition(partitionNumber)));
@@ -48,7 +48,7 @@ namespace Framework.Kafka
             {
                 var consumeResult = _consumerBuilder.Consume(cancellationTokenSource.Token);
 
-                action(consumeResult.Message);
+                action(consumeResult);
             }
         }
     }
