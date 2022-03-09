@@ -7,7 +7,7 @@ namespace Framework.Core.Events
         public Guid EventId { get; protected set; }
         public DateTime PublishDateTime { get; protected set; }
         public bool IsUsed { get; protected set; }
-        public string AggregateName { get; }
+        public string AggregateName { get; protected set; }
 
         protected DomainEvent()
         {

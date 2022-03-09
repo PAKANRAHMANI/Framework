@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Framework.Domain;
 using Framework.Domain.Events;
@@ -26,7 +27,10 @@ namespace Framework.DataAccess.Mongo
             {
                 await Database.GetCollection<T>(typeof(T).Name).InsertOneAsync(_session, aggregate);
 
-                await Database.GetCollection<DomainEventStructure>("DomainEvents").InsertManyAsync(GetDomainEvents(aggregate));
+                var domainEvent = GetDomainEvents(aggregate);
+
+                if (domainEvent.Any())
+                    await Database.GetCollection<DomainEventStructure>("DomainEvents").InsertManyAsync(domainEvent);
             }
 
             else
@@ -41,7 +45,10 @@ namespace Framework.DataAccess.Mongo
             {
                 await Database.GetCollection<T>(typeof(T).Name).ReplaceOneAsync(_session, filter, aggregate);
 
-                await Database.GetCollection<DomainEventStructure>("DomainEvents").InsertManyAsync(GetDomainEvents(aggregate));
+                var domainEvent = GetDomainEvents(aggregate);
+
+                if (domainEvent.Any())
+                    await Database.GetCollection<DomainEventStructure>("DomainEvents").InsertManyAsync(domainEvent);
             }
 
             else
@@ -58,7 +65,10 @@ namespace Framework.DataAccess.Mongo
             {
                 await Database.GetCollection<T>(typeof(T).Name).UpdateOneAsync(_session, filter, update);
 
-                await Database.GetCollection<DomainEventStructure>("DomainEvents").InsertManyAsync(GetDomainEvents(aggregate));
+                var domainEvents = GetDomainEvents(aggregate);
+
+                if (domainEvents.Any())
+                    await Database.GetCollection<DomainEventStructure>("DomainEvents").InsertManyAsync(domainEvents);
             }
 
             else

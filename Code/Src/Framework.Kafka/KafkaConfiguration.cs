@@ -6,7 +6,8 @@ namespace Framework.Kafka
     {
         public string BootstrapServers { get; set; }
 
-        public string TopicName { get; set; }
+        public string ProducerTopicName { get; set; }
+        public string ConsumerTopicName { get; set; }
 
         public int MessageTimeoutMs { get; set; }
         

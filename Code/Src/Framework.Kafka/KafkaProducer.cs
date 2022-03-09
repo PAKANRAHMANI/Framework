@@ -33,7 +33,7 @@ namespace Framework.Kafka
 
         public async Task<DeliveryResult<TKey, TMessage>> Send(TKey tKey,TMessage message, CancellationToken cancellationToken = default)
         {
-            return  await _producer.ProduceAsync(_configuration.TopicName, new Message<TKey, TMessage>
+            return  await _producer.ProduceAsync(_configuration.ProducerTopicName, new Message<TKey, TMessage>
             {
                 Value = message,
                 Key = tKey
