@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Framework.Domain;
 using Framework.Domain.Events;
+using Humanizer;
 using MongoDB.Driver;
 
 namespace Framework.DataAccess.Mongo
@@ -25,7 +26,7 @@ namespace Framework.DataAccess.Mongo
         {
             if (_config.IsDecorateTransactionForCommands)
             {
-                await Database.GetCollection<T>(typeof(T).Name).InsertOneAsync(_session, aggregate);
+                await Database.GetCollection<T>(typeof(T).Name.Pluralize()).InsertOneAsync(_session, aggregate);
 
                 var domainEvent = GetDomainEvents(aggregate);
 
@@ -34,7 +35,7 @@ namespace Framework.DataAccess.Mongo
             }
 
             else
-                await Database.GetCollection<T>(typeof(T).Name).InsertOneAsync(aggregate);
+                await Database.GetCollection<T>(typeof(T).Name.Pluralize()).InsertOneAsync(aggregate);
         }
 
         public async Task Update(T aggregate)
@@ -43,7 +44,7 @@ namespace Framework.DataAccess.Mongo
 
             if (_config.IsDecorateTransactionForCommands)
             {
-                await Database.GetCollection<T>(typeof(T).Name).ReplaceOneAsync(_session, filter, aggregate);
+                await Database.GetCollection<T>(typeof(T).Name.Pluralize()).ReplaceOneAsync(_session, filter, aggregate);
 
                 var domainEvent = GetDomainEvents(aggregate);
 
@@ -52,7 +53,7 @@ namespace Framework.DataAccess.Mongo
             }
 
             else
-                await Database.GetCollection<T>(typeof(T).Name).ReplaceOneAsync(filter, aggregate);
+                await Database.GetCollection<T>(typeof(T).Name.Pluralize()).ReplaceOneAsync(filter, aggregate);
         }
 
         public async Task Remove(T aggregate)
@@ -63,7 +64,7 @@ namespace Framework.DataAccess.Mongo
 
             if (_config.IsDecorateTransactionForCommands)
             {
-                await Database.GetCollection<T>(typeof(T).Name).UpdateOneAsync(_session, filter, update);
+                await Database.GetCollection<T>(typeof(T).Name.Pluralize()).UpdateOneAsync(_session, filter, update);
 
                 var domainEvents = GetDomainEvents(aggregate);
 
@@ -72,14 +73,14 @@ namespace Framework.DataAccess.Mongo
             }
 
             else
-                await Database.GetCollection<T>(typeof(T).Name).UpdateOneAsync(filter, update);
+                await Database.GetCollection<T>(typeof(T).Name.Pluralize()).UpdateOneAsync(filter, update);
         }
 
         public async Task<T> Get(TKey key)
         {
             var filter = Builders<T>.Filter.Eq("_id", key);
 
-            return await Database.GetCollection<T>(typeof(T).Name).Find(filter).FirstOrDefaultAsync();
+            return await Database.GetCollection<T>(typeof(T).Name.Pluralize()).Find(filter).FirstOrDefaultAsync();
         }
 
         private List<DomainEventStructure> GetDomainEvents(T aggregate)
