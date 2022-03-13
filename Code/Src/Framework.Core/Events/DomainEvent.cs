@@ -8,6 +8,7 @@ namespace Framework.Core.Events
         public DateTime PublishDateTime { get; protected set; }
         public bool IsUsed { get; protected set; }
         public string AggregateName { get; protected set; }
+        public Guid AggregateId { get; protected set; }
 
         protected DomainEvent()
         {
@@ -15,6 +16,7 @@ namespace Framework.Core.Events
             this.PublishDateTime = DateTime.Now;
             this.IsUsed = false;
             this.AggregateName = string.Empty;
+            this.AggregateId = Guid.Empty;
         }
     }
 }

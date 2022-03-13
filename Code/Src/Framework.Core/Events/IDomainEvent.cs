@@ -8,5 +8,6 @@ namespace Framework.Core.Events
         DateTime PublishDateTime { get; }
         public bool IsUsed { get; }
         string AggregateName { get; }
+        Guid AggregateId { get; }
     }
 }
