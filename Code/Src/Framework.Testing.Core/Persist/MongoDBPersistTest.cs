@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace Framework.Testing.Core.Persist
@@ -40,12 +41,12 @@ namespace Framework.Testing.Core.Persist
 
         public void Dispose()
         {
-            this._mongoDb.DropCollection(this._collectionName);
+            var deleteFilter = Builders<T>.Filter.Eq("_id",this._config.DocumentId);
+
+            this.DbCollection.DeleteOne(deleteFilter);
 
             if (this._config.IsUsingTransaction)
                 this.Session.Dispose();
-
-            this._client.DropDatabase(this._config.DbName);
         }
     }
 }
