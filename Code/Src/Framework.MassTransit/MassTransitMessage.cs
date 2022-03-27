@@ -14,6 +14,6 @@ namespace Framework.MassTransit
         public IList<string> MessageType { get; set; }
         public JToken Message { get; set; }
         public DateTime SentTime { get; set; }
-        public Host Host { get; set; }
+        public MassTransitHost Host { get; set; }
     }
 }
