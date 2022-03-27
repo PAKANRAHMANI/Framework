@@ -8,7 +8,7 @@ using MongoDB.Driver;
 
 namespace Framework.Testing.Core.Persist
 {
-    public class MongoDbPersistTest<T> : IDisposable
+    public abstract class MongoDbPersistTest<T> : IDisposable
     {
         private readonly IMongoClient _client;
         private readonly IMongoDatabase _mongoDb;
@@ -17,7 +17,8 @@ namespace Framework.Testing.Core.Persist
         protected IClientSessionHandle Session { get; }
         protected IMongoCollection<T> DbCollection { get; }
 
-        public MongoDbPersistTest(Action<MongoDbPersistConfiguration> configuration)
+
+        protected MongoDbPersistTest(Action<MongoDbPersistConfiguration> configuration)
         {
             this._config = new MongoDbPersistConfiguration();
 
@@ -38,10 +39,10 @@ namespace Framework.Testing.Core.Persist
                 this.Session.StartTransaction();
             }
         }
-
+        protected abstract object DocumentId { get; set; }
         public void Dispose()
         {
-            var deleteFilter = Builders<T>.Filter.Eq("_id",this._config.DocumentId);
+            var deleteFilter = Builders<T>.Filter.Eq("_id", DocumentId);
 
             this.DbCollection.DeleteOne(deleteFilter);
 

@@ -12,7 +12,6 @@ namespace Framework.Testing.Core.Persist
         public string ConnectionString { get; set; } = "mongodb://127.0.0.1:27017";
         public bool IsPluralCollectionName { get; set; } = false;
         public bool IsUsingTransaction { get; set; } = false;
-        public object DocumentId { get; set; }
 
     }
 }
