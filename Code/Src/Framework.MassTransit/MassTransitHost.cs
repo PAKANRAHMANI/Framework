@@ -1,6 +1,6 @@
 ﻿namespace Framework.MassTransit
 {
-    public class Host
+    public class MassTransitHost
     {
         public string MachineName { get; set; }
         public string ProcessName { get; set; }
