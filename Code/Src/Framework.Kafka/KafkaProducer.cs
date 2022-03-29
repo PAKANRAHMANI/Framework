@@ -8,7 +8,7 @@ using System.IO;
 
 namespace Framework.Kafka
 {
-    public class KafkaProducer<TKey, TMessage> : IKafkaProducer<TKey,TMessage>, IDisposable
+    public class KafkaProducer<TKey, TMessage> : IKafkaProducer<TKey, TMessage>, IDisposable
     {
         private readonly KafkaConfiguration _configuration;
         private readonly IProducer<TKey, TMessage> _producer;
@@ -18,7 +18,7 @@ namespace Framework.Kafka
             _configuration = configuration;
             var config = new ProducerConfig()
             {
-                BootstrapServers = configuration.BootstrapServers,
+                BootstrapServers = configuration.ProducerBootstrapServers,
                 MessageTimeoutMs = configuration.MessageTimeoutMs,
                 Acks = Acks.All
             };
@@ -31,15 +31,24 @@ namespace Framework.Kafka
         }
 
 
-        public async Task<DeliveryResult<TKey, TMessage>> Send(TKey tKey,TMessage message, CancellationToken cancellationToken = default)
+        public async Task<DeliveryResult<TKey, TMessage>> ProduceAsync(TKey key, TMessage message, CancellationToken cancellationToken = default)
         {
-            return  await _producer.ProduceAsync(_configuration.ProducerTopicName, new Message<TKey, TMessage>
+            return await _producer.ProduceAsync(_configuration.ProducerTopicName, new Message<TKey, TMessage>
             {
                 Value = message,
-                Key = tKey
+                Key = key
             }, cancellationToken);
         }
-        
+
+        public void Produce(TKey key, TMessage message, Action<DeliveryResult<TKey, TMessage>> action)
+        {
+            _producer.Produce(_configuration.ProducerTopicName, new Message<TKey, TMessage>
+            {
+                Value = message,
+                Key = key
+            }, action);
+        }
+
         private void OnError(IProducer<string, byte[]> producer, Error error)
         {
             Error?.Invoke(this, new ErrorEventArgs(new KafkaException(error)));
@@ -51,6 +60,6 @@ namespace Framework.Kafka
         }
 
 
-       
+
     }
 }

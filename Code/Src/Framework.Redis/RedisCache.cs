@@ -15,7 +15,7 @@ namespace Framework.Redis
         {
             _cache = cache;
         }
-        public T GetString<T>(string key)
+        public T Get<T>(string key)
         {
             var value = _cache.GetString(key);
 
@@ -25,7 +25,7 @@ namespace Framework.Redis
             return JsonConvert.DeserializeObject<T>(value);
         }
 
-        public async Task<T> GetStringAsync<T>(string key)
+        public async Task<T> GetAsync<T>(string key)
         {
             var value = await _cache.GetStringAsync(key);
 
@@ -35,7 +35,7 @@ namespace Framework.Redis
             return JsonConvert.DeserializeObject<T>(value);
         }
 
-        public void SetString(string key, object data, int expirationTimeInMinutes)
+        public void Set(string key, object data, int expirationTimeInMinutes)
         {
             var value = JsonConvert.SerializeObject(data);
 
@@ -46,7 +46,7 @@ namespace Framework.Redis
             _cache.SetString(key, value, options);
         }
 
-        public async Task SetStringAsync(string key, object data, int expirationTimeInMinutes)
+        public async Task SetAsync(string key, object data, int expirationTimeInMinutes)
         {
             var value = JsonConvert.SerializeObject(data);
 
@@ -57,6 +57,28 @@ namespace Framework.Redis
             await _cache.SetStringAsync(key, value, options);
         }
 
+        public void Set(string key, IEnumerable<object> data, int expirationTimeInMinutes)
+        {
+            var value = JsonConvert.SerializeObject(data);
+
+            var expiresIn = TimeSpan.FromMinutes(expirationTimeInMinutes);
+
+            var options = new DistributedCacheEntryOptions().SetAbsoluteExpiration(expiresIn);
+
+             _cache.SetString(key, value, options);
+        }
+
+
+        public async Task SetAsync(string key, IEnumerable<object> data, int expirationTimeInMinutes)
+        {
+            var value = JsonConvert.SerializeObject(data);
+
+            var expiresIn = TimeSpan.FromMinutes(expirationTimeInMinutes);
+
+            var options = new DistributedCacheEntryOptions().SetAbsoluteExpiration(expiresIn);
+
+            await _cache.SetAsync(key, Encoding.UTF8.GetBytes(value), options);
+        }
         public void Remove(string key)
         {
             _cache.Remove(key);
@@ -82,18 +104,9 @@ namespace Framework.Redis
             return true;
         }
 
-        public async Task Set(string key, IEnumerable<object> data, int expirationTimeInMinutes)
-        {
-            var value = JsonConvert.SerializeObject(data);
+    
 
-            var expiresIn = TimeSpan.FromMinutes(expirationTimeInMinutes);
-
-            var options = new DistributedCacheEntryOptions().SetAbsoluteExpiration(expiresIn);
-            
-            await _cache.SetAsync(key, Encoding.UTF8.GetBytes(value), options);
-        }
-
-        public async Task<List<T>> GetAsync<T>(string key)
+        public async Task<List<T>> GetValuesAsync<T>(string key)
         {
             var value = await _cache.GetAsync(key);
 
@@ -103,7 +116,7 @@ namespace Framework.Redis
             return JsonConvert.DeserializeObject<List<T>>(Encoding.UTF8.GetString(value));
         }
 
-        public List<T> Get<T>(string key)
+        public List<T> GetValues<T>(string key)
         {
             var value = _cache.Get(key);
 
