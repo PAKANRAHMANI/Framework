@@ -8,7 +8,7 @@ namespace Framework.Kafka
     public class KafkaConsumer<TKey, TMessage> : IKafkaConsumer<TKey, TMessage>
     {
         private readonly KafkaConfiguration _configuration;
-        private readonly IConsumer<TKey, TMessage> _consumerBuilder;
+        private readonly IConsumer<TKey, TMessage> _consumer;
         public KafkaConsumer(KafkaConfiguration configuration)
         {
             _configuration = configuration;
@@ -17,134 +17,148 @@ namespace Framework.Kafka
                 GroupId = configuration.GroupId,
                 BootstrapServers = configuration.ConsumerBootstrapServers,
                 EnableAutoOffsetStore = configuration.EnableAutoOffsetStore,
-                AutoOffsetReset = configuration.AutoOffsetReset
+                AutoOffsetReset = configuration.AutoOffsetReset,
+                EnableAutoCommit = configuration.EnableAutoCommit
             };
 
-            _consumerBuilder = new ConsumerBuilder<TKey, TMessage>(config).Build();
+            _consumer = new ConsumerBuilder<TKey, TMessage>(config).Build();
         }
 
-        public void Consume(Action<ConsumeResult<TKey, TMessage>> action)
+        public void Consume(Action<ConsumeResult<TKey, TMessage>> action,CancellationToken cancellationToken)
         {
-            _consumerBuilder.Subscribe(_configuration.ConsumerTopicName);
+            _consumer.Subscribe(_configuration.ConsumerTopicName);
 
-            var cancellationTokenSource = new CancellationTokenSource();
-
-            while (true & !cancellationTokenSource.IsCancellationRequested)
+            while (true & !cancellationToken.IsCancellationRequested)
             {
-                var consumeResult = _consumerBuilder.Consume(cancellationTokenSource.Token);
+                var consumeResult = _consumer.Consume(cancellationToken);
 
                 action(consumeResult);
             }
         }
 
-        public async Task ConsumeAsync(Action<ConsumeResult<TKey, TMessage>> action)
+        public async Task ConsumeAsync(Action<ConsumeResult<TKey, TMessage>> action, CancellationToken cancellationToken)
         {
             await Task.Run(() =>
             {
-                _consumerBuilder.Subscribe(_configuration.ConsumerTopicName);
+                _consumer.Subscribe(_configuration.ConsumerTopicName);
 
-                var cancellationTokenSource = new CancellationTokenSource();
-
-                while (true & !cancellationTokenSource.IsCancellationRequested)
+                while (true & !cancellationToken.IsCancellationRequested)
                 {
-                    var consumeResult = _consumerBuilder.Consume(cancellationTokenSource.Token);
+                    var consumeResult = _consumer.Consume(cancellationToken);
 
                     action(consumeResult);
                 }
-            });
+            }, cancellationToken);
         }
 
-        public void Consume(Action<ConsumeResult<TKey,TMessage>> action, int partitionNumber)
+        public void Consume(Action<ConsumeResult<TKey, TMessage>> action, int partitionNumber,CancellationToken cancellationToken)
         {
-            _consumerBuilder.Assign(new TopicPartition(_configuration.ConsumerTopicName, new Partition(partitionNumber)));
+            _consumer.Assign(new TopicPartition(_configuration.ConsumerTopicName, new Partition(partitionNumber)));
 
-            var cancellationTokenSource = new CancellationTokenSource();
-
-            while (true & !cancellationTokenSource.IsCancellationRequested)
+            while (true & !cancellationToken.IsCancellationRequested)
             {
-                var consumeResult = _consumerBuilder.Consume(cancellationTokenSource.Token);
+                var consumeResult = _consumer.Consume(cancellationToken);
 
                 action(consumeResult);
             }
         }
 
-        public async Task ConsumeAsync(Action<ConsumeResult<TKey, TMessage>> action, int partitionNumber)
+        public async Task ConsumeAsync(Action<ConsumeResult<TKey, TMessage>> action, int partitionNumber, CancellationToken cancellationToken)
         {
             await Task.Run(() =>
             {
-                _consumerBuilder.Assign(new TopicPartition(_configuration.ConsumerTopicName, new Partition(partitionNumber)));
+                _consumer.Assign(new TopicPartition(_configuration.ConsumerTopicName, new Partition(partitionNumber)));
 
-                var cancellationTokenSource = new CancellationTokenSource();
-
-                while (true & !cancellationTokenSource.IsCancellationRequested)
+                while (true & !cancellationToken.IsCancellationRequested)
                 {
-                    var consumeResult = _consumerBuilder.Consume(cancellationTokenSource.Token);
+                    var consumeResult = _consumer.Consume(cancellationToken);
 
                     action(consumeResult);
                 }
-            });
+            }, cancellationToken);
         }
 
-        public void Consume(Action<ConsumeResult<TKey, TMessage>> action, string topicName, int partitionNumber)
+        public void Consume(Action<ConsumeResult<TKey, TMessage>> action, string topicName, int partitionNumber, CancellationToken cancellationToken)
         {
-            _consumerBuilder.Assign(new TopicPartition(topicName, new Partition(partitionNumber)));
+            _consumer.Assign(new TopicPartition(topicName, new Partition(partitionNumber)));
 
-            var cancellationTokenSource = new CancellationTokenSource();
-
-            while (true & !cancellationTokenSource.IsCancellationRequested)
+            while (true & !cancellationToken.IsCancellationRequested)
             {
-                var consumeResult = _consumerBuilder.Consume(cancellationTokenSource.Token);
+                var consumeResult = _consumer.Consume(cancellationToken);
 
                 action(consumeResult);
             }
         }
 
-        public async Task ConsumeAsync(Action<ConsumeResult<TKey, TMessage>> action, string topicName, int partitionNumber)
+        public async Task ConsumeAsync(Action<ConsumeResult<TKey, TMessage>> action, string topicName, int partitionNumber, CancellationToken cancellationToken)
         {
             await Task.Run(() =>
             {
-                _consumerBuilder.Assign(new TopicPartition(topicName, new Partition(partitionNumber)));
+                _consumer.Assign(new TopicPartition(topicName, new Partition(partitionNumber)));
 
-                var cancellationTokenSource = new CancellationTokenSource();
-
-                while (true & !cancellationTokenSource.IsCancellationRequested)
+                while (true & !cancellationToken.IsCancellationRequested)
                 {
-                    var consumeResult = _consumerBuilder.Consume(cancellationTokenSource.Token);
+                    var consumeResult = _consumer.Consume(cancellationToken);
 
                     action(consumeResult);
                 }
-            });
+            }, cancellationToken);
         }
 
-        public void Consume(Action<ConsumeResult<TKey, TMessage>> action, string topicName)
+        public void Consume(Action<ConsumeResult<TKey, TMessage>> action, string topicName, CancellationToken cancellationToken)
         {
-            _consumerBuilder.Subscribe(topicName);
+            _consumer.Subscribe(topicName);
 
-            var cancellationTokenSource = new CancellationTokenSource();
-
-            while (true & !cancellationTokenSource.IsCancellationRequested)
+            while (true & !cancellationToken.IsCancellationRequested)
             {
-                var consumeResult = _consumerBuilder.Consume(cancellationTokenSource.Token);
+                var consumeResult = _consumer.Consume(cancellationToken);
 
                 action(consumeResult);
             }
         }
 
-        public async Task ConsumeAsync(Action<ConsumeResult<TKey, TMessage>> action, string topicName)
+        public async Task ConsumeAsync(Action<ConsumeResult<TKey, TMessage>> action, string topicName, CancellationToken cancellationToken)
         {
             await Task.Run(() =>
             {
-                _consumerBuilder.Subscribe(topicName);
+                _consumer.Subscribe(topicName);
 
-                var cancellationTokenSource = new CancellationTokenSource();
-
-                while (true & !cancellationTokenSource.IsCancellationRequested)
+                while (true & !cancellationToken.IsCancellationRequested)
                 {
-                    var consumeResult = _consumerBuilder.Consume(cancellationTokenSource.Token);
+                    var consumeResult = _consumer.Consume(cancellationToken);
 
                     action(consumeResult);
                 }
-            });
+            }, cancellationToken);
         }
+
+        public void Consume(Action<ConsumeResult<TKey, TMessage>> action, int partitionNumber, long offset, CancellationToken cancellationToken)
+        {
+            var partitionOffset = new TopicPartitionOffset(_configuration.ConsumerTopicName, new Partition(partitionNumber), new Offset(offset));
+
+            _consumer.Assign(partitionOffset);
+
+            //_consumer.Seek(partitionOffset);
+
+            while (true & !cancellationToken.IsCancellationRequested)
+            {
+                var consumeResult = _consumer.Consume(cancellationToken);
+
+                action(consumeResult);
+            }
+        }
+
+
+        public void Commit(params TopicPartitionOffset[] topicPartitionOffsets)
+        {
+            _consumer.Commit(topicPartitionOffsets);
+        }
+
+        public void Commit(ConsumeResult<TKey, TMessage> consumeResult)
+        {
+            _consumer.Commit(consumeResult);
+        }
+
+        
     }
 }

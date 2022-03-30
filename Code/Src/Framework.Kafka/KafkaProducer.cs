@@ -2,9 +2,7 @@
 using Confluent.Kafka;
 using System.Threading;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 using System.IO;
-
 
 namespace Framework.Kafka
 {
@@ -40,9 +38,26 @@ namespace Framework.Kafka
             }, cancellationToken);
         }
 
+        public async Task<DeliveryResult<TKey, TMessage>> ProduceAsync(TKey key, TMessage message, int partitionNumber, CancellationToken cancellationToken = default)
+        {
+            return await _producer.ProduceAsync(new TopicPartition(_configuration.ProducerTopicName, new Partition(partitionNumber)), new Message<TKey, TMessage>
+            {
+                Value = message,
+                Key = key
+            }, cancellationToken);
+        }
+
         public void Produce(TKey key, TMessage message, Action<DeliveryResult<TKey, TMessage>> action)
         {
             _producer.Produce(_configuration.ProducerTopicName, new Message<TKey, TMessage>
+            {
+                Value = message,
+                Key = key
+            }, action);
+        }
+        public void Produce(TKey key, TMessage message,int partitionNumber, Action<DeliveryResult<TKey, TMessage>> action)
+        {
+            _producer.Produce(new TopicPartition(_configuration.ProducerTopicName,new Partition(partitionNumber)), new Message<TKey, TMessage>
             {
                 Value = message,
                 Key = key
@@ -58,8 +73,5 @@ namespace Framework.Kafka
             _producer.Flush(TimeSpan.FromSeconds(10));
             _producer.Dispose();
         }
-
-
-
     }
 }
