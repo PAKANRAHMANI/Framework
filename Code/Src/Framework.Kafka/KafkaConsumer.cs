@@ -1,5 +1,6 @@
 ﻿using Confluent.Kafka;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -24,7 +25,7 @@ namespace Framework.Kafka
             _consumer = new ConsumerBuilder<TKey, TMessage>(config).Build();
         }
 
-        public void Consume(Action<ConsumeResult<TKey, TMessage>> action,CancellationToken cancellationToken)
+        public void Consume(Action<ConsumeResult<TKey, TMessage>> action, CancellationToken cancellationToken)
         {
             _consumer.Subscribe(_configuration.ConsumerTopicName);
 
@@ -51,7 +52,7 @@ namespace Framework.Kafka
             }, cancellationToken);
         }
 
-        public void Consume(Action<ConsumeResult<TKey, TMessage>> action, int partitionNumber,CancellationToken cancellationToken)
+        public void Consume(Action<ConsumeResult<TKey, TMessage>> action, int partitionNumber, CancellationToken cancellationToken)
         {
             _consumer.Assign(new TopicPartition(_configuration.ConsumerTopicName, new Partition(partitionNumber)));
 
@@ -148,6 +149,59 @@ namespace Framework.Kafka
             }
         }
 
+        public async Task ConsumeAsync(Action<ConsumeResult<TKey, TMessage>> action, int partitionNumber, long offset, CancellationToken cancellationToken)
+        {
+            await Task.Run(() =>
+            {
+                var partitionOffset = new TopicPartitionOffset(_configuration.ConsumerTopicName, new Partition(partitionNumber), new Offset(offset));
+
+                _consumer.Assign(partitionOffset);
+
+                //_consumer.Seek(partitionOffset);
+
+                while (true & !cancellationToken.IsCancellationRequested)
+                {
+                    var consumeResult = _consumer.Consume(cancellationToken);
+
+                    action(consumeResult);
+                }
+            }, cancellationToken);
+        }
+
+        public void Consume(Action<ConsumeResult<TKey, TMessage>> action, string topic, int partitionNumber, Timestamp timestamp, TimeSpan timeout, CancellationToken cancellationToken)
+        {
+            var topicPartitionTimeStamp = new TopicPartitionTimestamp(topic, new Partition(partitionNumber), timestamp);
+
+            var topicPartitionOffsets = _consumer.OffsetsForTimes(new List<TopicPartitionTimestamp>() { topicPartitionTimeStamp }, timeout);
+
+            _consumer.Assign(topicPartitionOffsets);
+
+            while (true & !cancellationToken.IsCancellationRequested)
+            {
+                var consumeResult = _consumer.Consume(cancellationToken);
+
+                action(consumeResult);
+            }
+        }
+
+        public async Task ConsumeAsync(Action<ConsumeResult<TKey, TMessage>> action, string topic, int partitionNumber, Timestamp timestamp, TimeSpan timeout, CancellationToken cancellationToken)
+        {
+            await Task.Run(() =>
+           {
+               var topicPartitionTimeStamp = new TopicPartitionTimestamp(topic, new Partition(partitionNumber), timestamp);
+
+               var topicPartitionOffsets = _consumer.OffsetsForTimes(new List<TopicPartitionTimestamp>() { topicPartitionTimeStamp }, timeout);
+
+               _consumer.Assign(topicPartitionOffsets);
+
+               while (true & !cancellationToken.IsCancellationRequested)
+               {
+                   var consumeResult = _consumer.Consume(cancellationToken);
+
+                   action(consumeResult);
+               }
+           }, cancellationToken);
+        }
 
         public void Commit(params TopicPartitionOffset[] topicPartitionOffsets)
         {
@@ -159,6 +213,6 @@ namespace Framework.Kafka
             _consumer.Commit(consumeResult);
         }
 
-        
+
     }
 }
