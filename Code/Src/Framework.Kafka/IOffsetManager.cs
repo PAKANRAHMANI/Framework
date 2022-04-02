@@ -1,13 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Confluent.Kafka;
 
 namespace Framework.Kafka
 {
     public interface IOffsetManager
     {
-        Position CurrentPosition();
-        void MoveTo(Position position);
+        Task<TopicPartitionOffset> CurrentOffset(string path);
+        Task Persist(string path, TopicPartitionOffset topicPartitionOffset);
     }
 }

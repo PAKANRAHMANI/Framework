@@ -18,6 +18,8 @@ namespace Framework.Kafka
             dependencyRegister.RegisterScoped(typeof(KafkaConfiguration), _configuration);
 
             dependencyRegister.RegisterKafka();
+
+            dependencyRegister.RegisterSingleton<IOffsetManager,OffsetManager>();
         }
     }
 }
