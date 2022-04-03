@@ -25,7 +25,7 @@ namespace Framework.MassTransit
         {
             var endpoint =  _sendEndpointProvider.GetSendEndpoint(new Uri($"queue:{queueName}")).Result;
 
-             endpoint.Send(message, context => context.SetPriority((byte)priority)).Wait();
+             endpoint.Send(message, context => context.SetPriority((byte)priority)).GetAwaiter().GetResult();
         }
 
         public async Task SendAsync(IMessage message, string queueName)
@@ -39,7 +39,7 @@ namespace Framework.MassTransit
         {
             var endpoint =  _sendEndpointProvider.GetSendEndpoint(new Uri($"queue:{queueName}")).Result;
 
-             endpoint.Send(message).Wait();
+             endpoint.Send(message).GetAwaiter().GetResult();
         }
 
         public async Task SendBatchAsync(IEnumerable<IMessage> messages, string queueName, Priority priority)
@@ -55,7 +55,7 @@ namespace Framework.MassTransit
             var endpoint =  _sendEndpointProvider.GetSendEndpoint(new Uri($"queue:{queueName}")).Result;
 
             foreach (var message in messages)
-                 endpoint.Send(message, context => context.SetPriority((byte)priority)).Wait();
+                 endpoint.Send(message, context => context.SetPriority((byte)priority)).GetAwaiter().GetResult();
         }
 
         public async Task SendBatchAsync(IEnumerable<IMessage> messages, string queueName)
@@ -69,7 +69,7 @@ namespace Framework.MassTransit
         {
             var endpoint =  _sendEndpointProvider.GetSendEndpoint(new Uri($"queue:{queueName}")).Result;
 
-             endpoint.SendBatch(messages).Wait();
+             endpoint.SendBatch(messages).GetAwaiter().GetResult();
         }
     }
 }
