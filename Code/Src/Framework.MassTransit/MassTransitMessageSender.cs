@@ -14,21 +14,35 @@ namespace Framework.MassTransit
         {
             _sendEndpointProvider = sendEndpointProvider;
         }
-        public async Task Send(IMessage message, string queueName, Priority priority)
+        public async Task SendAsync(IMessage message, string queueName, Priority priority)
         {
             var endpoint = await _sendEndpointProvider.GetSendEndpoint(new Uri($"queue:{queueName}"));
 
             await endpoint.Send(message, context => context.SetPriority((byte)priority));
         }
 
-        public async Task Send(IMessage message, string queueName)
+        public void Send(IMessage message, string queueName, Priority priority)
+        {
+            var endpoint =  _sendEndpointProvider.GetSendEndpoint(new Uri($"queue:{queueName}")).Result;
+
+             endpoint.Send(message, context => context.SetPriority((byte)priority)).Wait();
+        }
+
+        public async Task SendAsync(IMessage message, string queueName)
         {
             var endpoint = await _sendEndpointProvider.GetSendEndpoint(new Uri($"queue:{queueName}"));
 
             await endpoint.Send(message);
         }
 
-        public async Task SendBatch(IEnumerable<IMessage> messages, string queueName, Priority priority)
+        public void Send(IMessage message, string queueName)
+        {
+            var endpoint =  _sendEndpointProvider.GetSendEndpoint(new Uri($"queue:{queueName}")).Result;
+
+             endpoint.Send(message).Wait();
+        }
+
+        public async Task SendBatchAsync(IEnumerable<IMessage> messages, string queueName, Priority priority)
         {
             var endpoint = await _sendEndpointProvider.GetSendEndpoint(new Uri($"queue:{queueName}"));
 
@@ -36,11 +50,26 @@ namespace Framework.MassTransit
                 await endpoint.Send(message, context => context.SetPriority((byte)priority));
         }
 
-        public async Task SendBatch(IEnumerable<IMessage> messages, string queueName)
+        public void SendBatch(IEnumerable<IMessage> messages, string queueName, Priority priority)
+        {
+            var endpoint =  _sendEndpointProvider.GetSendEndpoint(new Uri($"queue:{queueName}")).Result;
+
+            foreach (var message in messages)
+                 endpoint.Send(message, context => context.SetPriority((byte)priority)).Wait();
+        }
+
+        public async Task SendBatchAsync(IEnumerable<IMessage> messages, string queueName)
         {
             var endpoint = await _sendEndpointProvider.GetSendEndpoint(new Uri($"queue:{queueName}"));
 
             await endpoint.SendBatch(messages);
+        }
+
+        public void SendBatch(IEnumerable<IMessage> messages, string queueName)
+        {
+            var endpoint =  _sendEndpointProvider.GetSendEndpoint(new Uri($"queue:{queueName}")).Result;
+
+             endpoint.SendBatch(messages).Wait();
         }
     }
 }
