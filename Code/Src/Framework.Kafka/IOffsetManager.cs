@@ -5,7 +5,7 @@ namespace Framework.Kafka
 {
     public interface IOffsetManager
     {
-        Task<TopicPartitionOffset> CurrentOffset(string path);
-        Task Persist(string path, TopicPartitionOffset topicPartitionOffset);
+        TopicPartitionOffset CurrentOffset(string path);
+        void Persist(string path, TopicPartitionOffset topicPartitionOffset);
     }
 }

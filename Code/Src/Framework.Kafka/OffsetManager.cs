@@ -10,9 +10,9 @@ namespace Framework.Kafka
 {
     public class OffsetManager : IOffsetManager
     {
-        public async Task<TopicPartitionOffset> CurrentOffset(string path)
+        public TopicPartitionOffset CurrentOffset(string path)
         {
-            var content = await File.ReadAllTextAsync(path);
+            var content = File.ReadLines(path).Last();
 
             return string.IsNullOrEmpty(content) ? null : ParseContent(content);
         }
@@ -22,12 +22,12 @@ namespace Framework.Kafka
 
             return new TopicPartitionOffset(parts.First(), new Partition(int.Parse(parts[1])), new Offset(long.Parse(parts[2])));
         }
-        public async Task Persist(string path, TopicPartitionOffset topicPartitionOffset)
+        public void Persist(string path, TopicPartitionOffset topicPartitionOffset)
         {
             var body =
                 $"{topicPartitionOffset.Topic},{topicPartitionOffset.Partition.Value},{topicPartitionOffset.Offset.Value}";
 
-            await File.AppendAllTextAsync(path, $"{body},{DateTime.Now}{Environment.NewLine}");
+            File.AppendAllText(path, $"{body},{DateTime.Now}{Environment.NewLine}");
         }
     }
 }
