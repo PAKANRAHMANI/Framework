@@ -11,7 +11,7 @@ namespace Framework.MassTransit
     {
         private readonly IServiceCollection _services;
         private readonly MassTransitConfiguration _config;
-        private readonly List<object> _consumers = new();
+        private readonly List<Type> _consumers = new();
         private bool _hasConsume = false;
         private bool _addMassTransitBus = false;
         public MassTransitBuilder(IServiceCollection services, Action<MassTransitConfiguration> massConfig)
@@ -32,9 +32,9 @@ namespace Framework.MassTransit
             this._hasConsume = true;
             return this;
         }
-        public MassTransitBuilder AddConsumer<T>()
+        public MassTransitBuilder AddConsumer(Type consumerType)
         {
-            this._consumers.Add(typeof(T));
+            this._consumers.Add(consumerType);
             return this;
         }
 
@@ -60,7 +60,7 @@ namespace Framework.MassTransit
                 {
                     foreach (var consumer in _consumers)
                     {
-                        configurator.AddConsumer(consumer.GetType());
+                        configurator.AddConsumer(consumer);
 
                         configurator.UsingRabbitMq((context, rabbitConfig) =>
                         {
@@ -74,7 +74,7 @@ namespace Framework.MassTransit
 
                                 configEndpoint.PrefetchCount = _config.PrefetchCount;
                                 configEndpoint.UseMessageRetry(retryConfig => retryConfig.Interval(_config.RetryConfiguration.RetryCount, _config.RetryConfiguration.Interval));
-                                configEndpoint.ConfigureConsumer(context, consumer.GetType());
+                                configEndpoint.ConfigureConsumer(context, consumer);
                             });
                         });
                     }
