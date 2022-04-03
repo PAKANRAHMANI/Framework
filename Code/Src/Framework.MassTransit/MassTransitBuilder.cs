@@ -64,6 +64,7 @@ namespace Framework.MassTransit
 
                         configurator.UsingRabbitMq((context, rabbitConfig) =>
                         {
+                            rabbitConfig.Host(_config.Connection);
                             rabbitConfig.ReceiveEndpoint(_config.QueueName, configEndpoint =>
                             {
                                 configEndpoint.ConfigureConsumeTopology = _config.ConfigureConsumeTopology;
@@ -73,9 +74,14 @@ namespace Framework.MassTransit
                                     configEndpoint.EnablePriority(_config.Priority.Value);
 
                                 configEndpoint.PrefetchCount = _config.PrefetchCount;
-                                configEndpoint.UseMessageRetry(retryConfig => retryConfig.Interval(_config.RetryConfiguration.RetryCount, _config.RetryConfiguration.Interval));
+
+                                if (_config.RetryConfiguration != null)
+                                    configEndpoint.UseMessageRetry(retryConfig => retryConfig.Interval(_config.RetryConfiguration.RetryCount, _config.RetryConfiguration.Interval));
+                                
                                 configEndpoint.ConfigureConsumer(context, consumer);
                             });
+                            rabbitConfig.ConfigureEndpoints(context);
+
                         });
                     }
                 }
