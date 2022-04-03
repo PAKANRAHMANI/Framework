@@ -51,7 +51,6 @@ namespace Framework.MassTransit
                             rabbitMqConfig.EnablePriority(_config.Priority.Value);
                         rabbitMqConfig.Host(_config.Connection);
                         rabbitMqConfig.ExchangeType = _config.ExchangeType;
-
                         rabbitMqConfig.ConfigureEndpoints(context);
                     }));
                 }
