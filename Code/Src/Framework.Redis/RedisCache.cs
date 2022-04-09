@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
@@ -57,21 +58,21 @@ namespace Framework.Redis
             await _cache.SetStringAsync(key, value, options);
         }
 
-        public void Set(string key, IEnumerable<object> data, int expirationTimeInMinutes)
+        public void Set(string key, int expirationTimeInMinutes, params object[] data)
         {
-            var value = JsonConvert.SerializeObject(data);
+            var value = JsonConvert.SerializeObject(data.ToList());
 
             var expiresIn = TimeSpan.FromMinutes(expirationTimeInMinutes);
 
             var options = new DistributedCacheEntryOptions().SetAbsoluteExpiration(expiresIn);
 
-             _cache.SetString(key, value, options);
+            _cache.SetString(key, value, options);
         }
 
 
-        public async Task SetAsync(string key, IEnumerable<object> data, int expirationTimeInMinutes)
+        public async Task SetAsync(string key, int expirationTimeInMinutes, params object[] data)
         {
-            var value = JsonConvert.SerializeObject(data);
+            var value = JsonConvert.SerializeObject(data.ToList());
 
             var expiresIn = TimeSpan.FromMinutes(expirationTimeInMinutes);
 
@@ -104,7 +105,7 @@ namespace Framework.Redis
             return true;
         }
 
-    
+
 
         public async Task<List<T>> GetValuesAsync<T>(string key)
         {
