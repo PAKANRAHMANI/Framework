@@ -6,13 +6,16 @@
 		<Authors>Charisma</Authors>
 		<Company>Charisma</Company>
 		<Product>Framework.MassTransit</Product>
-		<Version>1.0.8</Version>
+		<Version>1.0.26</Version>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<PackageReference Include="MassTransit.AspNetCore" Version="7.3.1" />
+		
 		<PackageReference Include="MassTransit.RabbitMQ" Version="7.3.1" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.2" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -21,14 +21,14 @@ namespace Framework.EasyNetQ
             _bus = bus;
         }
         
-        public async Task SendAsync(IMessage message, string queueName, Priority priority)
+        public async Task SendAsync(IMessage message, string exchangeName, Priority priority)
         {
             //TODO:Refactor use TemplateMethod
 
             var jsonBody = SetupMessage(message);
 
             await _bus.Advanced.PublishAsync(
-                new Exchange(queueName),
+                new Exchange(exchangeName),
                 string.Empty,
                 false,
                messageProperties: new MessageProperties
@@ -57,12 +57,12 @@ namespace Framework.EasyNetQ
             );
         }
 
-        public async Task SendAsync(IMessage message, string queueName)
+        public async Task SendAsync(IMessage message, string exchangeName)
         {
             var jsonBody = SetupMessage(message);
 
             await _bus.Advanced.PublishAsync(
-                new Exchange(queueName),
+                new Exchange(exchangeName),
                 string.Empty,
                 false,
                 messageProperties: new MessageProperties { },
