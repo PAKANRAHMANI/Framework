@@ -8,6 +8,9 @@ using Framework.Core;
 using Framework.Domain;
 using Framework.Kafka;
 using Framework.Query;
+using GreenPipes;
+using MassTransit;
+
 
 namespace Framework.Config.Autofac
 {
@@ -96,6 +99,11 @@ namespace Framework.Config.Autofac
             _container.Register(p => config).As(implementationType).InstancePerLifetimeScope();
         }
 
+        public void RegisterSingleton(Type implementationType, object config)
+        {
+            _container.Register(p => config).As(implementationType).SingleInstance();
+        }
+
         public void RegisterRepositories(Assembly assembly)
         {
             _container.RegisterAssemblyTypes(assembly)
@@ -132,6 +140,49 @@ namespace Framework.Config.Autofac
                 .RegisterGeneric(typeof(KafkaConsumer<,>))
                 .As(typeof(IKafkaConsumer<,>))
                 .SingleInstance();
+        }
+
+        public void RegisterMassTransit(MassTransitConfiguration config, params Type[] consumers)
+        {
+            _container.AddMassTransit(configurator =>
+            {
+                configurator.AddBus(context => Bus.Factory.CreateUsingRabbitMq(configure =>
+                {
+                    if (config.Priority != null)
+                        configure.EnablePriority(config.Priority.Value);
+
+                    configure.Host(config.Connection);
+                    
+                    configure.ExchangeType = config.ProducersExchangeType;
+
+                    foreach (var consumer in consumers)
+                    {
+                        configurator.AddConsumer(consumer);
+
+                        configure.ReceiveEndpoint(config.QueueName, configureEndpoint =>
+                        {
+                            if (config.Priority != null)
+                                configureEndpoint.EnablePriority(config.Priority.Value);
+
+                            configureEndpoint.ConfigureConsumeTopology = config.ConfigureConsumeTopology;
+
+                            configureEndpoint.Consumer(consumer, _ => _container.RegisterBuildCallback(lifetimeScope =>
+                            {
+                                lifetimeScope.Resolve(consumer);
+                            }));
+
+                            configureEndpoint.ExchangeType = config.EndpointExchangeType;
+
+                            if (config.RetryConfiguration != null)
+                                configureEndpoint.UseMessageRetry(messageConfig => messageConfig
+                                    .Interval(config.RetryConfiguration.RetryCount,
+                                        config.RetryConfiguration.Interval));
+                        });
+                        configure.ConfigureEndpoints(context);
+                    }
+                }));
+            });
+            
         }
     }
 }

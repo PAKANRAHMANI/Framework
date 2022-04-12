@@ -39,7 +39,7 @@ namespace Framework.MassTransit
 
         private Uri GenerateUriAddress(string exchangeName)
         {
-            return new Uri($"exchange:{exchangeName}?type={_senderConfiguration.ExchangeType}");
+            return new Uri($"exchange:{exchangeName}?type={_senderConfiguration.ProducerExchangeType}");
         }
 
         public void Send(IMessage message, string exchangeName)

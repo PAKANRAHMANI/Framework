@@ -8,6 +8,23 @@ namespace Framework.Core.Utilities
         protected Money()
         {
         }
+        protected bool Equals(Money other)
+        {
+            return Amount == other.Amount && Currency == other.Currency;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((Money) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Amount, Currency);
+        }
 
         public Money(decimal amount, string currency)
         {
@@ -18,23 +35,7 @@ namespace Framework.Core.Utilities
         public decimal Amount { get; private set; }
         public string Currency { get; private set; }
 
-        protected bool Equals(Money other)
-        {
-            return base.Equals(other) && Amount == other.Amount && Equals(Currency, other.Currency);
-        }
 
-        public override bool Equals(object obj)
-        {
-            if (ReferenceEquals(null, obj)) return false;
-            if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != this.GetType()) return false;
-            return Equals((Money)obj);
-        }
-
-        public override int GetHashCode()
-        {
-            return HashCode.Combine(base.GetHashCode(), Amount, Currency);
-        }
 
  
         public static bool operator ==(Money firstMoney, Money secondMoney)

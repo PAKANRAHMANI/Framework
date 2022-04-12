@@ -60,7 +60,7 @@ namespace Framework.Redis
 
         public void Set(string key, int expirationTimeInMinutes, params object[] data)
         {
-            var value = JsonConvert.SerializeObject(data.ToList());
+            var value = JsonConvert.SerializeObject(data);
 
             var expiresIn = TimeSpan.FromMinutes(expirationTimeInMinutes);
 
@@ -72,7 +72,7 @@ namespace Framework.Redis
 
         public async Task SetAsync(string key, int expirationTimeInMinutes, params object[] data)
         {
-            var value = JsonConvert.SerializeObject(data.ToList());
+            var value = JsonConvert.SerializeObject(data);
 
             var expiresIn = TimeSpan.FromMinutes(expirationTimeInMinutes);
 
