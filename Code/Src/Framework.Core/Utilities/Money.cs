@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Framework.Core.Utilities
 {
-    public class Money 
+    public class Money
     {
         protected Money()
         {
@@ -20,7 +20,7 @@ namespace Framework.Core.Utilities
 
         protected bool Equals(Money other)
         {
-            return base.Equals(other) && Amount == other.Amount && Equals(Currency, other.Currency);
+            return base.Equals(other) && Amount == other.Amount && Currency == other.Currency;
         }
 
         public override bool Equals(object obj)
@@ -36,7 +36,7 @@ namespace Framework.Core.Utilities
             return HashCode.Combine(base.GetHashCode(), Amount, Currency);
         }
 
- 
+
         public static bool operator ==(Money firstMoney, Money secondMoney)
         {
             var amount = secondMoney?.Amount;
