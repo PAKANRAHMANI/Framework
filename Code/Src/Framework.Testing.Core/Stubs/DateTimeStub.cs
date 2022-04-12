@@ -14,7 +14,7 @@ namespace Framework.Testing.Core.Stubs
 
         public DateTimeStub()
         {
-            this._now = DateTime.Now;
+            this._now = DateTime.UtcNow;
         }
 
         public static DateTimeStub CreateClockWhichSetsNowAs(DateTime now)

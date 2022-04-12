@@ -8,7 +8,7 @@ namespace Framework.Core.Clock
     {
         public DateTime Now()
         {
-            return DateTime.Now;
+            return DateTime.UtcNow;
         }
     }
 }
