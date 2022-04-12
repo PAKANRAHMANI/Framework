@@ -10,7 +10,7 @@ namespace Framework.Messages
         public Message()
         {
             this.MessageId = Guid.NewGuid();
-            this.PublishDateTime = DateTime.Now;
+            this.PublishDateTime = DateTime.UtcNow;
         }
     }
 }

@@ -27,7 +27,7 @@ namespace Framework.Kafka
             var body =
                 $"{topicPartitionOffset.Topic},{topicPartitionOffset.Partition.Value},{topicPartitionOffset.Offset.Value}";
 
-            File.AppendAllText(path, $"{body},{DateTime.Now}{Environment.NewLine}");
+            File.AppendAllText(path, $"{body},{DateTime.UtcNow}{Environment.NewLine}");
         }
     }
 }
