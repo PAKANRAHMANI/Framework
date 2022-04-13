@@ -6,12 +6,13 @@
 		<Authors>Charisma</Authors>
 		<Company>Charisma</Company>
 		<Product>Framework.MassTransit</Product>
-		<Version>1.0.26</Version>
+		<Version>1.0.30</Version>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<PackageReference Include="MassTransit.AspNetCore" Version="7.3.1" />
+		<PackageReference Include="MassTransit.Autofac" Version="7.3.1" />
 		
 		<PackageReference Include="MassTransit.RabbitMQ" Version="7.3.1" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.2" />
@@ -19,6 +20,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\Framework.Config\Framework.Config.csproj" />
 		<ProjectReference Include="..\Framework.Core\Framework.Core.csproj" />
 		<ProjectReference Include="..\Framework.Messages\Framework.Messages.csproj" />
 	</ItemGroup>

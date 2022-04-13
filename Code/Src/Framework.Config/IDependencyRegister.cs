@@ -23,6 +23,8 @@ namespace Framework.Config
         void RegisterDecorator<TService, TDecorator>() where TDecorator : TService;
         void RegisterDecorator(Type service, Type decorator);
         void RegisterScoped(Type implementationType, object config);
+        void RegisterSingleton(Type implementationType, object config);
         void RegisterKafka();
+        void RegisterMassTransit(MassTransitConfiguration config, params Type[] consumers); 
     }
 }
