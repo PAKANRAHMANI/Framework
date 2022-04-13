@@ -82,35 +82,35 @@ namespace Framework.EasyNetQ
                 Encoding.UTF8.GetBytes(jsonBody));
         }
 
-        public async Task SendBatchAsync(IEnumerable<IMessage> messages, string queueName, Priority priority)
+        public async Task SendBatchAsync(IEnumerable<IMessage> messages,  string exchangeName, string exchangeType, Priority priority)
         {
             foreach (var message in messages)
             {
-                await SendAsync(message, queueName, priority);
+                await SendAsync(message,exchangeName,exchangeType, priority);
             }
         }
 
-        public void SendBatch(IEnumerable<IMessage> messages, string queueName, Priority priority)
+        public void SendBatch(IEnumerable<IMessage> messages, string exchangeName, string exchangeType, Priority priority)
         {
             foreach (var message in messages)
             {
-                Send(message, queueName, priority);
+                Send(message, exchangeName, exchangeType, priority);
             }
         }
 
-        public async Task SendBatchAsync(IEnumerable<IMessage> messages, string queueName)
+        public async Task SendBatchAsync(IEnumerable<IMessage> messages, string exchangeName, string exchangeType)
         {
             foreach (var message in messages)
             {
-                await SendAsync(message, queueName);
+                await SendAsync(message, exchangeName, exchangeType);
             }
         }
 
-        public void SendBatch(IEnumerable<IMessage> messages, string queueName)
+        public void SendBatch(IEnumerable<IMessage> messages, string exchangeName, string exchangeType)
         {
             foreach (var message in messages)
             {
-                Send(message, queueName);
+                Send(message, exchangeName, exchangeType);
             }
         }
 
