@@ -43,7 +43,7 @@ namespace Framework.Core.Utilities
             var amount = secondMoney?.Amount;
             if (amount == null) return false;
             return firstMoney != null && (firstMoney.Amount == secondMoney.Amount &&
-                                          Equals(firstMoney.Currency, secondMoney.Currency));
+                                          firstMoney.Currency==secondMoney.Currency);
         }
 
         public static bool operator !=(Money firstMoney, Money secondMoney)
