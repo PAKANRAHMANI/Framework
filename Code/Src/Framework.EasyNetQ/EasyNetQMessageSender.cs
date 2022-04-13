@@ -6,6 +6,7 @@ using EasyNetQ;
 using EasyNetQ.Topology;
 using Framework.EasyNetQ.Helpers;
 using Framework.Messages;
+using MassTransit.RabbitMqTransport;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using IMessage = Framework.Messages.IMessage;
@@ -15,62 +16,61 @@ namespace Framework.EasyNetQ
     public class EasyNetQMessageSender : IMessageSender
     {
         private readonly IBus _bus;
-        
+
         public EasyNetQMessageSender(IBus bus)
         {
             _bus = bus;
         }
-        
-        public async Task SendAsync(IMessage message, string exchangeName, Priority priority)
+
+        private EasyNetQConfiguration Configure(string exchangeName, string exchangeType, Priority? priority)
         {
-            //TODO:Refactor use TemplateMethod
-
-            var jsonBody = SetupMessage(message);
-
-            await _bus.Advanced.PublishAsync(
-                new Exchange(exchangeName),
-                string.Empty,
-                false,
-               messageProperties: new MessageProperties
-               {
-                   Priority = (byte)priority,
-               },
-                Encoding.UTF8.GetBytes(jsonBody)
-            );
-        }
-
-        public void Send(IMessage message, string queueName, Priority priority)
-        {
-            //TODO:Refactor use TemplateMethod
-
-            var jsonBody = SetupMessage(message);
-
-             _bus.Advanced.Publish(
-                new Exchange(queueName),
-                string.Empty,
-                false,
-                messageProperties: new MessageProperties
+            var config = new EasyNetQConfiguration
+            {
+                Exchange = new Exchange(exchangeName, exchangeType),
+                
+            };
+            if (priority != null)
+            {
+                config.MessageProperties = new MessageProperties()
                 {
-                    Priority = (byte)priority,
-                },
-                Encoding.UTF8.GetBytes(jsonBody)
-            );
-        }
+                    Priority = (byte) priority
+                };
+            }
+            else
+            {
+                config.MessageProperties = new MessageProperties();
+            }
 
-        public async Task SendAsync(IMessage message, string exchangeName)
+            return config;
+        }
+        public async Task SendAsync(IMessage message, string exchangeName, string exchangeType, Priority priority)
         {
             var jsonBody = SetupMessage(message);
 
-            await _bus.Advanced.PublishAsync(
-                new Exchange(exchangeName),
-                string.Empty,
-                false,
-                messageProperties: new MessageProperties { },
-                Encoding.UTF8.GetBytes(jsonBody)
-            );
+            var config = Configure(exchangeName, exchangeType, priority);
+
+            await _bus.Advanced.PublishAsync(config.Exchange, string.Empty, false, config.MessageProperties, Encoding.UTF8.GetBytes(jsonBody));
         }
 
-        public void Send(IMessage message, string queueName)
+        public void Send(IMessage message, string exchangeName, string exchangeType, Priority priority)
+        {
+            var jsonBody = SetupMessage(message);
+
+            var config = Configure(exchangeName, exchangeType, priority);
+
+            _bus.Advanced.Publish(config.Exchange, string.Empty, false, config.MessageProperties, Encoding.UTF8.GetBytes(jsonBody));
+        }
+
+        public async Task SendAsync(IMessage message, string exchangeName, string exchangeType)
+        {
+            var jsonBody = SetupMessage(message);
+
+            var config = Configure(exchangeName, exchangeType,null);
+
+            await _bus.Advanced.PublishAsync(config.Exchange, string.Empty, false, messageProperties: config.MessageProperties, Encoding.UTF8.GetBytes(jsonBody));
+        }
+
+        public void Send(IMessage message, string queueName, string exchangeType)
         {
             var jsonBody = SetupMessage(message);
 
@@ -94,7 +94,7 @@ namespace Framework.EasyNetQ
         {
             foreach (var message in messages)
             {
-                 Send(message, queueName, priority);
+                Send(message, queueName, priority);
             }
         }
 
@@ -110,7 +110,7 @@ namespace Framework.EasyNetQ
         {
             foreach (var message in messages)
             {
-                 Send(message, queueName);
+                Send(message, queueName);
             }
         }
 

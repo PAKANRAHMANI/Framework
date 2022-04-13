@@ -18,8 +18,6 @@ namespace Framework.MassTransit
         }
         public void Register(IDependencyRegister dependencyRegister)
         {
-            dependencyRegister.RegisterSingleton(typeof(MassTransitConfiguration), _configuration);
-
             dependencyRegister.RegisterMassTransit(Map(_configuration), _consumers);
 
             dependencyRegister.RegisterScoped<IMessageSender, MassTransitMessageSender>();
