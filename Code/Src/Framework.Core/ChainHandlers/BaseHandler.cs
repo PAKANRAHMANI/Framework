@@ -9,7 +9,7 @@ namespace Framework.Core.ChainHandlers
     {
         private IHandler<T> _nextHandler;
 
-        public abstract Task Handle(T request);
+        public abstract Task<object> Handle(T request);
 
         public void SetNext(IHandler<T> handler)
         {
