@@ -10,7 +10,7 @@ namespace Framework.MassTransit
     {
         private readonly ISendEndpointProvider _sendEndpointProvider;
 
-        public MassTransitMessageSender(ISendEndpointProvider sendEndpointProvider, MassTransitConfiguration senderConfiguration)
+        public MassTransitMessageSender(ISendEndpointProvider sendEndpointProvider)
         {
             _sendEndpointProvider = sendEndpointProvider;
         }
