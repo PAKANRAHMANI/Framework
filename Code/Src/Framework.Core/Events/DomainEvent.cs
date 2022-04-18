@@ -13,7 +13,7 @@ namespace Framework.Core.Events
         protected DomainEvent()
         {
             this.EventId = Guid.NewGuid();
-            this.PublishDateTime = DateTime.Now;
+            this.PublishDateTime = DateTime.UtcNow;
             this.IsUsed = false;
             this.AggregateName = string.Empty;
             this.AggregateId = Guid.Empty;

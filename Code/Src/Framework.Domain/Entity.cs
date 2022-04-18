@@ -6,7 +6,7 @@ namespace Framework.Domain
     public abstract class Entity<TKey> : IEntity
     {
         public byte[] RowVersion { get; private set; }
-        public DateTime CreationDateTime { get;  }
+        public DateTime CreationDateTime { get; private set; }
         public DateTime LastUpdateDateTime { get; private set; }
         public DateTime DeleteDateTime { get; private set; }
         public bool IsDeleted { get; private set; }
@@ -14,7 +14,7 @@ namespace Framework.Domain
 
         protected Entity()
         {
-            this.CreationDateTime = DateTime.Now;
+            this.CreationDateTime = DateTime.UtcNow;
             this.IsDeleted = false;
         }
         protected bool Equals(Entity<TKey> other)
@@ -39,13 +39,13 @@ namespace Framework.Domain
 
         public void MarkAsUpdated()
         {
-           this.LastUpdateDateTime = DateTime.Now;
+           this.LastUpdateDateTime = DateTime.UtcNow;
         }
 
         public void MarkAsDeleted()
         {
             this.IsDeleted = true;
-            this.DeleteDateTime = DateTime.Now;
+            this.DeleteDateTime = DateTime.UtcNow;
         }
     }
 }

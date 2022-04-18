@@ -9,16 +9,16 @@ namespace Framework.Core.ChainHandlers
     {
         private IHandler<T> _nextHandler;
 
-        public abstract Task Handle(T request);
+        public abstract object Handle(T request);
 
         public void SetNext(IHandler<T> handler)
         {
             this._nextHandler = handler;
         }
 
-        protected async Task CallNext(T request)
+        protected object CallNext(T request)
         {
-            if (_nextHandler != null) await _nextHandler?.Handle(request);
+            return _nextHandler?.Handle(request);
         }
     }
 }

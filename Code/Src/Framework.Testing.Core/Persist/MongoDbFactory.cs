@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
+using System.IO;
 
 namespace Framework.Testing.Core.Persist
 {
@@ -19,8 +14,8 @@ namespace Framework.Testing.Core.Persist
         {
             a.ConnectionString = Config.ConnectionString;
             a.DbName = Config.DbName;
-            a.IsPluralCollectionName = false;
-            a.IsUsingTransaction = true;
+            a.IsPluralCollectionName = Config.IsPluralCollectionName;
+            a.IsUsingTransaction = Config.IsUsingTransaction;
         })
         {
 

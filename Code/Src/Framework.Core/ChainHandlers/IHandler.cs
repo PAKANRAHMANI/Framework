@@ -7,7 +7,7 @@ namespace Framework.Core.ChainHandlers
 {
     public interface IHandler<T>
     {
-        Task Handle(T request);
+        object Handle(T request);
         void SetNext(IHandler<T> handler);
     }
 }

@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MongoDB.Bson;
-using MongoDB.Driver;
+﻿using MongoDB.Driver;
+using System;
+using Humanizer;
 
 namespace Framework.Testing.Core.Persist
 {
@@ -24,7 +20,7 @@ namespace Framework.Testing.Core.Persist
 
             configuration?.Invoke(this._config);
 
-            this._collectionName = this._config.IsPluralCollectionName ? $"{typeof(T).Name}s" : $"{typeof(T).Name}";
+            this._collectionName = this._config.IsPluralCollectionName ? typeof(T).Name.Pluralize() : typeof(T).Name;
 
             this._client = new MongoClient(this._config.ConnectionString);
 
