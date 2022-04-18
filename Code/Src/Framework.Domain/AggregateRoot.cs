@@ -14,10 +14,12 @@ namespace Framework.Domain
         protected AggregateRoot()
         {
             _domainEvents = new List<IDomainEvent>();
+            _distributedEvents = new List<IDistributedEvent>();
         }
         protected AggregateRoot(IEventPublisher publisher)
         {
             _domainEvents = new List<IDomainEvent>();
+            _distributedEvents = new List<IDistributedEvent>();
             _publisher = publisher;
         }
         public void Publish<T>(T @event) where T : IDomainEvent
