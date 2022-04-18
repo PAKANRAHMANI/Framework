@@ -9,6 +9,7 @@ namespace Framework.Domain
     {
         private readonly IEventPublisher _publisher;
         private readonly List<IDomainEvent> _domainEvents;
+        private readonly List<IDistributedEvent> _distributedEvents;
 
         protected AggregateRoot()
         {
@@ -24,15 +25,27 @@ namespace Framework.Domain
             _publisher.Publish(@event);
             _domainEvents.Add(@event);
         }
-
+        public void PublishDistributed<T>(T @event) where T : IDistributedEvent
+        {
+            _publisher.Publish(@event);
+            _distributedEvents.Add(@event);
+        }
         public IReadOnlyCollection<IDomainEvent> GetEvents()
         {
             return _domainEvents.AsReadOnly();
+        }
+        public IReadOnlyCollection<IDistributedEvent> GetDistributedEvents()
+        {
+            return _distributedEvents.AsReadOnly();
         }
 
         public void ClearEvents()
         {
             _domainEvents.Clear();
+        }
+        public void ClearDistributedEvents()
+        {
+            _distributedEvents.Clear();
         }
     }
 }
