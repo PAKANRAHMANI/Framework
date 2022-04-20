@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Framework.Core.Events
 {
-    public class DistributedEvent : IDomainEvent
+    public class DistributedEvent : IDistributedEvent
     {
         public Guid EventId { get; protected set; }
         public DateTime PublishDateTime { get; protected set; }
