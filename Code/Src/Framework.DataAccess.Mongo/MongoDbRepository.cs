@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Framework.Core.Events;
 using Framework.Domain;
 using Framework.Domain.Events;
 using Humanizer;
@@ -28,10 +29,8 @@ namespace Framework.DataAccess.Mongo
             {
                 await Database.GetCollection<T>(typeof(T).Name.Pluralize()).InsertOneAsync(_session, aggregate);
 
-                var domainEvent = GetDomainEvents(aggregate);
+                await PersistEvents(aggregate);
 
-                if (domainEvent.Any())
-                    await Database.GetCollection<DomainEventStructure>("DomainEvents").InsertManyAsync(domainEvent);
             }
 
             else
@@ -46,10 +45,7 @@ namespace Framework.DataAccess.Mongo
             {
                 await Database.GetCollection<T>(typeof(T).Name.Pluralize()).ReplaceOneAsync(_session, filter, aggregate);
 
-                var domainEvent = GetDomainEvents(aggregate);
-
-                if (domainEvent.Any())
-                    await Database.GetCollection<DomainEventStructure>("DomainEvents").InsertManyAsync(domainEvent);
+                await PersistEvents(aggregate);
             }
 
             else
@@ -66,10 +62,7 @@ namespace Framework.DataAccess.Mongo
             {
                 await Database.GetCollection<T>(typeof(T).Name.Pluralize()).UpdateOneAsync(_session, filter, update);
 
-                var domainEvents = GetDomainEvents(aggregate);
-
-                if (domainEvents.Any())
-                    await Database.GetCollection<DomainEventStructure>("DomainEvents").InsertManyAsync(domainEvents);
+                await PersistEvents(aggregate);
             }
 
             else
@@ -83,11 +76,38 @@ namespace Framework.DataAccess.Mongo
             return await Database.GetCollection<T>(typeof(T).Name.Pluralize()).Find(filter).FirstOrDefaultAsync();
         }
 
+        protected async Task PersistEvents(T aggregate)
+        {
+            var domainEvent = GetDomainEvents(aggregate);
+            var distributedEvent = GetDistributedEvents(aggregate);
+
+            if (domainEvent.Any())
+            {
+                await Database.GetCollection<DomainEventStructure>("DomainEvents").InsertManyAsync(domainEvent);
+                aggregate.ClearEvents();
+            }
+
+
+            if (distributedEvent.Any())
+            {
+                await Database.GetCollection<DistributedEventStructure>("DistributedEvents").InsertManyAsync(distributedEvent);
+                aggregate.ClearEvents();
+            }
+                
+        }
+
         private List<DomainEventStructure> GetDomainEvents(T aggregate)
         {
             var domainEvents = aggregate.GetEvents();
 
             return DomainEventStructureFactory.Create(domainEvents);
+        }
+
+        private List<DistributedEventStructure> GetDistributedEvents(T aggregate)
+        {
+            var distributedEvents = aggregate.GetDistributedEvents();
+
+            return DistributedEventStructureFactory.Create(distributedEvents);
         }
     }
 }
