@@ -200,12 +200,9 @@ namespace Framework.Kafka
 
                 action(consumeResult);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 _consumer.Close();
-            }
-            finally
-            {
             }
         }
     }
