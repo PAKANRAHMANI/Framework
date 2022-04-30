@@ -12,17 +12,12 @@ namespace Framework.AspNetCore.MiddleWares
     {
         private readonly RequestDelegate _next;
 
-        private readonly SentryConfiguration _sentryConfiguration;
+        private readonly ExceptionLogConfiguration _exceptionLogConfiguration;
 
-        public ExceptionHandlerMiddleware(RequestDelegate next)
+        public ExceptionHandlerMiddleware(RequestDelegate next, ExceptionLogConfiguration exceptionLogConfiguration)
         {
             _next = next;
-        }
-
-        public ExceptionHandlerMiddleware(RequestDelegate next, SentryConfiguration sentryConfiguration)
-        {
-            _next = next;
-            _sentryConfiguration = sentryConfiguration;
+            _exceptionLogConfiguration = exceptionLogConfiguration;
         }
 
         public async Task InvokeAsync(HttpContext context)
@@ -68,12 +63,12 @@ namespace Framework.AspNetCore.MiddleWares
 
         private bool IsUnhandledExceptionsCapturedBySentry()
         {
-            return _sentryConfiguration != null;
+            return _exceptionLogConfiguration.CaptureBySentry;
         }
 
         private void CaptureOnSentry(Exception exception)
         {
-            using (SentrySdk.Init(_sentryConfiguration.Dsn))
+            using (SentrySdk.Init(_exceptionLogConfiguration.SentryConfiguration.Dsn))
             {
                 SentrySdk.CaptureException(exception);
             }
