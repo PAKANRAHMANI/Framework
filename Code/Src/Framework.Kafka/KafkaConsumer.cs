@@ -31,11 +31,10 @@ namespace Framework.Kafka
 
             while (true & !cancellationToken.IsCancellationRequested)
             {
-                var consumeResult = _consumer.Consume(cancellationToken);
-
-                action(consumeResult);
+                ConsumeFromKafka(action, cancellationToken);
             }
         }
+
 
         public async Task ConsumeAsync(Action<ConsumeResult<TKey, TMessage>> action, CancellationToken cancellationToken)
         {
@@ -45,10 +44,9 @@ namespace Framework.Kafka
 
                 while (true & !cancellationToken.IsCancellationRequested)
                 {
-                    var consumeResult = _consumer.Consume(cancellationToken);
-
-                    action(consumeResult);
+                    ConsumeFromKafka(action, cancellationToken);
                 }
+
             }, cancellationToken);
         }
 
@@ -58,9 +56,7 @@ namespace Framework.Kafka
 
             while (true & !cancellationToken.IsCancellationRequested)
             {
-                var consumeResult = _consumer.Consume(cancellationToken);
-
-                action(consumeResult);
+                ConsumeFromKafka(action, cancellationToken);
             }
         }
 
@@ -72,9 +68,7 @@ namespace Framework.Kafka
 
                 while (true & !cancellationToken.IsCancellationRequested)
                 {
-                    var consumeResult = _consumer.Consume(cancellationToken);
-
-                    action(consumeResult);
+                    ConsumeFromKafka(action, cancellationToken);
                 }
             }, cancellationToken);
         }
@@ -85,9 +79,7 @@ namespace Framework.Kafka
 
             while (true & !cancellationToken.IsCancellationRequested)
             {
-                var consumeResult = _consumer.Consume(cancellationToken);
-
-                action(consumeResult);
+                ConsumeFromKafka(action, cancellationToken);
             }
         }
 
@@ -99,9 +91,7 @@ namespace Framework.Kafka
 
                 while (true & !cancellationToken.IsCancellationRequested)
                 {
-                    var consumeResult = _consumer.Consume(cancellationToken);
-
-                    action(consumeResult);
+                    ConsumeFromKafka(action, cancellationToken);
                 }
             }, cancellationToken);
         }
@@ -112,9 +102,7 @@ namespace Framework.Kafka
 
             while (true & !cancellationToken.IsCancellationRequested)
             {
-                var consumeResult = _consumer.Consume(cancellationToken);
-
-                action(consumeResult);
+                ConsumeFromKafka(action, cancellationToken);
             }
         }
 
@@ -126,9 +114,7 @@ namespace Framework.Kafka
 
                 while (true & !cancellationToken.IsCancellationRequested)
                 {
-                    var consumeResult = _consumer.Consume(cancellationToken);
-
-                    action(consumeResult);
+                    ConsumeFromKafka(action, cancellationToken);
                 }
             }, cancellationToken);
         }
@@ -143,9 +129,7 @@ namespace Framework.Kafka
 
             while (true & !cancellationToken.IsCancellationRequested)
             {
-                var consumeResult = _consumer.Consume(cancellationToken);
-
-                action(consumeResult);
+                ConsumeFromKafka(action, cancellationToken);
             }
         }
 
@@ -161,9 +145,7 @@ namespace Framework.Kafka
 
                 while (true & !cancellationToken.IsCancellationRequested)
                 {
-                    var consumeResult = _consumer.Consume(cancellationToken);
-
-                    action(consumeResult);
+                    ConsumeFromKafka(action, cancellationToken);
                 }
             }, cancellationToken);
         }
@@ -178,9 +160,7 @@ namespace Framework.Kafka
 
             while (true & !cancellationToken.IsCancellationRequested)
             {
-                var consumeResult = _consumer.Consume(cancellationToken);
-
-                action(consumeResult);
+                ConsumeFromKafka(action, cancellationToken);
             }
         }
 
@@ -196,9 +176,8 @@ namespace Framework.Kafka
 
                while (true & !cancellationToken.IsCancellationRequested)
                {
-                   var consumeResult = _consumer.Consume(cancellationToken);
 
-                   action(consumeResult);
+                   ConsumeFromKafka(action, cancellationToken);
                }
            }, cancellationToken);
         }
@@ -213,6 +192,18 @@ namespace Framework.Kafka
             _consumer.Commit(consumeResult);
         }
 
+        private void ConsumeFromKafka(Action<ConsumeResult<TKey, TMessage>> action, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var consumeResult = _consumer.Consume(cancellationToken);
 
+                action(consumeResult);
+            }
+            catch (Exception)
+            {
+                _consumer.Close();
+            }
+        }
     }
 }
