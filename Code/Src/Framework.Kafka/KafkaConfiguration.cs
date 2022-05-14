@@ -14,5 +14,6 @@ namespace Framework.Kafka
         public bool EnableAutoOffsetStore { get; set; }
         public bool EnableAutoCommit { get; set; }
         public AutoOffsetReset AutoOffsetReset { get; set; }
+        public string OffsetPath { get; set; }
     }
 }
