@@ -23,7 +23,7 @@ using static Nuke.Common.Tools.DotNet.DotNetTasks;
 
             [Solution] readonly Solution Solution;
             AbsolutePath ArtifactsDirectory => RootDirectory / "artifacts";
-            [Parameter] string _nugetApiUrl = "https://azure.charisma.tech/Brokerage/Framework/_packaging/Charisma_Framework_Backend/nuget/v3/index.json";
+            [Parameter] string _nugetApiUrl = "https://azure.charisma.tech/Brokerage/_packaging/Charisma_Trader_Framework_Backend/nuget/v3/index.json";
             //[GitVersion] readonly GitVersion GitVersion;
             Target Clean => _ => _
                 .Before(Restore)
