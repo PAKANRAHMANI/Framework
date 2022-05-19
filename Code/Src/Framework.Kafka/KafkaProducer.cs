@@ -29,6 +29,16 @@ namespace Framework.Kafka
         }
 
 
+        public async Task<DeliveryResult<TKey, TMessage>> ProduceAsync(TKey key, TMessage message, string topicName, int partitionNumber,
+            CancellationToken cancellationToken = default)
+        {
+            return await _producer.ProduceAsync(new TopicPartition(topicName, new Partition(partitionNumber)), new Message<TKey, TMessage>
+            {
+                Value = message,
+                Key = key
+            }, cancellationToken);
+        }
+
         public async Task<DeliveryResult<TKey, TMessage>> ProduceAsync(TKey key, TMessage message, CancellationToken cancellationToken = default)
         {
             return await _producer.ProduceAsync(_configuration.ProducerTopicName, new Message<TKey, TMessage>
@@ -64,13 +74,23 @@ namespace Framework.Kafka
             }, action);
         }
 
+        public void Produce(TKey key, TMessage message, string topicName, int partitionNumber,
+            Action<DeliveryResult<TKey, TMessage>> action = null)
+        {
+            _producer.Produce(new TopicPartition(topicName, new Partition(partitionNumber)), new Message<TKey, TMessage>
+            {
+                Value = message,
+                Key = key
+            }, action);
+        }
+
         private void OnError(IProducer<string, byte[]> producer, Error error)
         {
             Error?.Invoke(this, new ErrorEventArgs(new KafkaException(error)));
         }
         public void Dispose()
         {
-            _producer.Flush(TimeSpan.FromSeconds(10));
+            _producer.Flush(TimeSpan.FromSeconds(2));
             _producer.Dispose();
         }
     }
