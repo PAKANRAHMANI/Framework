@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Framework.Application.Contracts;
 using Framework.Core.Logging;
 
-namespace Framework.Logging.SeriLog
+namespace Framework.Application
 {
     public class LoggingCommandHandlerDecorator<T> : ICommandHandler<T> where T : ICommand
     {

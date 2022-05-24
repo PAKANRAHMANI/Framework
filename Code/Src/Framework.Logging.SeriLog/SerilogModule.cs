@@ -1,5 +1,4 @@
-﻿using Framework.Application.Contracts;
-using Framework.Config;
+﻿using Framework.Config;
 using Serilog;
 
 namespace Framework.Logging.SeriLog
@@ -16,7 +15,6 @@ namespace Framework.Logging.SeriLog
         {
             var adapter = new SeriLogAdapter(_logger);
             dependencyRegister.RegisterSingleton<Core.Logging.ILogger, SeriLogAdapter>(adapter);
-            dependencyRegister.RegisterDecorator(typeof(ICommandHandler<>), typeof(LoggingCommandHandlerDecorator<>));
         }
     }
 }
