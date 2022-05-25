@@ -2,7 +2,7 @@
 using Framework.Application.Contracts;
 using Framework.Core.Logging;
 
-namespace Framework.Application
+namespace Framework.Config
 {
     public class LoggingCommandHandlerDecorator<T> : ICommandHandler<T> where T : ICommand
     {
