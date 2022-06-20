@@ -58,7 +58,7 @@ namespace Framework.Redis
             await _cache.SetStringAsync(key, value, options);
         }
 
-        public void Set(string key, int expirationTimeInMinutes, params object[] data)
+        public void Set(string key, int expirationTimeInMinutes, List<object> data)
         {
             var value = JsonConvert.SerializeObject(data);
 
@@ -69,8 +69,7 @@ namespace Framework.Redis
             _cache.SetString(key, value, options);
         }
 
-
-        public async Task SetAsync(string key, int expirationTimeInMinutes, params object[] data)
+        public async Task SetAsync(string key, int expirationTimeInMinutes, List<object> data)
         {
             var value = JsonConvert.SerializeObject(data);
 
@@ -80,6 +79,7 @@ namespace Framework.Redis
 
             await _cache.SetAsync(key, Encoding.UTF8.GetBytes(value), options);
         }
+
         public void Remove(string key)
         {
             _cache.Remove(key);
@@ -104,8 +104,6 @@ namespace Framework.Redis
 
             return true;
         }
-
-
 
         public async Task<List<T>> GetValuesAsync<T>(string key)
         {

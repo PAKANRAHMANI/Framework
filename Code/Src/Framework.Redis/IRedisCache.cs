@@ -12,8 +12,8 @@ namespace Framework.Redis
         bool TryGetValue<T>(string key, out T result);
         void Set(string key, object data, int expirationTimeInMinutes);
         Task SetAsync(string key, object data, int expirationTimeInMinutes);
-        void Set(string key, int expirationTimeInMinutes, params object[] data);
-        Task SetAsync(string key, int expirationTimeInMinutes, params object[] data);
+        void Set(string key, int expirationTimeInMinutes, List<object> data);
+        Task SetAsync(string key, int expirationTimeInMinutes, List<object> data);
         void Remove(string key);
         Task RemoveAsync(string key);
 
