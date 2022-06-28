@@ -18,7 +18,7 @@ namespace Framework.Redis
             _redisCacheConfiguration = redisCacheConfiguration;
             _database = redisHelper.GetDatabase(_redisCacheConfiguration.Connection, _redisCacheConfiguration.DbNumber);
         }
-        
+
         public void Set(string key, object data, int expirationTimeInMinutes)
         {
             if (_redisCacheConfiguration.UseFromInstanceNameInKey)
@@ -42,7 +42,7 @@ namespace Framework.Redis
 
             await _database.StringSetAsync(key, value, expiresIn);
         }
-        
+
         public T Get<T>(string key)
         {
             if (_redisCacheConfiguration.UseFromInstanceNameInKey)
@@ -74,7 +74,7 @@ namespace Framework.Redis
                 return default;
             return list;
         }
-        
+
         public async Task<T> GetAsync<T>(string key)
         {
             if (_redisCacheConfiguration.UseFromInstanceNameInKey)
@@ -110,9 +110,9 @@ namespace Framework.Redis
 
             var value = await _database.StringGetAsync(key);
 
-            return value.HasValue ? default(IEnumerable<T>) : JsonConvert.DeserializeObject<List<T>>(Encoding.UTF8.GetString(value));
+            return value.HasValue ? JsonConvert.DeserializeObject<IEnumerable<T>>(Encoding.UTF8.GetString(value)) : default(IEnumerable<T>);
         }
-        
+
         public void Remove(string key)
         {
             if (_redisCacheConfiguration.UseFromInstanceNameInKey)
