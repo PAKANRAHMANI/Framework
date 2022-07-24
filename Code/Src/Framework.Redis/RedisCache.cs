@@ -129,5 +129,14 @@ namespace Framework.Redis
             await _database.KeyDeleteAsync(key);
         }
 
+        public bool LockRelease(RedisKey key, RedisValue value, CommandFlags flags = CommandFlags.None)
+        {
+            return _database.LockRelease(key, value, flags);
+        }
+
+        public bool LockTake(RedisKey key, RedisValue value, TimeSpan expiry, CommandFlags flags = CommandFlags.None)
+        {
+            return _database.LockTake(key, value, expiry, flags);
+        }
     }
 }
