@@ -138,5 +138,15 @@ namespace Framework.Redis
         {
             return _database.LockTake(key, value, expiry, flags);
         }
+
+        public bool KeyExists(RedisKey key, CommandFlags flags = CommandFlags.None)
+        {
+            return _database.KeyExists(key, flags);
+        }
+
+        public long KeyExists(RedisKey[] keys, CommandFlags flags = CommandFlags.None)
+        {
+            return _database.KeyExists(keys, flags);
+        }
     }
 }

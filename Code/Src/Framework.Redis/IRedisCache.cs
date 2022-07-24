@@ -35,5 +35,39 @@ namespace Framework.Redis
         /// <param name="flags">The flags to use for this operation.</param>
         /// <returns><see langword="true"/> if the lock was successfully taken, <see langword="false"/> otherwise.</returns>
         bool LockTake(RedisKey key, RedisValue value, TimeSpan expiry, CommandFlags flags = CommandFlags.None);
+        //
+        // Summary:
+        //     Returns if key exists.
+        //
+        // Parameters:
+        //   key:
+        //     The key to check.
+        //
+        //   flags:
+        //     The flags to use for this operation.
+        //
+        // Returns:
+        //     true if the key exists. false if the key does not exist.
+        //
+        // Remarks:
+        //     https://redis.io/commands/exists
+        bool KeyExists(RedisKey key, CommandFlags flags = CommandFlags.None);
+        //
+        // Summary:
+        //     Indicates how many of the supplied keys exists.
+        //
+        // Parameters:
+        //   keys:
+        //     The keys to check.
+        //
+        //   flags:
+        //     The flags to use for this operation.
+        //
+        // Returns:
+        //     The number of keys that existed.
+        //
+        // Remarks:
+        //     https://redis.io/commands/exists
+        long KeyExists(RedisKey[] keys, CommandFlags flags = CommandFlags.None);
     }
 }
