@@ -117,7 +117,6 @@ namespace Framework.Redis
         {
             if (_redisCacheConfiguration.UseFromInstanceNameInKey)
                 key = _redisCacheConfiguration.InstanceName + key;
-
             _database.KeyDelete(key);
         }
 
@@ -129,24 +128,28 @@ namespace Framework.Redis
             await _database.KeyDeleteAsync(key);
         }
 
-        public bool LockRelease(RedisKey key, RedisValue value, CommandFlags flags = CommandFlags.None)
+        public bool LockRelease(string key, RedisValue value, CommandFlags flags = CommandFlags.None)
         {
+            if (_redisCacheConfiguration.UseFromInstanceNameInKey)
+                key = _redisCacheConfiguration.InstanceName + key;
+
             return _database.LockRelease(key, value, flags);
         }
 
-        public bool LockTake(RedisKey key, RedisValue value, TimeSpan expiry, CommandFlags flags = CommandFlags.None)
+        public bool LockTake(string key, RedisValue value, TimeSpan expiry, CommandFlags flags = CommandFlags.None)
         {
+            if (_redisCacheConfiguration.UseFromInstanceNameInKey)
+                key = _redisCacheConfiguration.InstanceName + key;
+
             return _database.LockTake(key, value, expiry, flags);
         }
 
-        public bool KeyExists(RedisKey key, CommandFlags flags = CommandFlags.None)
+        public bool KeyExists(string key, CommandFlags flags = CommandFlags.None)
         {
-            return _database.KeyExists(key, flags);
-        }
+            if (_redisCacheConfiguration.UseFromInstanceNameInKey)
+                key = _redisCacheConfiguration.InstanceName + key;
 
-        public long KeyExists(RedisKey[] keys, CommandFlags flags = CommandFlags.None)
-        {
-            return _database.KeyExists(keys, flags);
+            return _database.KeyExists(key, flags);
         }
     }
 }

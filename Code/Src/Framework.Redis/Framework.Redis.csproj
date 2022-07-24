@@ -6,7 +6,7 @@
 		<Authors>Charisma</Authors>
 		<Company>Charisma</Company>
 		<Product>Framework.Redis</Product>
-		<Version>1.0.11</Version>
+		<Version>1.0.12</Version>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 	</PropertyGroup>
 

@@ -24,7 +24,7 @@ namespace Framework.Redis
         /// <param name="value">The value at the key that must match.</param>
         /// <param name="flags">The flags to use for this operation.</param>
         /// <returns><see langword="true"/> if the lock was successfully released, <see langword="false"/> otherwise.</returns>
-        bool LockRelease(RedisKey key, RedisValue value, CommandFlags flags = CommandFlags.None);
+        bool LockRelease(string key, RedisValue value, CommandFlags flags = CommandFlags.None);
 
         /// <summary>
         /// Takes a lock (specifying a token value) if it is not already taken.
@@ -34,7 +34,7 @@ namespace Framework.Redis
         /// <param name="expiry">The expiration of the lock key.</param>
         /// <param name="flags">The flags to use for this operation.</param>
         /// <returns><see langword="true"/> if the lock was successfully taken, <see langword="false"/> otherwise.</returns>
-        bool LockTake(RedisKey key, RedisValue value, TimeSpan expiry, CommandFlags flags = CommandFlags.None);
+        bool LockTake(string key, RedisValue value, TimeSpan expiry, CommandFlags flags = CommandFlags.None);
         //
         // Summary:
         //     Returns if key exists.
@@ -51,23 +51,6 @@ namespace Framework.Redis
         //
         // Remarks:
         //     https://redis.io/commands/exists
-        bool KeyExists(RedisKey key, CommandFlags flags = CommandFlags.None);
-        //
-        // Summary:
-        //     Indicates how many of the supplied keys exists.
-        //
-        // Parameters:
-        //   keys:
-        //     The keys to check.
-        //
-        //   flags:
-        //     The flags to use for this operation.
-        //
-        // Returns:
-        //     The number of keys that existed.
-        //
-        // Remarks:
-        //     https://redis.io/commands/exists
-        long KeyExists(RedisKey[] keys, CommandFlags flags = CommandFlags.None);
+        bool KeyExists(string key, CommandFlags flags = CommandFlags.None);
     }
 }
