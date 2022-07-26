@@ -7,10 +7,10 @@ using Framework.Core.Events;
 
 namespace Framework.Domain.Tests.Unit.AggregateTests
 {
-    public class TestDomainEvent : DomainEvent
+    public class TestDomainEvent : DomainEvent<Guid>
     {
-        public Guid Id { get;private set; }
-        public string Name { get;private set; }
+        public Guid Id { get; private set; }
+        public string Name { get; private set; }
 
         public TestDomainEvent(Guid id, string name)
         {
