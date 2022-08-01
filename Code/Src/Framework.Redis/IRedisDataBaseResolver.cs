@@ -2,7 +2,7 @@
 
 namespace Framework.Redis
 {
-    public interface IRedisHelper
+    public interface IRedisDataBaseResolver
     {
         IDatabase GetDatabase(string connection, int dbNumber = 0);
     }

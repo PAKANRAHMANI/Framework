@@ -15,7 +15,7 @@ namespace Framework.Redis
 
             services.AddSingleton<IRedisCache, RedisCache>();
 
-            services.AddSingleton<IRedisHelper, RedisHelper>();
+            services.AddSingleton<IRedisDataBaseResolver, RedisDataBaseResolver>();
 
             return services;
         }

@@ -13,7 +13,7 @@ namespace Framework.Redis
 
         private readonly IDatabase _database;
         private readonly RedisCacheConfiguration _redisCacheConfiguration;
-        public RedisCache(IRedisHelper redisHelper, RedisCacheConfiguration redisCacheConfiguration)
+        public RedisCache(IRedisDataBaseResolver redisHelper, RedisCacheConfiguration redisCacheConfiguration)
         {
             _redisCacheConfiguration = redisCacheConfiguration;
             _database = redisHelper.GetDatabase(_redisCacheConfiguration.Connection, _redisCacheConfiguration.DbNumber);
