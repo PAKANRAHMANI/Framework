@@ -21,7 +21,6 @@ namespace Framework.Config
             dependencyRegister.RegisterScoped<IEventListener, EventListener>();
             dependencyRegister.RegisterScoped<IEventPublisher, EventPublisher>();
             dependencyRegister.RegisterScoped<ICommandBus, CommandBus>();
-            dependencyRegister.RegisterDecorator(typeof(ICommandHandler<>), typeof(LoggingCommandHandlerDecorator<>));
         }
     }
 }
