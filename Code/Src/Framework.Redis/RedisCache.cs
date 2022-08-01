@@ -52,14 +52,13 @@ namespace Framework.Redis
             if (value == null)
                 return default;
 
-            var list = JsonConvert.DeserializeObject<List<T>>(value);
-            if (list == null || !list.Any())
+            var obj = JsonConvert.DeserializeObject<T>(value);
+            if (obj == null)
                 return default;
 
-            return list.First();
+            return obj;
 
         }
-
         public IEnumerable<T> GetValues<T>(string key)
         {
             if (_redisCacheConfiguration.UseFromInstanceNameInKey)
@@ -69,7 +68,7 @@ namespace Framework.Redis
             if (value == null)
                 return default;
 
-            var list = JsonConvert.DeserializeObject<IList<T>>(value);
+            var list = JsonConvert.DeserializeObject<List<T>>(value);
             if (list == null || !list.Any())
                 return default;
             return list;
@@ -110,7 +109,7 @@ namespace Framework.Redis
 
             var value = await _database.StringGetAsync(key);
 
-            return value.HasValue ? JsonConvert.DeserializeObject<IEnumerable<T>>(Encoding.UTF8.GetString(value)) : default(IEnumerable<T>);
+            return value.HasValue ? JsonConvert.DeserializeObject<List<T>>(Encoding.UTF8.GetString(value)) : default(List<T>);
         }
 
         public void Remove(string key)
