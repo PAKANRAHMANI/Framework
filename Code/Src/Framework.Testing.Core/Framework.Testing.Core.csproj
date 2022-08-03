@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Framework.DataAccess.EF\Framework.DataAccess.EF.csproj" />
     <ProjectReference Include="..\Framework.Messages\Framework.Messages.csproj" />
     <ProjectReference Include="..\Framework.Core\Framework.Core.csproj">
 	    <IncludeAssets>all</IncludeAssets>
