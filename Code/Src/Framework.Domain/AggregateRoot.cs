@@ -7,7 +7,7 @@ namespace Framework.Domain
 {
     public abstract class AggregateRoot<TKey> : Entity<TKey>, IAggregateRoot
     {
-        private readonly IEventPublisher _publisher;
+        private IEventPublisher _publisher;
         private readonly List<IDomainEvent> _domainEvents;
         private readonly List<IDistributedEvent> _distributedEvents;
 
@@ -16,11 +16,9 @@ namespace Framework.Domain
             _domainEvents = new List<IDomainEvent>();
             _distributedEvents = new List<IDistributedEvent>();
         }
-        protected AggregateRoot(IEventPublisher publisher)
+        protected AggregateRoot(IAggregateRootConfigurator configurator) : this()
         {
-            _domainEvents = new List<IDomainEvent>();
-            _distributedEvents = new List<IDistributedEvent>();
-            _publisher = publisher;
+            configurator.Config(this);
         }
         public void Publish<T>(T @event) where T : IDomainEvent
         {
@@ -48,6 +46,11 @@ namespace Framework.Domain
         public void ClearDistributedEvents()
         {
             _distributedEvents.Clear();
+        }
+
+        public void SetPublisher(IEventPublisher publisher)
+        {
+            _publisher = publisher;
         }
     }
 }

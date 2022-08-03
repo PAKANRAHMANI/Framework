@@ -9,10 +9,12 @@ namespace Framework.DataAccess.NH
 {
     public abstract class NhRepository<TKey, T> : IRepository<TKey, T> where T : IAggregateRoot
     {
+        private readonly IAggregateRootConfigurator _configurator;
         protected ISession Session { get; private set; }
 
-        protected NhRepository(ISession session)
+        protected NhRepository(ISession session, IAggregateRootConfigurator configurator)
         {
+            _configurator = configurator;
             Session = session;
         }
 
@@ -30,7 +32,9 @@ namespace Framework.DataAccess.NH
 
         public async Task<T> Get(TKey key)
         {
-            return await Session.GetAsync<T>(key);
+            var aggregate = await Session.GetAsync<T>(key);
+
+            return _configurator.Config(aggregate);
         }
     }
 }

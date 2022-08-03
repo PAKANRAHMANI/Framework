@@ -3,6 +3,7 @@ using System.Reflection;
 using System.Transactions;
 using NHibernate;
 using Framework.DataAccess.NH;
+using Framework.Testing.Core.Fakes;
 
 namespace Framework.Testing.Core.Persist
 {

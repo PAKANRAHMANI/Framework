@@ -7,6 +7,7 @@ using Framework.Application;
 using Framework.Application.Contracts;
 using Framework.Core.Clock;
 using Framework.Core.Events;
+using Framework.Domain;
 using Framework.Query;
 
 namespace Framework.Config
@@ -21,6 +22,7 @@ namespace Framework.Config
             dependencyRegister.RegisterScoped<IEventListener, EventListener>();
             dependencyRegister.RegisterScoped<IEventPublisher, EventPublisher>();
             dependencyRegister.RegisterScoped<ICommandBus, CommandBus>();
+            dependencyRegister.RegisterScoped<IAggregateRootConfigurator, AggregateRootConfigurator>();
         }
     }
 }

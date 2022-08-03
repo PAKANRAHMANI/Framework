@@ -14,5 +14,6 @@ namespace Framework.Domain
         IReadOnlyCollection<IDistributedEvent> GetDistributedEvents();
         void ClearEvents();
         void ClearDistributedEvents();
+        void SetPublisher(IEventPublisher publisher);
     }
 }

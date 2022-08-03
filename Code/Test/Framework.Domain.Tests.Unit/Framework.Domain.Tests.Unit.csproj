@@ -7,23 +7,24 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="FluentAssertions"  />
+		<PackageReference Include="FluentAssertions" />
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.6.1" />
-		<PackageReference Include="xunit"  />
+		<PackageReference Include="xunit" />
 		<PackageReference Include="xunit.runner.visualstudio" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\Src\Framework.Core\Framework.Core.csproj" >
+		<ProjectReference Include="..\..\Src\Framework.Core\Framework.Core.csproj">
 			<IncludeAssets>all</IncludeAssets>
 			<ExcludeAssets>all</ExcludeAssets>
 			<PrivateAssets>all</PrivateAssets>
 		</ProjectReference>
-		<ProjectReference Include="..\..\Src\Framework.Domain\Framework.Domain.csproj" >
+		<ProjectReference Include="..\..\Src\Framework.Domain\Framework.Domain.csproj">
 			<IncludeAssets>all</IncludeAssets>
 			<ExcludeAssets>all</ExcludeAssets>
 			<PrivateAssets>all</PrivateAssets>
 		</ProjectReference>
+		<ProjectReference Include="..\..\Src\Framework.Testing.Core\Framework.Testing.Core.csproj" />
 	</ItemGroup>
 
 </Project>

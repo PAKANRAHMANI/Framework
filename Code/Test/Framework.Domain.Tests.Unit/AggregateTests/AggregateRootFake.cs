@@ -7,15 +7,15 @@ using Framework.Core.Events;
 
 namespace Framework.Domain.Tests.Unit.AggregateTests
 {
-    public class AggregateRootFake: AggregateRoot<Guid>
+    public class AggregateRootFake : AggregateRoot<Guid>
     {
         public AggregateRootFake()
         {
-            
+
         }
-        public AggregateRootFake(IEventPublisher publisher):base(publisher)
+        public AggregateRootFake(IAggregateRootConfigurator configurator) : base(configurator)
         {
-            
+
         }
     }
 }
