@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net5.0</TargetFramework>
+		<TargetFramework>net6.0</TargetFramework>
 		<PackageId>Framework.Consul</PackageId>
 		<Authors>Charisma</Authors>
 		<Company>Charisma</Company>
@@ -11,7 +11,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Winton.Extensions.Configuration.Consul" Version="3.1.2" />
+		<PackageReference Include="Winton.Extensions.Configuration.Consul"  />
 	</ItemGroup>
 
 </Project>
