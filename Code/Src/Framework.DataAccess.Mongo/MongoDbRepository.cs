@@ -12,12 +12,14 @@ namespace Framework.DataAccess.Mongo
     public abstract class MongoDbRepository<TKey, T> : IRepository<TKey, T> where T : AggregateRoot<TKey>
     {
         protected readonly IMongoDatabase Database;
+        private readonly IAggregateRootConfigurator _configurator;
         private readonly IClientSessionHandle _session;
         private readonly MongoDbConfig _config;
 
-        protected MongoDbRepository(IMongoDatabase database, IMongoContext mongoContext, MongoDbConfig config)
+        protected MongoDbRepository(IMongoDatabase database, IMongoContext mongoContext, IAggregateRootConfigurator configurator, MongoDbConfig config)
         {
             Database = database;
+            _configurator = configurator;
             _session = mongoContext.GetSession();
             _config = config;
         }
@@ -73,7 +75,9 @@ namespace Framework.DataAccess.Mongo
         {
             var filter = Builders<T>.Filter.Eq("_id", key);
 
-            return await Database.GetCollection<T>(typeof(T).Name.Pluralize()).Find(filter).FirstOrDefaultAsync();
+            var aggregate = await Database.GetCollection<T>(typeof(T).Name.Pluralize()).Find(filter).FirstOrDefaultAsync();
+
+            return _configurator.Config(aggregate);
         }
 
         protected async Task PersistEvents(T aggregate)
@@ -93,7 +97,7 @@ namespace Framework.DataAccess.Mongo
                 await Database.GetCollection<DistributedEventStructure>("DistributedEvents").InsertManyAsync(distributedEvent);
                 aggregate.ClearEvents();
             }
-                
+
         }
 
         private List<DomainEventStructure> GetDomainEvents(T aggregate)
