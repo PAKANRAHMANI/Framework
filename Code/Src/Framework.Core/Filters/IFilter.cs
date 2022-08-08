@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Framework.Core.Filters
 {
-    public interface IFilter
+    public interface IFilter<T>
     {
-        void SetNext(IFilter next);
-        T Apply<T>(T obj);
+        void SetNext(IFilter<T> next);
+        T Apply(T obj);
     }
 }

@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Framework.Core.Filters
 {
-    public interface IOperation
+    public interface IOperation<T>
     {
-        T Apply<T>(T obj);
+        T Apply(T input);
     }
 }

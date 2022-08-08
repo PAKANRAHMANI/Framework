@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 
 namespace Framework.Core.Filters
 {
-    public class EndFilter : IFilter
+    public class EndFilter<T> : IFilter<T>
     {
-        public static IFilter Instance = new EndFilter();
+        public static IFilter<T> Instance = new EndFilter<T>();
         private EndFilter() { }
-        public void SetNext(IFilter next)
+        public void SetNext(IFilter<T> next)
         {
             throw new NotSupportedException("Can't set next on EndFilter");
         }
 
-        public T Apply<T>(T obj)
+        public T Apply(T obj)
         {
             return obj;
         }

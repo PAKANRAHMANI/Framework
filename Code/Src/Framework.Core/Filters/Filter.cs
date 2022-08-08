@@ -1,28 +1,26 @@
 ﻿namespace Framework.Core.Filters
 {
-    public class Filter : IFilter
+    public class Filter<T> : IFilter<T>
     {
-        private readonly ICondition _condition;
-        private readonly IOperation _operation;
-        private IFilter _nextFilter;
+        private readonly IOperation<T> _operation;
+        private IFilter<T> _nextFilter;
 
-        public Filter(ICondition condition, IOperation operation)
+        public Filter(IOperation<T> operation)
         {
-            _condition = condition;
             _operation = operation;
-            _nextFilter = EndFilter.Instance;
+            _nextFilter = EndFilter<T>.Instance;
         }
-        public void SetNext(IFilter next)
+        public void SetNext(IFilter<T> next)
         {
             this._nextFilter = next;
         }
 
-        public T Apply<T>(T obj)
+        public T Apply(T obj)
         {
-            if (_condition.IsSatisfied(obj))
-                obj = _operation.Apply(obj);
+            obj = _operation.Apply(obj);
 
             return _nextFilter.Apply(obj);
         }
+
     }
 }
