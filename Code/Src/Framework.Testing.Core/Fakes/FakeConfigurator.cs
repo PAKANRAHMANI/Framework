@@ -7,7 +7,7 @@ using Framework.Domain;
 
 namespace Framework.Testing.Core.Fakes
 {
-    internal class FakeConfigurator : IAggregateRootConfigurator
+    public class FakeConfigurator : IAggregateRootConfigurator
     {
         public T Config<T>(T aggregateRoot) where T : IAggregateRoot
         {

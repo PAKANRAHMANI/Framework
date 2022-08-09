@@ -14,7 +14,7 @@ namespace Framework.Testing.Core.Persist
     {
         public readonly EfUnitOfWork EfUnitOfWork;
         public TDbContext DbContext;
-        internal FakeConfigurator Configurator { get; private set; }
+        public FakeConfigurator Configurator { get; private set; }
         protected EfPersistTest(string connectionString)
         {
             this.Configurator = new FakeConfigurator();
