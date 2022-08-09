@@ -2,12 +2,7 @@
 
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
-		<PackageId>Framework.RabbitMQ</PackageId>
-		<Authors>Charisma</Authors>
-		<Company>Charisma</Company>
-		<Product>Framework.RabbitMQ</Product>
-		<Version>1.0.0</Version>
-		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<Version>2.0.0</Version>
 	</PropertyGroup>
 
 	<ItemGroup>
