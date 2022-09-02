@@ -15,7 +15,9 @@ namespace Framework.DataAccess.EF
             builder
                 .Property(a => a.RowVersion)
                 .IsRowVersion();
+
             builder.Property(a => a.CreationDateTime);
+
             this.EntityTypeConfiguration(builder);
         }
 

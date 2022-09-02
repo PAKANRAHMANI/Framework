@@ -6,7 +6,7 @@ namespace Framework.Domain
     public abstract class Entity<TKey> : IEntity
     {
         public byte[] RowVersion { get; private set; }
-        protected DateTime CreationDateTime { get; private set; }
+        public DateTime CreationDateTime { get; protected set; }
         public DateTime? LastUpdateDateTime { get; private set; }
         public DateTime DeleteDateTime { get; private set; }
         public bool IsDeleted { get; private set; }
