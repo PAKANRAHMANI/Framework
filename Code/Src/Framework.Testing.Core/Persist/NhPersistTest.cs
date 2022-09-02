@@ -9,15 +9,15 @@ namespace Framework.Testing.Core.Persist
 {
     public class NhPersistTest: IDisposable
     {
-        protected FakePublisher EventPublisher { get; private set; }
+        public FakeConfigurator Configurator { get; private set; }
         protected ISession Session { get; }
-        private TransactionScope _transactionScope;
+        private readonly TransactionScope _transactionScope;
 
         public NhPersistTest(Assembly mappingAssembly, string connectionString)
         {
-            _transactionScope = new TransactionScope(TransactionScopeOption.Required, TransactionScopeAsyncFlowOption.Enabled);
-            EventPublisher = new FakePublisher();
-            Session = new SessionFactoryBuilder()
+            this._transactionScope = new TransactionScope(TransactionScopeOption.Required, TransactionScopeAsyncFlowOption.Enabled);
+            this.Configurator = new FakeConfigurator();
+            this.Session = new SessionFactoryBuilder()
                 .WithMappingsInAssembly(mappingAssembly)
                 .SetSessionNameAs("Test")
                 .UsingConnectionString(connectionString)
