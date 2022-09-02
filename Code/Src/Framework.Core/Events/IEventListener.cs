@@ -7,7 +7,7 @@ namespace Framework.Core.Events
 {
     public interface IEventListener
     {
-        void Subscribe<T>(Action<T> action) where T : IDomainEvent;
-        void Subscribe<T>(IEventHandler<T> @event) where T : IDomainEvent;
+        void Subscribe<TEvent>(Action<TEvent> action) where TEvent : IDomainEvent;
+        void Subscribe<TEvent>(IEventHandler<TEvent> eventHandler) where TEvent : IDomainEvent;
     }
 }

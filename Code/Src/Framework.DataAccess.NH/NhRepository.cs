@@ -11,11 +11,13 @@ namespace Framework.DataAccess.NH
     {
         private readonly IAggregateRootConfigurator _configurator;
         protected ISession Session { get; private set; }
+        protected SequenceHelper Sequence { get; private set; }
 
         protected NhRepository(ISession session, IAggregateRootConfigurator configurator)
         {
-            _configurator = configurator;
-            Session = session;
+            this._configurator = configurator;
+            this.Session = session;
+            this.Sequence = new SequenceHelper(session);
         }
 
         public abstract Task<TKey> GetNextId();
