@@ -16,18 +16,18 @@ namespace Framework.DataAccess.NH
         }
         public Task Begin()
         {
-            this._session.Transaction.Begin(IsolationLevel.ReadCommitted);
+            this._session.BeginTransaction(IsolationLevel.ReadCommitted);
             return Task.CompletedTask;
         }
 
         public async Task Commit()
         {
-            await this._session.Transaction.CommitAsync();
+            await this._session.GetCurrentTransaction().CommitAsync();
         }
 
         public async Task RollBack()
         {
-            await this._session.Transaction.RollbackAsync();
+            await this._session.GetCurrentTransaction().RollbackAsync();
         }
     }
 }

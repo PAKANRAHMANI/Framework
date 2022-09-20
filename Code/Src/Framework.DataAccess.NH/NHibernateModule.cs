@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Framework.Application.Contracts;
 using NHibernate;
 using Framework.Config;
 using Framework.Core;
@@ -22,6 +23,7 @@ namespace Framework.DataAccess.NH
         {
             dependencyRegister.RegisterScoped(CreateSession, a => a.Close());
             dependencyRegister.RegisterScoped<IUnitOfWork, NhUnitOfWork>();
+            dependencyRegister.RegisterDecorator(typeof(ICommandHandler<>), typeof(TransactionalCommandHandlerDecorator<>));
         }
         private ISession CreateSession()
         {
