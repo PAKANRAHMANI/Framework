@@ -29,6 +29,7 @@ namespace Framework.EventProcessor
         {
             _logger = logger;
             _dataStore = dataStore;
+            _dataStore.SetSubscriber(this);
             _eventBus = eventBus;
             _eventTypeResolver = eventTypeResolver;
             _eventFilter = eventFilter;
@@ -39,11 +40,20 @@ namespace Framework.EventProcessor
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                await _eventBus.Start();
+                try
+                {
+                    await _eventBus.Start();
 
-                _logger.LogInformation("Event hOst Service running at: {time}", DateTimeOffset.Now);
+                    _logger.LogInformation("Event host Service running at: {time}", DateTimeOffset.Now);
 
-                _dataStore.SubscribeForChanges();
+                    _dataStore.SubscribeForChanges();
+
+                    _logger.LogInformation("Subscribed to data store");
+                }
+                catch (Exception exception)
+                {
+                    _logger.LogError(exception.Message);
+                }
             }
         }
 

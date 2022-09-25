@@ -21,5 +21,23 @@ namespace Framework.DataAccess.EF
             EfDomainEvent.Persist(this);
             return await base.SaveChangesAsync(cancellationToken);
         }
+
+        public override int SaveChanges()
+        {
+            EfDomainEvent.Persist(this);
+            return base.SaveChanges();
+        }
+
+        public override int SaveChanges(bool acceptAllChangesOnSuccess)
+        {
+            EfDomainEvent.Persist(this);
+            return base.SaveChanges(acceptAllChangesOnSuccess);
+        }
+
+        public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = new CancellationToken())
+        {
+            EfDomainEvent.Persist(this);
+            return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+        }
     }
 }
