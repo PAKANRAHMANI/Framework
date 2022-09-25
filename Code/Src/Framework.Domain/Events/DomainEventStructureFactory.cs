@@ -19,9 +19,7 @@ namespace Framework.Domain.Events
                 EventId = domainEvent.EventId,
                 EventType = domainEvent.GetType().ToString(),
                 PublishDateTime = domainEvent.PublishDateTime,
-                IsUsed=domainEvent.IsUsed,
-                AggregateName = domainEvent.AggregateName
-
+                AggregateType = domainEvent.AggregateType
             };
         }
     }

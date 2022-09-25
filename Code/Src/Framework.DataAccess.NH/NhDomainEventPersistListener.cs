@@ -62,7 +62,7 @@ namespace Framework.DataAccess.NH
                 var columns = _persistenceBuilder.GetColumns();
                 AddParametersToCommand(command, @event, columns);
                 command.Connection = session.Connection as SqlConnection;
-                session.Transaction.Enlist(command);
+                session.GetCurrentTransaction().Enlist(command);
                 command.ExecuteNonQuery();
             }
             aggregateRoot.ClearEvents();
@@ -79,7 +79,7 @@ namespace Framework.DataAccess.NH
                 var columns = _persistenceBuilder.GetColumns();
                 AddParametersToCommand(command, @event, columns);
                 command.Connection = session.Connection as SqlConnection;
-                session.Transaction.Enlist(command);
+                session.GetCurrentTransaction().Enlist(command);
                 await command.ExecuteNonQueryAsync();
             }
             aggregateRoot.ClearEvents();

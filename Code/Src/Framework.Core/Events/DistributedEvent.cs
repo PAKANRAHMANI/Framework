@@ -10,6 +10,7 @@ namespace Framework.Core.Events
     {
         public Guid EventId { get; protected set; }
         public DateTime PublishDateTime { get; protected set; }
+        public Guid CorrelationId { get; protected set; }
         public bool IsUsed { get; protected set; }
         public string AggregateName { get; protected set; }
         public Guid AggregateId { get; protected set; }
