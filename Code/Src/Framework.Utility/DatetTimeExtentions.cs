@@ -28,6 +28,23 @@ public static class DatetTimeExtentions
 
         return ($"{strYear}/{strMonth}/{strDay} {strHour}:{strMinutes}:{strSeconds}");
     }
+    public static string ToShamsiDateWithoutTime(this DateTime dateTime, bool convertToLocalTime = true)
+    {
+        if (convertToLocalTime)
+            dateTime = dateTime.ToLocalTime();
+
+        var persianCalendar = new PersianCalendar();
+
+        var intYear = persianCalendar.GetYear(dateTime);
+        var intMonth = persianCalendar.GetMonth(dateTime);
+        var intDay = persianCalendar.GetDayOfMonth(dateTime);
+
+        var strYear = intYear.ToString();
+        var strMonth = intMonth < 10 ? "0" + intMonth.ToString() : intMonth.ToString();
+        var strDay = intDay < 10 ? "0" + intDay.ToString() : intDay.ToString();
+
+        return ($"{strYear}/{strMonth}/{strDay}");
+    }
     /// <summary>
     /// return datetime with format 2022/02/02 02:02:02
     /// </summary>
