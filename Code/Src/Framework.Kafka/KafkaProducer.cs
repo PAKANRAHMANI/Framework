@@ -93,5 +93,14 @@ namespace Framework.Kafka
             _producer.Flush(TimeSpan.FromSeconds(2));
             _producer.Dispose();
         }
+
+        public void Produce(TKey key, TMessage message, string topicName, Action<DeliveryResult<TKey, TMessage>> action = null)
+        {
+            _producer.Produce(topicName, new Message<TKey, TMessage>
+            {
+                Value = message,
+                Key = key
+            }, action);
+        }
     }
 }

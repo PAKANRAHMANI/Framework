@@ -13,5 +13,6 @@ namespace Framework.Kafka
         void Produce(TKey key, TMessage message, Action<DeliveryResult<TKey, TMessage>> action = null);
         void Produce(TKey key, TMessage message, int partitionNumber, Action<DeliveryResult<TKey, TMessage>> action = null);
         void Produce(TKey key, TMessage message, string topicName, int partitionNumber, Action<DeliveryResult<TKey, TMessage>> action = null);
+        void Produce(TKey key, TMessage message, string topicName, Action<DeliveryResult<TKey, TMessage>> action = null);
     }
 }
