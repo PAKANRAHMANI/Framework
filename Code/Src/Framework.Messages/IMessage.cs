@@ -7,5 +7,6 @@ namespace Framework.Messages
         Type MessageType { get; }
         Guid MessageId { get; }
         DateTime PublishDateTime { get; }
+        public string Body { get; set; }
     }
 }
