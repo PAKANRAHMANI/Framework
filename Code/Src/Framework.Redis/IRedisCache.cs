@@ -7,6 +7,12 @@ namespace Framework.Redis
 {
     public interface IRedisCache
     {
+        void HashSet(string key, object data);
+        Task HashSetAsync(string key,object data);
+        T HashGetAll<T>(string key);
+        Task<T> HashGetAllAsync<T>(string key);
+        T HashGet<T>(string key, string fieldName);
+        Task<T> HashGetAsync<T>(string key, string fieldName);
         void Set(string key, object data, int expirationTimeInMinutes);
         Task SetAsync(string key, object data, int expirationTimeInMinutes);
         T Get<T>(string key);

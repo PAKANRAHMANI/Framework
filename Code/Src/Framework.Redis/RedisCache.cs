@@ -19,11 +19,90 @@ namespace Framework.Redis
             _database = redisHelper.GetDatabase(_redisCacheConfiguration.Connection, _redisCacheConfiguration.DbNumber);
         }
 
-        public void Set(string key, object data, int expirationTimeInMinutes)
+
+        public void HashSet(string key, object data)
         {
             if (_redisCacheConfiguration.UseFromInstanceNameInKey)
                 key = _redisCacheConfiguration.InstanceName + key;
 
+            _database.HashSet(key, data.ToHashEntries());
+        }
+
+        public async Task HashSetAsync(string key, object data)
+        {
+            if (_redisCacheConfiguration.UseFromInstanceNameInKey)
+                key = _redisCacheConfiguration.InstanceName + key;
+
+            await _database.HashSetAsync(key, data.ToHashEntries());
+        }
+
+        public T HashGetAll<T>(string key)
+        {
+            if (_redisCacheConfiguration.UseFromInstanceNameInKey)
+                key = _redisCacheConfiguration.InstanceName + key;
+
+            if (!_database.KeyExists(key))
+                return default;
+
+            var stockHashEntries = _database.HashGetAll(key);
+
+            return stockHashEntries.ConvertFromRedis<T>();
+        }
+
+        public async Task<T> HashGetAllAsync<T>(string key)
+        {
+            if (_redisCacheConfiguration.UseFromInstanceNameInKey)
+                key = _redisCacheConfiguration.InstanceName + key;
+
+            if (!_database.KeyExists(key))
+                return default;
+
+            var stockHashEntries = await _database.HashGetAllAsync(key);
+
+            return stockHashEntries.ConvertFromRedis<T>();
+        }
+
+        public T HashGet<T>(string key, string fieldName)
+        {
+            if (_redisCacheConfiguration.UseFromInstanceNameInKey)
+                key = _redisCacheConfiguration.InstanceName + key;
+
+            if (!_database.KeyExists(key))
+                return default;
+
+            var value = _database.HashGet(key, fieldName);
+            if (!value.HasValue)
+                return default(T);
+
+            if ((typeof(T).IsClass || typeof(T).IsArray) && !(typeof(T)).IsString())
+                return JsonConvert.DeserializeObject<T>(value);
+
+            return (T)Convert.ChangeType(value, typeof(T));
+        }
+
+        public async Task<T> HashGetAsync<T>(string key, string fieldName)
+        {
+            if (_redisCacheConfiguration.UseFromInstanceNameInKey)
+                key = _redisCacheConfiguration.InstanceName + key;
+
+            if (!await _database.KeyExistsAsync(key))
+                return default;
+
+            var value = await _database.HashGetAsync(key, fieldName);
+
+            if (!value.HasValue)
+                return default(T);
+
+            if ((typeof(T).IsClass || typeof(T).IsArray) && !(typeof(T)).IsString())
+                return JsonConvert.DeserializeObject<T>(value);
+
+            return (T)Convert.ChangeType(value, typeof(T));
+        }
+
+        public void Set(string key, object data, int expirationTimeInMinutes)
+        {
+            if (_redisCacheConfiguration.UseFromInstanceNameInKey)
+                key = _redisCacheConfiguration.InstanceName + key;
             var value = JsonConvert.SerializeObject(data);
 
             var expiresIn = TimeSpan.FromMinutes(expirationTimeInMinutes);
