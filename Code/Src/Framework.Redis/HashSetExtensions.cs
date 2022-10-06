@@ -7,9 +7,9 @@ using System.Reflection;
 
 namespace Framework.Redis
 {
-    internal static class HashSetExtensions 
+    public static class HashSetExtensions 
     {
-        internal static HashEntry[] ToHashEntries(this object obj)
+        public static HashEntry[] ToHashEntries(this object obj)
         {
             var properties = obj.GetType().GetProperties();
 
@@ -36,7 +36,7 @@ namespace Framework.Redis
                 )
                 .ToArray();
         }
-        internal static T ConvertFromRedis<T>(this HashEntry[] hashEntries)
+        public static T ConvertFromRedis<T>(this HashEntry[] hashEntries)
         {
             var properties = typeof(T).GetProperties();
 
@@ -67,7 +67,7 @@ namespace Framework.Redis
 
             return (T)obj;
         }
-        internal static bool IsString(this Type type)
+        public static bool IsString(this Type type)
         {
             return type == typeof(string);
         }
