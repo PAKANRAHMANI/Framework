@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Framework.Core.Pagination
@@ -13,14 +14,14 @@ namespace Framework.Core.Pagination
 
             paginationModel.TotalCount = models.Count;
 
-            var pageCount = models.Count / pageSize;
+            var pageCount = (int)Math.Ceiling((decimal)models.Count / pageSize);
             if (pageIndex > pageCount)
                 pageIndex = 1;
 
             paginationModel.TotalPageCount = pageCount == 0 ? 1 : pageCount;
 
             var result = models
-                .Skip(pageIndex * paginationModel.PageSize)
+                .Skip(pageIndex * pageSize)
                 .Take(pageSize).ToList();
             return result;
         } 
