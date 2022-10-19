@@ -27,13 +27,30 @@ namespace Framework.Redis
 
             _database.HashSet(key, data.ToHashEntries());
         }
+        public void HashSet(string key,string field, object data)
+        {
+            if (_redisCacheConfiguration.UseFromInstanceNameInKey)
+                key = _redisCacheConfiguration.InstanceName + key;
 
+            var value = JsonConvert.SerializeObject(data);
+
+            _database.HashSet(key,field, value);
+        }
         public async Task HashSetAsync(string key, object data)
         {
             if (_redisCacheConfiguration.UseFromInstanceNameInKey)
                 key = _redisCacheConfiguration.InstanceName + key;
 
             await _database.HashSetAsync(key, data.ToHashEntries());
+        }
+        public async Task HashSetAsync(string key, string field, object data)
+        {
+            if (_redisCacheConfiguration.UseFromInstanceNameInKey)
+                key = _redisCacheConfiguration.InstanceName + key;
+
+            var value = JsonConvert.SerializeObject(data);
+
+            await _database.HashSetAsync(key,field, value);
         }
 
         public T HashGetAll<T>(string key)
