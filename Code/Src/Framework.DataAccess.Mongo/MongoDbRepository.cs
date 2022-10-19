@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Framework.Core.Events;
 using Framework.Domain;
@@ -79,7 +81,13 @@ namespace Framework.DataAccess.Mongo
 
             return _configurator.Config(aggregate);
         }
+        public async Task<T> Get(Expression<Func<T, bool>> predicate)
+        {
+            var aggregate = await Database.GetCollection<T>(typeof(T).Name.Pluralize()).Find(predicate).FirstOrDefaultAsync();
 
+            return _configurator.Config(aggregate);
+        }
+ 
         protected async Task PersistEvents(T aggregate)
         {
             var domainEvent = GetDomainEvents(aggregate);

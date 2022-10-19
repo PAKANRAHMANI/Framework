@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace Framework.Domain
 {
@@ -11,5 +13,6 @@ namespace Framework.Domain
         Task Create(T aggregate);
         Task Remove(T aggregate);
         Task<T> Get(TKey key);
+        Task<T> Get(Expression<Func<T, bool>> predicate);
     }
 }

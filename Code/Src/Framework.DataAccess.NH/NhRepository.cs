@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using NHibernate;
 using Framework.Domain;
+using NHibernate.Linq;
 
 namespace Framework.DataAccess.NH
 {
@@ -35,6 +38,13 @@ namespace Framework.DataAccess.NH
         public async Task<T> Get(TKey key)
         {
             var aggregate = await Session.GetAsync<T>(key);
+
+            return _configurator.Config(aggregate);
+        }
+
+        public async Task<T> Get(Expression<Func<T, bool>> predicate)
+        {
+            var aggregate = await Session.Query<T>().Where(predicate).FirstOrDefaultAsync();
 
             return _configurator.Config(aggregate);
         }
