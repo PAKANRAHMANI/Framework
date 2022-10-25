@@ -13,9 +13,23 @@ namespace Framework.Redis
 
             services.AddSingleton(redisCacheConfiguration);
 
+            services.AddSingleton<IRedisDataBaseResolver, RedisDataBaseResolver>();
+
             services.AddSingleton<IRedisCache, RedisCache>();
 
+            return services;
+        }
+        public static IServiceCollection AddHashsetRedisCache(this IServiceCollection services, Action<RedisHashsetCacheConfiguration> options)
+        {
+            var redisCacheConfiguration = new RedisHashsetCacheConfiguration();
+
+            options.Invoke(redisCacheConfiguration);
+
+            services.AddSingleton(redisCacheConfiguration);
+
             services.AddSingleton<IRedisDataBaseResolver, RedisDataBaseResolver>();
+
+            services.AddSingleton<IRedisHashsetCache, RedisHashsetCache>();
 
             return services;
         }
