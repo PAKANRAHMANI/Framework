@@ -1,31 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Framework.Config;
+﻿using Framework.Config;
+using System;
 
-namespace Framework.Redis
+namespace Framework.Redis;
+
+public class RedisModule : IFrameworkModule
 {
-    public class RedisModule : IFrameworkModule
-    {
-        private readonly CacheConfiguration _config;
+	private readonly CacheConfiguration _config;
 
-        public RedisModule(Action<CacheConfiguration> configuration)
-        {
-            _config = new CacheConfiguration();
+	public RedisModule(Action<CacheConfiguration> configuration)
+	{
+		_config = new CacheConfiguration();
 
-            configuration.Invoke(_config);
-        }
-        public void Register(IDependencyRegister dependencyRegister)
-        {
-            dependencyRegister.RegisterSingleton(typeof(CacheConfiguration), _config);
+		configuration.Invoke(_config);
+	}
 
-            dependencyRegister.RegisterSingleton<IRedisDataBaseResolver, RedisDataBaseResolver>();
+	public void Register(IDependencyRegister dependencyRegister)
+	{
+		dependencyRegister.RegisterSingleton(typeof(CacheConfiguration), _config);
 
-            dependencyRegister.RegisterSingleton<IRedisCache, RedisCache>();
+		dependencyRegister.RegisterSingleton<IRedisDataBaseResolver, RedisDataBaseResolver>();
 
-            dependencyRegister.RegisterSingleton<IRedisHashsetCache, RedisHashsetCache>();
-        }
-    }
+		dependencyRegister.RegisterSingleton<IRedisCache, RedisCache>();
+
+		dependencyRegister.RegisterSingleton<IRedisHashsetCache, RedisHashsetCache>();
+	}
 }

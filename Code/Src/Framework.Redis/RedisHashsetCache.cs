@@ -1,183 +1,184 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using StackExchange.Redis;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
-using StackExchange.Redis;
 
 namespace Framework.Redis;
 
 public class RedisHashsetCache : IRedisHashsetCache
 {
-    private readonly IDatabase _database;
-    private readonly RedisHashsetCacheConfiguration _redisCacheConfiguration;
-    public RedisHashsetCache(IRedisDataBaseResolver redisHelper, RedisHashsetCacheConfiguration redisCacheConfiguration)
-    {
-        _redisCacheConfiguration = redisCacheConfiguration;
-        _database = redisHelper.GetDatabase(_redisCacheConfiguration.Connection, _redisCacheConfiguration.DbNumber);
-    }
+	private readonly IDatabase _database;
+	private readonly RedisHashsetCacheConfiguration _redisCacheConfiguration;
 
-    public void HashSet<TKey, TValue>(string hashKey, Dictionary<TKey, TValue> data)
-    {
-        var fields = data.Select(pair => new HashEntry(pair.Key.ToString(), JsonConvert.SerializeObject(pair.Value))).ToArray();
+	public RedisHashsetCache(IRedisDataBaseResolver redisHelper, CacheConfiguration cacheConfiguration)
+	{
+		this._redisCacheConfiguration = cacheConfiguration.RedisHashsetCacheConfiguration;
+		this._database = redisHelper.GetDatabase(_redisCacheConfiguration.Connection, _redisCacheConfiguration.DbNumber);
+	}
 
-        if (_redisCacheConfiguration.UseFromInstanceNameInKey)
-            hashKey = _redisCacheConfiguration.InstanceName + hashKey;
+	public void HashSet<TKey, TValue>(string hashKey, Dictionary<TKey, TValue> data)
+	{
+		var fields = data.Select(pair => new HashEntry(pair.Key.ToString(), JsonConvert.SerializeObject(pair.Value))).ToArray();
 
-        _database.HashSet(hashKey, fields);
-    }
+		if (_redisCacheConfiguration.UseFromInstanceNameInKey)
+			hashKey = _redisCacheConfiguration.InstanceName + hashKey;
 
-    public async Task HashSetAsync<TKey, TValue>(string hashKey, Dictionary<TKey, TValue> data)
-    {
-        var fields = data.Select(pair => new HashEntry(pair.Key.ToString(), JsonConvert.SerializeObject(pair.Value))).ToArray();
+		_database.HashSet(hashKey, fields);
+	}
 
-        if (_redisCacheConfiguration.UseFromInstanceNameInKey)
-            hashKey = _redisCacheConfiguration.InstanceName + hashKey;
+	public async Task HashSetAsync<TKey, TValue>(string hashKey, Dictionary<TKey, TValue> data)
+	{
+		var fields = data.Select(pair => new HashEntry(pair.Key.ToString(), JsonConvert.SerializeObject(pair.Value))).ToArray();
 
-        await _database.HashSetAsync(hashKey, fields);
-    }
+		if (_redisCacheConfiguration.UseFromInstanceNameInKey)
+			hashKey = _redisCacheConfiguration.InstanceName + hashKey;
 
-    public void HashDelete(string hashKey, string key)
-    {
-        if (_redisCacheConfiguration.UseFromInstanceNameInKey)
-            hashKey = _redisCacheConfiguration.InstanceName + hashKey;
+		await _database.HashSetAsync(hashKey, fields);
+	}
 
-        _database.HashDelete(hashKey, key);
-    }
+	public void HashDelete(string hashKey, string key)
+	{
+		if (_redisCacheConfiguration.UseFromInstanceNameInKey)
+			hashKey = _redisCacheConfiguration.InstanceName + hashKey;
 
-    public async Task HashDeleteAsync(string hashKey, string key)
-    {
-        if (_redisCacheConfiguration.UseFromInstanceNameInKey)
-            hashKey = _redisCacheConfiguration.InstanceName + hashKey;
+		_database.HashDelete(hashKey, key);
+	}
 
-        await _database.HashDeleteAsync(hashKey, key);
-    }
+	public async Task HashDeleteAsync(string hashKey, string key)
+	{
+		if (_redisCacheConfiguration.UseFromInstanceNameInKey)
+			hashKey = _redisCacheConfiguration.InstanceName + hashKey;
 
-    public void HashSet(string key, object data)
-    {
-        if (_redisCacheConfiguration.UseFromInstanceNameInKey)
-            key = _redisCacheConfiguration.InstanceName + key;
+		await _database.HashDeleteAsync(hashKey, key);
+	}
 
-        _database.HashSet(key, data.ToHashEntries());
-    }
-    public void HashSet(string key, string field, object data)
-    {
-        if (_redisCacheConfiguration.UseFromInstanceNameInKey)
-            key = _redisCacheConfiguration.InstanceName + key;
+	public void HashSet(string key, object data)
+	{
+		if (_redisCacheConfiguration.UseFromInstanceNameInKey)
+			key = _redisCacheConfiguration.InstanceName + key;
 
-        var value = JsonConvert.SerializeObject(data);
+		_database.HashSet(key, data.ToHashEntries());
+	}
+	public void HashSet(string key, string field, object data)
+	{
+		if (_redisCacheConfiguration.UseFromInstanceNameInKey)
+			key = _redisCacheConfiguration.InstanceName + key;
 
-        _database.HashSet(key, field, value);
-    }
-    public async Task HashSetAsync(string key, object data)
-    {
-        if (_redisCacheConfiguration.UseFromInstanceNameInKey)
-            key = _redisCacheConfiguration.InstanceName + key;
+		var value = JsonConvert.SerializeObject(data);
 
-        await _database.HashSetAsync(key, data.ToHashEntries());
-    }
-    public async Task HashSetAsync(string key, string field, object data)
-    {
-        if (_redisCacheConfiguration.UseFromInstanceNameInKey)
-            key = _redisCacheConfiguration.InstanceName + key;
+		_database.HashSet(key, field, value);
+	}
+	public async Task HashSetAsync(string key, object data)
+	{
+		if (_redisCacheConfiguration.UseFromInstanceNameInKey)
+			key = _redisCacheConfiguration.InstanceName + key;
 
-        var value = JsonConvert.SerializeObject(data);
+		await _database.HashSetAsync(key, data.ToHashEntries());
+	}
+	public async Task HashSetAsync(string key, string field, object data)
+	{
+		if (_redisCacheConfiguration.UseFromInstanceNameInKey)
+			key = _redisCacheConfiguration.InstanceName + key;
 
-        await _database.HashSetAsync(key, field, value);
-    }
-    public T HashGetAll<T>(string key)
-    {
-        if (_redisCacheConfiguration.UseFromInstanceNameInKey)
-            key = _redisCacheConfiguration.InstanceName + key;
+		var value = JsonConvert.SerializeObject(data);
 
-        if (!_database.KeyExists(key))
-            return default;
+		await _database.HashSetAsync(key, field, value);
+	}
+	public T HashGetAll<T>(string key)
+	{
+		if (_redisCacheConfiguration.UseFromInstanceNameInKey)
+			key = _redisCacheConfiguration.InstanceName + key;
 
-        var stockHashEntries = _database.HashGetAll(key);
+		if (!_database.KeyExists(key))
+			return default;
 
-        return stockHashEntries.ConvertFromRedis<T>();
-    }
-    public async Task<T> HashGetAllAsync<T>(string key)
-    {
-        if (_redisCacheConfiguration.UseFromInstanceNameInKey)
-            key = _redisCacheConfiguration.InstanceName + key;
+		var stockHashEntries = _database.HashGetAll(key);
 
-        if (!_database.KeyExists(key))
-            return default;
+		return stockHashEntries.ConvertFromRedis<T>();
+	}
+	public async Task<T> HashGetAllAsync<T>(string key)
+	{
+		if (_redisCacheConfiguration.UseFromInstanceNameInKey)
+			key = _redisCacheConfiguration.InstanceName + key;
 
-        var stockHashEntries = await _database.HashGetAllAsync(key);
+		if (!_database.KeyExists(key))
+			return default;
 
-        return stockHashEntries.ConvertFromRedis<T>();
-    }
-    public T HashGet<T>(string key, string fieldName)
-    {
-        if (_redisCacheConfiguration.UseFromInstanceNameInKey)
-            key = _redisCacheConfiguration.InstanceName + key;
+		var stockHashEntries = await _database.HashGetAllAsync(key);
 
-        if (!_database.KeyExists(key))
-            return default;
+		return stockHashEntries.ConvertFromRedis<T>();
+	}
+	public T HashGet<T>(string key, string fieldName)
+	{
+		if (_redisCacheConfiguration.UseFromInstanceNameInKey)
+			key = _redisCacheConfiguration.InstanceName + key;
 
-        var value = _database.HashGet(key, fieldName);
-        if (!value.HasValue)
-            return default(T);
+		if (!_database.KeyExists(key))
+			return default;
 
-        if ((typeof(T).IsClass || typeof(T).IsArray) && !(typeof(T)).IsString())
-            return JsonConvert.DeserializeObject<T>(value);
+		var value = _database.HashGet(key, fieldName);
+		if (!value.HasValue)
+			return default(T);
 
-        return (T)Convert.ChangeType(value, typeof(T));
-    }
-    public async Task<T> HashGetAsync<T>(string key, string fieldName)
-    {
-        if (_redisCacheConfiguration.UseFromInstanceNameInKey)
-            key = _redisCacheConfiguration.InstanceName + key;
+		if ((typeof(T).IsClass || typeof(T).IsArray) && !(typeof(T)).IsString())
+			return JsonConvert.DeserializeObject<T>(value);
 
-        if (!await _database.KeyExistsAsync(key))
-            return default;
+		return (T)Convert.ChangeType(value, typeof(T));
+	}
+	public async Task<T> HashGetAsync<T>(string key, string fieldName)
+	{
+		if (_redisCacheConfiguration.UseFromInstanceNameInKey)
+			key = _redisCacheConfiguration.InstanceName + key;
 
-        var value = await _database.HashGetAsync(key, fieldName);
+		if (!await _database.KeyExistsAsync(key))
+			return default;
 
-        if (!value.HasValue)
-            return default(T);
+		var value = await _database.HashGetAsync(key, fieldName);
 
-        if ((typeof(T).IsClass || typeof(T).IsArray) && !(typeof(T)).IsString())
-            return JsonConvert.DeserializeObject<T>(value);
+		if (!value.HasValue)
+			return default(T);
 
-        return (T)Convert.ChangeType(value, typeof(T));
-    }
+		if ((typeof(T).IsClass || typeof(T).IsArray) && !(typeof(T)).IsString())
+			return JsonConvert.DeserializeObject<T>(value);
 
-    public List<object> HashKeys(string hashKey)
-    {
-        if (_redisCacheConfiguration.UseFromInstanceNameInKey)
-            hashKey = _redisCacheConfiguration.InstanceName + hashKey;
+		return (T)Convert.ChangeType(value, typeof(T));
+	}
 
-        var keys = _database.HashKeys(hashKey).ToList();
+	public List<object> HashKeys(string hashKey)
+	{
+		if (_redisCacheConfiguration.UseFromInstanceNameInKey)
+			hashKey = _redisCacheConfiguration.InstanceName + hashKey;
 
-        return (List<object>)Convert.ChangeType(keys, typeof(List<object>));
-    }
+		var keys = _database.HashKeys(hashKey).ToList();
 
-    public async Task<List<object>> HashKeysAsync(string hashKey)
-    {
-        if (_redisCacheConfiguration.UseFromInstanceNameInKey)
-            hashKey = _redisCacheConfiguration.InstanceName + hashKey;
+		return (List<object>)Convert.ChangeType(keys, typeof(List<object>));
+	}
 
-        var keys = await _database.HashKeysAsync(hashKey);
+	public async Task<List<object>> HashKeysAsync(string hashKey)
+	{
+		if (_redisCacheConfiguration.UseFromInstanceNameInKey)
+			hashKey = _redisCacheConfiguration.InstanceName + hashKey;
 
-        return (List<object>)Convert.ChangeType(keys.ToList(), typeof(List<object>));
-    }
+		var keys = await _database.HashKeysAsync(hashKey);
 
-    public bool HashExist(string hashKey, string fieldName)
-    {
-        if (_redisCacheConfiguration.UseFromInstanceNameInKey)
-            hashKey = _redisCacheConfiguration.InstanceName + hashKey;
+		return (List<object>)Convert.ChangeType(keys.ToList(), typeof(List<object>));
+	}
 
-        return _database.HashExists(hashKey, fieldName);
-    }
+	public bool HashExist(string hashKey, string fieldName)
+	{
+		if (_redisCacheConfiguration.UseFromInstanceNameInKey)
+			hashKey = _redisCacheConfiguration.InstanceName + hashKey;
 
-    public async Task<bool> HashExistAsync(string hashKey,string fieldName)
-    {
-        if (_redisCacheConfiguration.UseFromInstanceNameInKey)
-            hashKey = _redisCacheConfiguration.InstanceName + hashKey;
+		return _database.HashExists(hashKey, fieldName);
+	}
 
-        return await _database.HashExistsAsync(hashKey, fieldName);
-    }
+	public async Task<bool> HashExistAsync(string hashKey, string fieldName)
+	{
+		if (_redisCacheConfiguration.UseFromInstanceNameInKey)
+			hashKey = _redisCacheConfiguration.InstanceName + hashKey;
+
+		return await _database.HashExistsAsync(hashKey, fieldName);
+	}
 }

@@ -5,20 +5,20 @@ namespace Framework.Redis;
 
 public interface IRedisHashsetCache
 {
-    void HashSet<TKey, TValue>(string hashKey, Dictionary<TKey, TValue> data);
-    Task HashSetAsync<TKey, TValue>(string hashKey, Dictionary<TKey, TValue> data);
-    void HashDelete(string hashKey, string key);
-    Task HashDeleteAsync(string hashKey, string key);
-    void HashSet(string key, object data);
-    void HashSet(string key, string field, object data);
-    Task HashSetAsync(string key, object data);
-    Task HashSetAsync(string key, string field, object data);
-    T HashGetAll<T>(string key);
-    Task<T> HashGetAllAsync<T>(string key);
-    T HashGet<T>(string key, string fieldName);
-    Task<T> HashGetAsync<T>(string key, string fieldName);
-    List<object> HashKeys(string hashKey);
-    Task<List<object>> HashKeysAsync(string hashKey);
-    bool HashExist(string hashKey, string fieldName);
-    Task<bool> HashExistAsync(string hashKey, string fieldName);
+	void HashSet<TKey, TValue>(string hashKey, Dictionary<TKey, TValue> data);
+	Task HashSetAsync<TKey, TValue>(string hashKey, Dictionary<TKey, TValue> data);
+	void HashDelete(string hashKey, string key);
+	Task HashDeleteAsync(string hashKey, string key);
+	void HashSet(string key, object data);
+	void HashSet(string key, string field, object data);
+	Task HashSetAsync(string key, object data);
+	Task HashSetAsync(string key, string field, object data);
+	T HashGetAll<T>(string key);
+	Task<T> HashGetAllAsync<T>(string key);
+	T HashGet<T>(string key, string fieldName);
+	Task<T> HashGetAsync<T>(string key, string fieldName);
+	List<object> HashKeys(string hashKey);
+	Task<List<object>> HashKeysAsync(string hashKey);
+	bool HashExist(string hashKey, string fieldName);
+	Task<bool> HashExistAsync(string hashKey, string fieldName);
 }
