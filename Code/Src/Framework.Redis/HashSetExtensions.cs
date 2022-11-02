@@ -42,20 +42,24 @@ public static class HashSetExtensions
 		var properties = typeof(T).GetProperties();
 
 		var obj = Activator.CreateInstance(typeof(T), BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public, null, null, null);
+
 		foreach (var property in properties)
 		{
 			var entry = hashEntries.FirstOrDefault(g => g.Name.ToString().Equals(property.Name));
+
 			if (entry.Equals(new HashEntry())) continue;
 
+			/*
 			var value =
 				(property.PropertyType.IsClass || property.PropertyType.IsArray) && !property.PropertyType.IsString()
 					? JsonConvert.DeserializeObject(entry.Value, property.PropertyType)
 					: Convert.ChangeType(entry.Value, property.PropertyType);
+			*/
 
+			var value = JsonConvert.DeserializeObject(entry.Value, property.PropertyType);
 
 			if (property.CanWrite == false && typeof(T).BaseType?.IsAbstract == true)
 			{
-
 				var baseProperty = property.DeclaringType?.GetProperty(property.Name);
 
 				baseProperty?.GetSetMethod(true)?.Invoke(obj, new object[] { value });
