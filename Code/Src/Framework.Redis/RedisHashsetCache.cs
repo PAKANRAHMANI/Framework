@@ -18,6 +18,42 @@ public class RedisHashsetCache : IRedisHashsetCache
 		this._database = redisHelper.GetDatabase(_redisCacheConfiguration.Connection, _redisCacheConfiguration.DbNumber);
 	}
 
+	public void HashSet(string key, object data)
+	{
+		if (_redisCacheConfiguration.UseFromInstanceNameInKey)
+			key = _redisCacheConfiguration.InstanceName + key;
+
+		_database.HashSet(key, data.ToHashEntries());
+	}
+
+	public async Task HashSetAsync(string key, object data)
+	{
+		if (_redisCacheConfiguration.UseFromInstanceNameInKey)
+			key = _redisCacheConfiguration.InstanceName + key;
+
+		await _database.HashSetAsync(key, data.ToHashEntries());
+	}
+
+	public void HashSet(string key, string field, object data)
+	{
+		if (_redisCacheConfiguration.UseFromInstanceNameInKey)
+			key = _redisCacheConfiguration.InstanceName + key;
+
+		var value = JsonConvert.SerializeObject(data);
+
+		_database.HashSet(key, field, value);
+	}
+
+	public async Task HashSetAsync(string key, string field, object data)
+	{
+		if (_redisCacheConfiguration.UseFromInstanceNameInKey)
+			key = _redisCacheConfiguration.InstanceName + key;
+
+		var value = JsonConvert.SerializeObject(data);
+
+		await _database.HashSetAsync(key, field, value);
+	}
+
 	public void HashSet<TKey, TValue>(string hashKey, Dictionary<TKey, TValue> data)
 	{
 		var fields = data.Select(pair => new HashEntry(pair.Key.ToString(), JsonConvert.SerializeObject(pair.Value))).ToArray();
@@ -53,39 +89,7 @@ public class RedisHashsetCache : IRedisHashsetCache
 
 		await _database.HashDeleteAsync(hashKey, key);
 	}
-
-	public void HashSet(string key, object data)
-	{
-		if (_redisCacheConfiguration.UseFromInstanceNameInKey)
-			key = _redisCacheConfiguration.InstanceName + key;
-
-		_database.HashSet(key, data.ToHashEntries());
-	}
-	public void HashSet(string key, string field, object data)
-	{
-		if (_redisCacheConfiguration.UseFromInstanceNameInKey)
-			key = _redisCacheConfiguration.InstanceName + key;
-
-		var value = JsonConvert.SerializeObject(data);
-
-		_database.HashSet(key, field, value);
-	}
-	public async Task HashSetAsync(string key, object data)
-	{
-		if (_redisCacheConfiguration.UseFromInstanceNameInKey)
-			key = _redisCacheConfiguration.InstanceName + key;
-
-		await _database.HashSetAsync(key, data.ToHashEntries());
-	}
-	public async Task HashSetAsync(string key, string field, object data)
-	{
-		if (_redisCacheConfiguration.UseFromInstanceNameInKey)
-			key = _redisCacheConfiguration.InstanceName + key;
-
-		var value = JsonConvert.SerializeObject(data);
-
-		await _database.HashSetAsync(key, field, value);
-	}
+	
 	public T HashGetAll<T>(string key)
 	{
 		if (_redisCacheConfiguration.UseFromInstanceNameInKey)
@@ -98,6 +102,7 @@ public class RedisHashsetCache : IRedisHashsetCache
 
 		return stockHashEntries.ConvertFromRedis<T>();
 	}
+
 	public async Task<T> HashGetAllAsync<T>(string key)
 	{
 		if (_redisCacheConfiguration.UseFromInstanceNameInKey)
@@ -110,6 +115,7 @@ public class RedisHashsetCache : IRedisHashsetCache
 
 		return stockHashEntries.ConvertFromRedis<T>();
 	}
+
 	public T HashGet<T>(string key, string fieldName)
 	{
 		if (_redisCacheConfiguration.UseFromInstanceNameInKey)
@@ -127,6 +133,7 @@ public class RedisHashsetCache : IRedisHashsetCache
 
 		return (T)Convert.ChangeType(value, typeof(T));
 	}
+
 	public async Task<T> HashGetAsync<T>(string key, string fieldName)
 	{
 		if (_redisCacheConfiguration.UseFromInstanceNameInKey)

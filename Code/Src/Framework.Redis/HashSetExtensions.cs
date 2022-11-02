@@ -20,7 +20,7 @@ public static class HashSetExtensions
 				property =>
 				{
 					var propertyValue = property.GetValue(obj);
-					string hashValue;
+					RedisValue hashValue;
 
 					if (property.PropertyType.IsClass || propertyValue is IEnumerable<object>)
 					{
@@ -28,7 +28,7 @@ public static class HashSetExtensions
 					}
 					else
 					{
-						hashValue = propertyValue.ToString();
+						hashValue = (RedisValue)propertyValue;
 					}
 
 					return new HashEntry(property.Name, hashValue);
