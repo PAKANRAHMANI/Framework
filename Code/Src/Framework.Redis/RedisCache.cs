@@ -56,8 +56,8 @@ public class RedisCache : IRedisCache
 			return default;
 
 		return obj;
-
 	}
+
 	public IEnumerable<T> GetValues<T>(string key)
 	{
 		if (_redisCacheConfiguration.UseFromInstanceNameInKey)

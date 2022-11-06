@@ -20,16 +20,13 @@ public static class HashSetExtensions
 				property =>
 				{
 					var propertyValue = property.GetValue(obj);
-					RedisValue hashValue;
+
+					string hashValue;
 
 					if (property.PropertyType.IsClass || propertyValue is IEnumerable<object>)
-					{
 						hashValue = JsonConvert.SerializeObject(propertyValue);
-					}
 					else
-					{
-						hashValue = (RedisValue)propertyValue;
-					}
+						hashValue = propertyValue?.ToString();
 
 					return new HashEntry(property.Name, hashValue);
 				}
