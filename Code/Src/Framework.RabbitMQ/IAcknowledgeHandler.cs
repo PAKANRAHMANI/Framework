@@ -1,7 +1,6 @@
-﻿namespace Framework.RabbitMQ
+﻿namespace Framework.RabbitMQ;
+
+public interface IAcknowledgeHandler
 {
-    public interface IAcknowledgeHandler
-    {
-        void Handle(AcknowledgeReceived acknowledge);
-    }
+	void Handle(AcknowledgeReceived acknowledge);
 }

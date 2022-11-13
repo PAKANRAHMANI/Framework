@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using Framework.Messages;
 
-namespace Framework.RabbitMQ
+namespace Framework.RabbitMQ;
+
+public interface IRabbitMqMessageSender
 {
-    public interface IRabbitMqMessageSender
-    {
-        void SendBatch(IEnumerable<IMessage> messages, string queueName, Priority priority);
-    }
+	void Send<T>(T message, string exchange, byte priority = 0) where T : IMessage;
+	void SendBatch(IEnumerable<IMessage> messages, string exchange, byte priority = 0);
 }

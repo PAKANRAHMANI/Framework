@@ -1,8 +1,7 @@
-﻿namespace Framework.RabbitMQ
+﻿namespace Framework.RabbitMQ;
+
+public interface IAcknowledgeManagement
 {
-    public interface IAcknowledgeManagement
-    {
-        void Subscribe(IAcknowledgeHandler handler);
-        void Publish(AcknowledgeReceived acknowledge);
-    }
+	void Subscribe(IAcknowledgeHandler handler);
+	void Publish(AcknowledgeReceived acknowledge);
 }

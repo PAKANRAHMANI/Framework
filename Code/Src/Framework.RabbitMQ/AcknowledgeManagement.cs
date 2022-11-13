@@ -1,25 +1,24 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace Framework.RabbitMQ
+namespace Framework.RabbitMQ;
+
+public class AcknowledgeManagement : IAcknowledgeManagement
 {
-    public class AcknowledgeManagement : IAcknowledgeManagement
-    {
-        private readonly List<object> _handlers = new List<object>();
+	private readonly List<object> _handlers = new();
 
-        public void Subscribe(IAcknowledgeHandler handler)
-        {
-            _handlers.Add(handler);
-        }
+	public void Subscribe(IAcknowledgeHandler handler)
+	{
+		_handlers.Add(handler);
+	}
 
-        public void Publish(AcknowledgeReceived acknowledge)
-        {
-            var handlers = _handlers.OfType<IAcknowledgeHandler>().ToList();
+	public void Publish(AcknowledgeReceived acknowledge)
+	{
+		var handlers = _handlers.OfType<IAcknowledgeHandler>().ToList();
 
-            handlers.ForEach(handler =>
-            {
-                handler.Handle(acknowledge);
-            });
-        }
-    }
+		handlers.ForEach(handler =>
+		{
+			handler.Handle(acknowledge);
+		});
+	}
 }
