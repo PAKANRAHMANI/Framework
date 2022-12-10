@@ -13,6 +13,8 @@ namespace Framework.DataAccess.EF.Mapping
         {
             builder.ToTable("DomainEvents");
             builder.HasKey(a => a.EventId);
+            builder.Property(a=>a.AggregateType)
+                .HasConversion(b=>b.FullName,c=>Type.GetType(c));
         }
     }
 }
