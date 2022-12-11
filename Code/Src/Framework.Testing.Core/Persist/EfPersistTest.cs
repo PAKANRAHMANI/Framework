@@ -19,7 +19,7 @@ namespace Framework.Testing.Core.Persist
         {
             this.Configurator = new FakeConfigurator();
             var option = new DbContextOptionsBuilder().UseSqlServer(connectionString);
-            this.DbContext = (TDbContext)Activator.CreateInstance(typeof(TDbContext), true, option.Options);
+            this.DbContext = (TDbContext)Activator.CreateInstance(typeof(TDbContext), option.Options);
             this.EfUnitOfWork = new EfUnitOfWork(this.DbContext);
         }
 
