@@ -20,13 +20,18 @@ public static class HashSetExtensions
 				property =>
 				{
 					var propertyValue = property.GetValue(obj);
+					var propertyType = property.PropertyType;
 
 					string hashValue;
 
-					if (property.PropertyType.IsClass || propertyValue is IEnumerable<object>)
+					/*
+					if (propertyType.IsClass || propertyValue is IEnumerable<object>)
 						hashValue = JsonConvert.SerializeObject(propertyValue);
 					else
 						hashValue = propertyValue?.ToString();
+					*/
+
+					hashValue = JsonConvert.SerializeObject(propertyValue);
 
 					return new HashEntry(property.Name, hashValue);
 				}
@@ -44,7 +49,8 @@ public static class HashSetExtensions
 		{
 			var entry = hashEntries.FirstOrDefault(g => g.Name.ToString().Equals(property.Name));
 
-			if (entry.Equals(new HashEntry())) continue;
+			if (entry.Equals(new HashEntry())) 
+				continue;
 
 			/*
 			var value =
