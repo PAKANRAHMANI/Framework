@@ -49,7 +49,7 @@ public static class HashSetExtensions
 		{
 			var entry = hashEntries.FirstOrDefault(g => g.Name.ToString().Equals(property.Name));
 
-			if (entry.Equals(new HashEntry())) 
+			if (entry == default || entry.Equals(new HashEntry()))
 				continue;
 
 			/*
