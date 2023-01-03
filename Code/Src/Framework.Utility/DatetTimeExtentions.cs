@@ -5,6 +5,22 @@ namespace Framework.Utility;
 
 public static class DatetTimeExtentions
 {
+    public static DateTime? ToMiladiDate(this string shamsiDate)
+    {
+        try
+        {
+            var pc = new PersianCalendar();
+            var year = Convert.ToInt32(shamsiDate.Substring(0, 4));
+            var month = Convert.ToInt32(shamsiDate.Substring(5, 2));
+            var day = Convert.ToInt32(shamsiDate.Substring(8, 2));
+            var dateTime = new DateTime(year, month, day, pc);
+            return dateTime.Date;
+        }
+        catch (Exception e)
+        {
+            return null;
+        }
+    }
     public static string ToShamsiDate(this DateTime dateTime, bool convertToLocalTime = true)
     {
         if (convertToLocalTime)
