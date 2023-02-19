@@ -13,9 +13,9 @@ namespace Framework.AspNetCore
                 foreach (var model in controller.Selectors.Where(b=>b.AttributeRouteModel != null))
                 {
                     var controllerName = GetControllerName(controller.ControllerType.Name, "Query");
-                    model.AttributeRouteModel = new AttributeRouteModel()
+                    model.AttributeRouteModel = new AttributeRouteModel
                     {
-                        Template = $"api/{controllerName}"
+                        Template = $"{controllerName}"
                     };
                 }
             }
