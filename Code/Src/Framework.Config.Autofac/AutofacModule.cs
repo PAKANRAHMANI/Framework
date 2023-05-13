@@ -15,6 +15,7 @@ namespace Framework.Config.Autofac
         public void Register(IDependencyRegister dependencyRegister)
         {
             dependencyRegister.RegisterScoped<ICommandHandlerResolver, AutofacCommandHandlerResolver>();
+            dependencyRegister.RegisterScoped<IRequestHandlerResolver, AutofacRequestHandlerResolver>();
             dependencyRegister.RegisterScoped<IQueryHandlerResolver, AutofacQueryHandlerResolver>();
         }
 

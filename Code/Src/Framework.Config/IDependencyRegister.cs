@@ -8,6 +8,7 @@ namespace Framework.Config
     public interface IDependencyRegister
     {
         void RegisterCommandHandlers(Assembly assembly);
+        void RegisterRequestHandlers(Assembly assembly);
         void RegisterRepositories(Assembly assembly);
         void RegisterFacades(Assembly assembly);
         void RegisterDomainServices(Assembly assembly);

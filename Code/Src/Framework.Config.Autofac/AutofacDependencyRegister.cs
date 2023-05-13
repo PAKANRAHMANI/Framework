@@ -30,6 +30,16 @@ namespace Framework.Config.Autofac
                 .InstancePerLifetimeScope();
         }
 
+        public void RegisterRequestHandlers(Assembly assembly)
+        {
+            _container
+                .RegisterAssemblyTypes(assembly)
+                .As(type => type.GetInterfaces()
+                    .Where(interfaceType => interfaceType
+                        .IsClosedTypeOf(typeof(IRequestHandler<,>))))
+                .InstancePerLifetimeScope();
+        }
+
         public void RegisterQueryHandlers(Assembly assembly)
         {
             _container

@@ -18,7 +18,7 @@ namespace Framework.DataAccess.Mongo
         }
         public void Register(IDependencyRegister dependencyRegister)
         {
-            dependencyRegister.RegisterScoped(typeof(MongoDbConfig),_config);
+            dependencyRegister.RegisterScoped(typeof(MongoDbConfig), _config);
 
             dependencyRegister.RegisterSingleton<IMongoDatabase>(CreateMongoDb);
 
@@ -26,14 +26,17 @@ namespace Framework.DataAccess.Mongo
 
             dependencyRegister.RegisterScoped<IUnitOfWork, MongoUnitOfWork>();
 
-            dependencyRegister.RegisterDecorator(typeof(ICommandHandler<>), typeof(TransactionalCommandHandlerDecorator<>));
+            if (_config.IsDecorateTransactionForRequests)
+                dependencyRegister.RegisterDecorator(typeof(IRequestHandler<,>), typeof(TransactionalRequestHandlerDecorator<,>));
+            else if (_config.IsDecorateTransactionForCommands)
+                dependencyRegister.RegisterDecorator(typeof(ICommandHandler<>), typeof(TransactionalCommandHandlerDecorator<>));
 
         }
 
 
         private IMongoDatabase CreateMongoDb()
         {
-           var client = new MongoClient(_config.ConnectionString);
+            var client = new MongoClient(_config.ConnectionString);
 
             return client.GetDatabase(_config.DatabaseName);
         }

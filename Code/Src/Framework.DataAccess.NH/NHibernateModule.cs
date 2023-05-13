@@ -14,16 +14,22 @@ namespace Framework.DataAccess.NH
     public class NHibernateModule : IFrameworkModule
     {
         private readonly SessionFactoryBuilder _sessionFactory;
+        private readonly bool _isUsingRequestHandler;
 
-        public NHibernateModule(SessionFactoryBuilder sessionFactory)
+        public NHibernateModule(SessionFactoryBuilder sessionFactory, bool isUsingRequestHandler = false)
         {
             _sessionFactory = sessionFactory;
+            _isUsingRequestHandler = isUsingRequestHandler;
         }
         public void Register(IDependencyRegister dependencyRegister)
         {
             dependencyRegister.RegisterScoped(CreateSession, a => a.Close());
             dependencyRegister.RegisterScoped<IUnitOfWork, NhUnitOfWork>();
-            dependencyRegister.RegisterDecorator(typeof(ICommandHandler<>), typeof(TransactionalCommandHandlerDecorator<>));
+
+            if (_isUsingRequestHandler)
+                dependencyRegister.RegisterDecorator(typeof(IRequestHandler<,>), typeof(TransactionalRequestHandlerDecorator<,>));
+            else
+                dependencyRegister.RegisterDecorator(typeof(ICommandHandler<>), typeof(TransactionalCommandHandlerDecorator<>));
         }
         private ISession CreateSession()
         {

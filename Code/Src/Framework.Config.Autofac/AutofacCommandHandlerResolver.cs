@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Autofac;
 using Framework.Application.Contracts;
+using MassTransit.Initializers.Variables;
 
 namespace Framework.Config.Autofac
 {
