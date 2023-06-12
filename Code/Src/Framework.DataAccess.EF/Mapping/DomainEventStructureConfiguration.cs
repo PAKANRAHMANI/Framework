@@ -12,7 +12,14 @@ namespace Framework.DataAccess.EF.Mapping
         public void Configure(EntityTypeBuilder<DomainEventStructure> builder)
         {
             builder.ToTable("DomainEvents");
-            builder.HasKey(a => a.EventId);
+
+            builder.Property<long>("Id")
+                .HasColumnName("Id")
+                .IsRequired()
+                .ValueGeneratedOnAdd();
+
+            builder.HasKey("Id");
+
             builder.Property(a=>a.AggregateType)
                 .HasConversion(b=>b.FullName,c=>Type.GetType(c));
         }
