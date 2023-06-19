@@ -16,7 +16,7 @@ namespace Framework.EventProcessor.DataStore.Sql
 
         public static List<EventItem> GetEventsFromPosition(this IDbConnection connection, long position, string tableName)
         {
-            return connection.Query<EventItem>($"SELECT * from {tableName} WHERE Id > {position}").ToList();
+            return connection.Query<EventItem>($"SELECT * from {tableName} WHERE Id > {position} order by Id").ToList();
         }
     }
 }
