@@ -56,7 +56,7 @@ steps:
        command: custom
        projects: '**/Framework.Application.csproj'
        custom: pack
-       arguments: '/p:Configuration=Release /p:Version=$(Build.BuildId) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
+       arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
 ##################################################################################################
    - powershell: |
       [xml]$project = Get-Content -Path ./Code/Src/Framework.Application.Contracts/Framework.Application.Contracts.csproj
@@ -73,7 +73,7 @@ steps:
        command: custom
        projects: '**/Framework.Application.Contracts.csproj'
        custom: pack
-       arguments: '/p:Configuration=Release /p:Version=$(Build.BuildId) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
+       arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
 ##################################################################################################
    - powershell: |
       [xml]$project = Get-Content -Path ./Code/Src/Framework.AspNetCore/Framework.AspNetCore.csproj
@@ -90,7 +90,7 @@ steps:
        command: custom
        projects: '**/Framework.AspNetCore.csproj'
        custom: pack
-       arguments: '/p:Configuration=Release /p:Version=$(Build.BuildId) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
+       arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
 ##################################################################################################
    - powershell: |
       [xml]$project = Get-Content -Path ./Code/Src/Framework.Authorization/Framework.Authorization.csproj
@@ -107,7 +107,7 @@ steps:
        command: custom
        projects: '**/Framework.Authorization.csproj'
        custom: pack
-       arguments: '/p:Configuration=Release /p:Version=$(Build.BuildId) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
+       arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
 ##################################################################################################
    - powershell: |
       [xml]$project = Get-Content -Path ./Code/Src/Framework.Config/Framework.Config.csproj
@@ -124,7 +124,7 @@ steps:
        command: custom
        projects: '**/Framework.Config.csproj'
        custom: pack
-       arguments: '/p:Configuration=Release /p:Version=$(Build.BuildId) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
+       arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
 ##################################################################################################
    - powershell: |
       [xml]$project = Get-Content -Path ./Code/Src/Framework.Config.Autofac/Framework.Config.Autofac.csproj
@@ -141,7 +141,7 @@ steps:
        command: custom
        projects: '**/Framework.Config.Autofac.csproj'
        custom: pack
-       arguments: '/p:Configuration=Release /p:Version=$(Build.BuildId) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
+       arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
 ##################################################################################################
    - powershell: |
       [xml]$project = Get-Content -Path ./Code/Src/Framework.Consul/Framework.Consul.csproj
@@ -158,7 +158,7 @@ steps:
        command: custom
        projects: '**/Framework.Consul.csproj'
        custom: pack
-       arguments: '/p:Configuration=Release /p:Version=$(Build.BuildId) /p:PackageVersion=$(version) /p:GeneratePackageOnBuild=false --output $(Build.ArtifactStagingDirectory)'
+       arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) /p:GeneratePackageOnBuild=false --output $(Build.ArtifactStagingDirectory)'
 ##################################################################################################
    - powershell: |
       [xml]$project = Get-Content -Path ./Code/Src/Framework.Core/Framework.Core.csproj
@@ -175,7 +175,7 @@ steps:
        command: custom
        projects: '**/Framework.Core.csproj'
        custom: pack
-       arguments: '/p:Configuration=Release /p:Version=$(Build.BuildId) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
+       arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
 ##################################################################################################
    - powershell: |
       [xml]$project = Get-Content -Path ./Code/Src/Framework.DataAccess.EF/Framework.DataAccess.EF.csproj
@@ -192,7 +192,7 @@ steps:
        command: custom
        projects: '**/Framework.DataAccess.EF.csproj'
        custom: pack
-       arguments: '/p:Configuration=Release /p:Version=$(Build.BuildId) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
+       arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
 ##################################################################################################
    - powershell: |
       [xml]$project = Get-Content -Path ./Code/Src/Framework.DataAccess.Mongo/Framework.DataAccess.Mongo.csproj
@@ -209,7 +209,7 @@ steps:
        command: custom
        projects: '**/Framework.DataAccess.Mongo.csproj'
        custom: pack
-       arguments: '/p:Configuration=Release /p:Version=$(Build.BuildId) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
+       arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
 ##################################################################################################
    - powershell: |
       [xml]$project = Get-Content -Path ./Code/Src/Framework.DataAccess.NH/Framework.DataAccess.NH.csproj
@@ -226,7 +226,7 @@ steps:
        command: custom
        projects: '**/Framework.DataAccess.NH.csproj'
        custom: pack
-       arguments: '/p:Configuration=Release /p:Version=$(Build.BuildId) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
+       arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
 ##################################################################################################
    - powershell: |
       [xml]$project = Get-Content -Path ./Code/Src/Framework.Domain/Framework.Domain.csproj
@@ -243,7 +243,7 @@ steps:
        command: custom
        projects: '**/Framework.Domain.csproj'
        custom: pack
-       arguments: '/p:Configuration=Release /p:Version=$(Build.BuildId) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
+       arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
 ##################################################################################################
    - powershell: |
       [xml]$project = Get-Content -Path ./Code/Src/Framework.EasyNetQ/Framework.EasyNetQ.csproj
@@ -260,7 +260,7 @@ steps:
        command: custom
        projects: '**/Framework.EasyNetQ.csproj'
        custom: pack
-       arguments: '/p:Configuration=Release /p:Version=$(Build.BuildId) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
+       arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
 ##################################################################################################
    - powershell: |
       [xml]$project = Get-Content -Path ./Code/Src/Framework.FileUpload/Framework.FileUpload.csproj
@@ -277,7 +277,7 @@ steps:
        command: custom
        projects: '**/Framework.FileUpload.csproj'
        custom: pack
-       arguments: '/p:Configuration=Release /p:Version=$(Build.BuildId) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
+       arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
 ##################################################################################################
    - powershell: |
       [xml]$project = Get-Content -Path ./Code/Src/Framework.Kafka/Framework.Kafka.csproj
@@ -294,7 +294,7 @@ steps:
        command: custom
        projects: '**/Framework.Kafka.csproj'
        custom: pack
-       arguments: '/p:Configuration=Release /p:Version=$(Build.BuildId) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
+       arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
 ##################################################################################################
    - powershell: |
       [xml]$project = Get-Content -Path ./Code/Src/Framework.Logging.SeriLog/Framework.Logging.SeriLog.csproj
@@ -311,7 +311,7 @@ steps:
        command: custom
        projects: '**/Framework.Logging.SeriLog.csproj'
        custom: pack
-       arguments: '/p:Configuration=Release /p:Version=$(Build.BuildId) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
+       arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
 ##################################################################################################
    - powershell: |
       [xml]$project = Get-Content -Path ./Code/Src/Framework.MassTransit/Framework.MassTransit.csproj
@@ -328,7 +328,7 @@ steps:
        command: custom
        projects: '**/Framework.MassTransit.csproj'
        custom: pack
-       arguments: '/p:Configuration=Release /p:Version=$(Build.BuildId) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
+       arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
 ##################################################################################################
    - powershell: |
       [xml]$project = Get-Content -Path ./Code/Src/Framework.Messages/Framework.Messages.csproj
@@ -345,7 +345,7 @@ steps:
        command: custom
        projects: '**/Framework.Messages.csproj'
        custom: pack
-       arguments: '/p:Configuration=Release /p:Version=$(Build.BuildId) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
+       arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
 ##################################################################################################
    - powershell: |
       [xml]$project = Get-Content -Path ./Code/Src/Framework.Query/Framework.Query.csproj
@@ -362,7 +362,7 @@ steps:
        command: custom
        projects: '**/Framework.Query.csproj'
        custom: pack
-       arguments: '/p:Configuration=Release /p:Version=$(Build.BuildId) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
+       arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
 ##################################################################################################
    - powershell: |
       [xml]$project = Get-Content -Path ./Code/Src/Framework.RabbitMQ/Framework.RabbitMQ.csproj
@@ -379,7 +379,7 @@ steps:
        command: custom
        projects: '**/Framework.RabbitMQ.csproj'
        custom: pack
-       arguments: '/p:Configuration=Release /p:Version=$(Build.BuildId) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
+       arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
 ##################################################################################################
    - powershell: |
       [xml]$project = Get-Content -Path ./Code/Src/Framework.Redis/Framework.Redis.csproj
@@ -396,7 +396,7 @@ steps:
        command: custom
        projects: '**/Framework.Redis.csproj'
        custom: pack
-       arguments: '/p:Configuration=Release /p:Version=$(Build.BuildId) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
+       arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
 ##################################################################################################
    - powershell: |
       [xml]$project = Get-Content -Path ./Code/Src/Framework.Restful/Framework.Restful.csproj
@@ -413,7 +413,7 @@ steps:
        command: custom
        projects: '**/Framework.Restful.csproj'
        custom: pack
-       arguments: '/p:Configuration=Release /p:Version=$(Build.BuildId) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
+       arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
 ##################################################################################################
    - powershell: |
       [xml]$project = Get-Content -Path ./Code/Src/Framework.Specification/Framework.Specification.csproj
@@ -430,7 +430,7 @@ steps:
        command: custom
        projects: '**/Framework.Specification.csproj'
        custom: pack
-       arguments: '/p:Configuration=Release /p:Version=$(Build.BuildId) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
+       arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
 ##################################################################################################
    - powershell: |
       [xml]$project = Get-Content -Path ./Code/Src/Framework.Swagger/Framework.Swagger.csproj
@@ -447,7 +447,7 @@ steps:
        command: custom
        projects: '**/Framework.Swagger.csproj'
        custom: pack
-       arguments: '/p:Configuration=Release /p:Version=$(Build.BuildId) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
+       arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
 ##################################################################################################
    - powershell: |
       [xml]$project = Get-Content -Path ./Code/Src/Framework.Testing.Core/Framework.Testing.Core.csproj
@@ -464,7 +464,7 @@ steps:
        command: custom
        projects: '**/Framework.Testing.Core.csproj'
        custom: pack
-       arguments: '/p:Configuration=Release /p:Version=$(Build.BuildId) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
+       arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
 ##################################################################################################
    - powershell: |
       [xml]$project = Get-Content -Path ./Code/Src/Framework.Utility/Framework.Utility.csproj
@@ -481,7 +481,7 @@ steps:
        command: custom
        projects: '**/Framework.Utility.csproj'
        custom: pack
-       arguments: '/p:Configuration=Release /p:Version=$(Build.BuildId) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
+       arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
 ##################################################################################################
    - powershell: |
       [xml]$project = Get-Content -Path ./Code/Src/Framework.EventDispatcher/Framework.EventProcessor.csproj
@@ -498,7 +498,7 @@ steps:
        command: custom
        projects: '**/Framework.EventProcessor.csproj'
        custom: pack
-       arguments: '/p:Configuration=Release /p:Version=$(Build.BuildId) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
+       arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
 ##################################################################################################
    - task: PublishBuildArtifacts@1
      displayName: 'Publish Artifact: pack'
