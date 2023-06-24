@@ -11,11 +11,8 @@
 	    <ExcludeAssets>all</ExcludeAssets>
 	    <PrivateAssets>all</PrivateAssets>
     </ProjectReference>
-    <ProjectReference Include="..\Framework.Core\Framework.Core.csproj">
-	    <IncludeAssets>all</IncludeAssets>
-	    <ExcludeAssets>all</ExcludeAssets>
-	    <PrivateAssets>all</PrivateAssets>
-    </ProjectReference>
+    <ProjectReference Include="..\Framework.Core\Framework.Core.csproj" />
+	    
   </ItemGroup>
 
 </Project>

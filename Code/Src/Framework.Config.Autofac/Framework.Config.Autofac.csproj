@@ -15,11 +15,8 @@
 
 		</ProjectReference>
 		<ProjectReference Include="..\Framework.Config\Framework.Config.csproj" />
-		<ProjectReference Include="..\Framework.Core\Framework.Core.csproj" >
-			<IncludeAssets>all</IncludeAssets>
-			<ExcludeAssets>all</ExcludeAssets>
-			<PrivateAssets>all</PrivateAssets>
-		</ProjectReference>
+		<ProjectReference Include="..\Framework.Core\Framework.Core.csproj" />
+			
 		<ProjectReference Include="..\Framework.Domain\Framework.Domain.csproj" />
 		<ProjectReference Include="..\Framework.Kafka\Framework.Kafka.csproj" />
 		<ProjectReference Include="..\Framework.Query\Framework.Query.csproj" />

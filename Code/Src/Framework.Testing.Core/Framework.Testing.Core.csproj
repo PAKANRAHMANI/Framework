@@ -19,16 +19,10 @@
     <ProjectReference Include="..\Framework.DataAccess.EF\Framework.DataAccess.EF.csproj" />
     <ProjectReference Include="..\Framework.Domain\Framework.Domain.csproj" />
     <ProjectReference Include="..\Framework.Messages\Framework.Messages.csproj" />
-    <ProjectReference Include="..\Framework.Core\Framework.Core.csproj">
-	    <IncludeAssets>all</IncludeAssets>
-	    <ExcludeAssets>all</ExcludeAssets>
-	    <PrivateAssets>all</PrivateAssets>
-    </ProjectReference>
-    <ProjectReference Include="..\Framework.DataAccess.NH\Framework.DataAccess.NH.csproj">
-	    <IncludeAssets>all</IncludeAssets>
-	    <ExcludeAssets>all</ExcludeAssets>
-	    <PrivateAssets>all</PrivateAssets>
-    </ProjectReference>
+    <ProjectReference Include="..\Framework.Core\Framework.Core.csproj" />
+	    
+    <ProjectReference Include="..\Framework.DataAccess.NH\Framework.DataAccess.NH.csproj" />
+	    
 
   </ItemGroup>
 

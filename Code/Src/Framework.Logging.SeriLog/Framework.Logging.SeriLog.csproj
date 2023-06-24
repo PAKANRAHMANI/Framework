@@ -12,21 +12,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Framework.Application.Contracts\Framework.Application.Contracts.csproj" >
-			<IncludeAssets>all</IncludeAssets>
-			<ExcludeAssets>all</ExcludeAssets>
-			<PrivateAssets>all</PrivateAssets>
-		</ProjectReference>
-		<ProjectReference Include="..\Framework.Config\Framework.Config.csproj" >
-			<IncludeAssets>all</IncludeAssets>
-			<ExcludeAssets>all</ExcludeAssets>
-			<PrivateAssets>all</PrivateAssets>
-		</ProjectReference>
-		<ProjectReference Include="..\Framework.Core\Framework.Core.csproj" >
-			<IncludeAssets>all</IncludeAssets>
-			<ExcludeAssets>all</ExcludeAssets>
-			<PrivateAssets>all</PrivateAssets>
-		</ProjectReference>
+		<ProjectReference Include="..\Framework.Application.Contracts\Framework.Application.Contracts.csproj" />
+			
+		<ProjectReference Include="..\Framework.Config\Framework.Config.csproj" />
+			
+		<ProjectReference Include="..\Framework.Core\Framework.Core.csproj" />
+		
 	</ItemGroup>
 
 </Project>
