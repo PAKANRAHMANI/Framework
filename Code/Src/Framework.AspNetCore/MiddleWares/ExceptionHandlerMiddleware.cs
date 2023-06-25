@@ -4,7 +4,10 @@ using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using Framework.Core.Exceptions;
 using Framework.AspNetCore.Configurations;
+using Framework.Core.Logging;
 using Sentry;
+using System.Net;
+using System.Collections.Generic;
 
 namespace Framework.AspNetCore.MiddleWares
 {
@@ -13,11 +16,13 @@ namespace Framework.AspNetCore.MiddleWares
         private readonly RequestDelegate _next;
 
         private readonly ExceptionLogConfiguration _exceptionLogConfiguration;
+        private readonly ILogger _logger;
 
-        public ExceptionHandlerMiddleware(RequestDelegate next, ExceptionLogConfiguration exceptionLogConfiguration)
+        public ExceptionHandlerMiddleware(RequestDelegate next, ExceptionLogConfiguration exceptionLogConfiguration, ILogger logger)
         {
             _next = next;
             _exceptionLogConfiguration = exceptionLogConfiguration;
+            _logger = logger;
         }
 
         public async Task InvokeAsync(HttpContext context)
@@ -29,6 +34,7 @@ namespace Framework.AspNetCore.MiddleWares
             catch (Exception exception)
             {
                 await HandleException(context, exception);
+                _logger.WriteException(exception);
             }
         }
 
@@ -41,15 +47,22 @@ namespace Framework.AspNetCore.MiddleWares
 
         private async Task HandleBusinessException(HttpContext context, BusinessException businessException)
         {
-            var error = ExceptionDetails.Create(businessException.ExceptionMessage, businessException.ErrorCode);
-            await WriteExceptionToResponse(context, error);
+            var errors = new List<ExceptionDetails>()
+                {
+                    ExceptionDetails.Create(businessException.ExceptionMessage, businessException.ErrorCode,
+                        businessException.GetType().ToString())
+                };
+
+            await WriteExceptionToResponse(context, errors);
         }
 
-        private async Task WriteExceptionToResponse(HttpContext context, ExceptionDetails error)
+        private async Task WriteExceptionToResponse(HttpContext context, List<ExceptionDetails> errors)
         {
-            context.Response.StatusCode = (int)error.Code;
+        TODO://remove and use (int)error.Code
+            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+            //context.Response.StatusCode = (int)error.Code;
             context.Response.ContentType = "application/json";
-            await context.Response.WriteAsync(JsonConvert.SerializeObject(error));
+            await context.Response.WriteAsync(JsonConvert.SerializeObject(errors));
         }
 
         private async Task UnhandledException(HttpContext httpContext, Exception exception)
@@ -57,8 +70,12 @@ namespace Framework.AspNetCore.MiddleWares
             if (IsUnhandledExceptionsCapturedBySentry())
                 CaptureOnSentry(exception);
 
-            var error = ExceptionDetails.Create(exception.Message, -1000);
-            await WriteExceptionToResponse(httpContext, error);
+            var errors = new List<ExceptionDetails>()
+            {
+                ExceptionDetails.Create(exception.Message, -1000, exception.GetType().ToString())
+            };
+
+            await WriteExceptionToResponse(httpContext, errors);
         }
 
         private bool IsUnhandledExceptionsCapturedBySentry()

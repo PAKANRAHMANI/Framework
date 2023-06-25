@@ -15,7 +15,7 @@ namespace Framework.AspNetCore
                     var controllerName = GetControllerName(controller.ControllerType.Name, "Query");
                     model.AttributeRouteModel = new AttributeRouteModel
                     {
-                        Template = $"{controllerName}"
+                        Template = "/v{version:apiVersion}/" + controllerName
                     };
                 }
             }
