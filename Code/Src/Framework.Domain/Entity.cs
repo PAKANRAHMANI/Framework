@@ -8,7 +8,7 @@ namespace Framework.Domain
         public byte[] RowVersion { get; private set; }
         public DateTime CreationDateTime { get; protected set; }
         public DateTime? LastUpdateDateTime { get; private set; }
-        public DateTime DeleteDateTime { get; private set; }
+        public DateTime? DeleteDateTime { get; private set; }
         public bool IsDeleted { get; private set; }
         public TKey Id { get; protected set; }
 
