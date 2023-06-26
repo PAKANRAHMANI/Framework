@@ -6,6 +6,11 @@ namespace Framework.AspNetCore
 {
     public class CqrsConvention : IApplicationModelConvention
     {
+        private readonly bool _removeControllerName = false;
+        public CqrsConvention(bool removeControllerName = false)
+        {
+            _removeControllerName = removeControllerName;
+        }
         public void Apply(ApplicationModel application)
         {
             foreach (var controller in application.Controllers.Where(a => a.ControllerType.Name.Contains("Query",StringComparison.OrdinalIgnoreCase)))
@@ -13,6 +18,10 @@ namespace Framework.AspNetCore
                 foreach (var model in controller.Selectors.Where(b=>b.AttributeRouteModel != null))
                 {
                     var controllerName = GetControllerName(controller.ControllerType.Name, "Query");
+
+                    if (_removeControllerName)
+                        controllerName = "";
+
                     model.AttributeRouteModel = new AttributeRouteModel
                     {
                         Template = "/v{version:apiVersion}/" + controllerName
