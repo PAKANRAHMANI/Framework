@@ -17,12 +17,12 @@
 		<ProjectReference Include="..\..\Src\Framework.Core\Framework.Core.csproj">
 			<IncludeAssets>all</IncludeAssets>
 			<ExcludeAssets>all</ExcludeAssets>
-			<PrivateAssets>all</PrivateAssets>
+			 
 		</ProjectReference>
 		<ProjectReference Include="..\..\Src\Framework.Domain\Framework.Domain.csproj">
 			<IncludeAssets>all</IncludeAssets>
 			<ExcludeAssets>all</ExcludeAssets>
-			<PrivateAssets>all</PrivateAssets>
+			 
 		</ProjectReference>
 		<ProjectReference Include="..\..\Src\Framework.Testing.Core\Framework.Testing.Core.csproj" />
 	</ItemGroup>

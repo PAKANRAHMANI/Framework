@@ -11,17 +11,17 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Framework.Application.Contracts\Framework.Application.Contracts.csproj" >
-	    <PrivateAssets>all</PrivateAssets>
+	     
     </ProjectReference>
 	   
     <ProjectReference Include="..\Framework.Application\Framework.Application.csproj" >
-	    <PrivateAssets>all</PrivateAssets>
+	     
     </ProjectReference>
 
     <ProjectReference Include="..\Framework.Domain\Framework.Domain.csproj" />
 	    
     <ProjectReference Include="..\Framework.Query\Framework.Query.csproj" >
-	    <PrivateAssets>all</PrivateAssets>
+	     
     </ProjectReference>
 	  
   </ItemGroup>

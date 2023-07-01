@@ -13,7 +13,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\Framework.Config\Framework.Config.csproj" >
-			<PrivateAssets>all</PrivateAssets>
+			 
 		</ProjectReference>
 	</ItemGroup>
 
