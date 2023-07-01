@@ -12,11 +12,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Framework.Application.Contracts\Framework.Application.Contracts.csproj" />
 			
 		<ProjectReference Include="..\Framework.Config\Framework.Config.csproj" />
-			
-		<ProjectReference Include="..\Framework.Core\Framework.Core.csproj" />
 		
 	</ItemGroup>
 

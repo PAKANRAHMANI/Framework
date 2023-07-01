@@ -7,8 +7,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Framework.Application.Contracts\Framework.Application.Contracts.csproj">
-	    <IncludeAssets>all</IncludeAssets>
-	    <ExcludeAssets>all</ExcludeAssets>
 	    <PrivateAssets>all</PrivateAssets>
     </ProjectReference>
     <ProjectReference Include="..\Framework.Core\Framework.Core.csproj" />

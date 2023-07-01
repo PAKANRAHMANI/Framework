@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Framework.Application.Contracts;
 using Framework.Core;
 
-namespace Framework.Config
+namespace Framework.Application
 {
     public class TransactionalRequestHandlerDecorator<TRequest, Tresponse> : IRequestHandler<TRequest,Tresponse> where TRequest : IRequest
     {

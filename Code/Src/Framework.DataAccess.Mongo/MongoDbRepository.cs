@@ -29,7 +29,7 @@ namespace Framework.DataAccess.Mongo
 
         public async Task Create(T aggregate)
         {
-            if (_config.IsDecorateTransactionForCommands || _config.IsDecorateTransactionForRequests)
+            if (_config.UseTransaction)
             {
                 await Database.GetCollection<T>(typeof(T).Name.Pluralize()).InsertOneAsync(_session, aggregate);
 
@@ -45,7 +45,7 @@ namespace Framework.DataAccess.Mongo
         {
             var filter = Builders<T>.Filter.Eq(s => s.Id, aggregate.Id);
 
-            if (_config.IsDecorateTransactionForCommands || _config.IsDecorateTransactionForRequests)
+            if (_config.UseTransaction)
             {
                 await Database.GetCollection<T>(typeof(T).Name.Pluralize()).ReplaceOneAsync(_session, filter, aggregate);
 
@@ -62,7 +62,7 @@ namespace Framework.DataAccess.Mongo
 
             var update = Builders<T>.Update.Set(a => a.IsDeleted, aggregate.IsDeleted);
 
-            if (_config.IsDecorateTransactionForCommands || _config.IsDecorateTransactionForRequests)
+            if (_config.UseTransaction)
             {
                 await Database.GetCollection<T>(typeof(T).Name.Pluralize()).UpdateOneAsync(_session, filter, update);
 

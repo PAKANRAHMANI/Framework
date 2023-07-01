@@ -6,7 +6,6 @@ using EasyNetQ;
 using EasyNetQ.Topology;
 using Framework.EasyNetQ.Helpers;
 using Framework.Messages;
-using MassTransit.RabbitMqTransport;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using IMessage = Framework.Messages.IMessage;

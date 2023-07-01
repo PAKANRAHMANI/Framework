@@ -1,5 +1,4 @@
 ﻿using System;
-using Framework.Application.Contracts;
 using Framework.Config;
 using Framework.Core;
 using MongoDB.Driver;
@@ -25,11 +24,6 @@ namespace Framework.DataAccess.Mongo
             dependencyRegister.RegisterScoped<IMongoContext, MongoContext>();
 
             dependencyRegister.RegisterScoped<IUnitOfWork, MongoUnitOfWork>();
-
-            if (_config.IsDecorateTransactionForRequests)
-                dependencyRegister.RegisterDecorator(typeof(IRequestHandler<,>), typeof(TransactionalRequestHandlerDecorator<,>));
-            else if (_config.IsDecorateTransactionForCommands)
-                dependencyRegister.RegisterDecorator(typeof(ICommandHandler<>), typeof(TransactionalCommandHandlerDecorator<>));
 
         }
 

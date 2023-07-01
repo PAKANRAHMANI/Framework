@@ -7,17 +7,12 @@
 	<ItemGroup>
 		<PackageReference Include="autofac" />
 		<PackageReference Include="Autofac.Extras.DynamicProxy" />
-		<PackageReference Include="MassTransit.Autofac"  />
-		<PackageReference Include="MassTransit.RabbitMQ"  />
+		<PackageReference Include="MassTransit.Autofac" />
+		<PackageReference Include="MassTransit.RabbitMQ" />
 	</ItemGroup>
 	<ItemGroup>
-		<ProjectReference Include="..\Framework.Application.Contracts\Framework.Application.Contracts.csproj" >
-
-		</ProjectReference>
+		<ProjectReference Include="..\Framework.Application.Contracts\Framework.Application.Contracts.csproj" />
 		<ProjectReference Include="..\Framework.Config\Framework.Config.csproj" />
-		<ProjectReference Include="..\Framework.Core\Framework.Core.csproj" />
-			
-		<ProjectReference Include="..\Framework.Domain\Framework.Domain.csproj" />
 		<ProjectReference Include="..\Framework.Kafka\Framework.Kafka.csproj" />
 		<ProjectReference Include="..\Framework.Query\Framework.Query.csproj" />
 	</ItemGroup>
