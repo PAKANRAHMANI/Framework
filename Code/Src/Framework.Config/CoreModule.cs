@@ -26,6 +26,8 @@ namespace Framework.Config
             dependencyRegister.RegisterScoped<IAggregateRootConfigurator, AggregateRootConfigurator>();
             dependencyRegister.RegisterDecorator(typeof(IRequestHandler<,>), typeof(TransactionalRequestHandlerDecorator<,>));
             dependencyRegister.RegisterDecorator(typeof(ICommandHandler<>), typeof(TransactionalCommandHandlerDecorator<>));
+            dependencyRegister.RegisterDecorator(typeof(IRequestHandler<,>), typeof(LoggingRequestHandlerDecorator<,>));
+            dependencyRegister.RegisterDecorator(typeof(ICommandHandler<>), typeof(LoggingCommandHandlerDecorator<>));
         }
     }
 }
