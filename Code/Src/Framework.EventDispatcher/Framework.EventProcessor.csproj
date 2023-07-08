@@ -5,13 +5,14 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>disable</Nullable>
 		<OutputType>Library</OutputType>
-		  <Version>4.0.1</Version>
+		<Version>4.0.1</Version>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Dapper" Version="2.0.123" />
-		<PackageReference Include="MassTransit.RabbitMQ" Version="8.0.6" />
-		<PackageReference Include="Microsoft.Data.SqlClient" Version="5.0.0" />
+		<PackageReference Include="MongoDB.Driver" />
+		<PackageReference Include="Dapper"  />
+		<PackageReference Include="MassTransit.RabbitMQ"  />
+		<PackageReference Include="Microsoft.Data.SqlClient"  />
 		<PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
 		<PackageReference Include="PrivateSetterContractResolver" Version="2.1.0" />
 	</ItemGroup>

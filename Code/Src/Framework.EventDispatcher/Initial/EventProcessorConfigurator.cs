@@ -3,10 +3,10 @@ using Framework.EventProcessor.Events;
 using Framework.EventProcessor.Events.MassTransit;
 using Framework.EventProcessor.Filtering;
 using Framework.EventProcessor.Transformation;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using Framework.EventProcessor.DataStore;
+using Framework.EventProcessor.DataStore.MongoDB;
 
 namespace Framework.EventProcessor.Initial
 {
@@ -24,6 +24,14 @@ namespace Framework.EventProcessor.Initial
             _services.AddSingleton<IDataStoreObservable, SqlDataStore>();
 
             _services.Configure<SqlStoreConfig>(config);
+
+            return this;
+        }
+        public EventProcessorConfigurator ReadFromMongoDB(Action<MongoStoreConfig> config)
+        {
+            _services.AddSingleton<IDataStoreObservable, MongoDBDataStore>();
+
+            _services.Configure<MongoStoreConfig>(config);
 
             return this;
         }
