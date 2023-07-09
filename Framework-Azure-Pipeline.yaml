@@ -313,22 +313,22 @@ steps:
        custom: pack
        arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
 ##################################################################################################
-   - powershell: |
-      [xml]$project = Get-Content -Path ./Code/Src/Framework.MassTransit/Framework.MassTransit.csproj
-      $version = $project.Project.PropertyGroup.Version
-      echo "version: "
-      echo $version
-      echo "##vso[task.setvariable variable=version]$version"
+#    - powershell: |
+#       [xml]$project = Get-Content -Path ./Code/Src/Framework.MassTransit/Framework.MassTransit.csproj
+#       $version = $project.Project.PropertyGroup.Version
+#       echo "version: "
+#       echo $version
+#       echo "##vso[task.setvariable variable=version]$version"
  
-     displayName: 'Get Version of Framework.MassTransit'
-##################################################################################################
-   - task: DotNetCoreCLI@2
-     displayName: 'Pack Framework.MassTransit'
-     inputs:
-       command: 'custom'
-       projects: '**/Framework.MassTransit.csproj'
-       custom: 'pack'
-       arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
+#      displayName: 'Get Version of Framework.MassTransit'
+# ##################################################################################################
+#    - task: DotNetCoreCLI@2
+#      displayName: 'Pack Framework.MassTransit'
+#      inputs:
+#        command: 'custom'
+#        projects: '**/Framework.MassTransit.csproj'
+#        custom: 'pack'
+#        arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
 ##################################################################################################
    - powershell: |
       [xml]$project = Get-Content -Path ./Code/Src/Framework.Messages/Framework.Messages.csproj
