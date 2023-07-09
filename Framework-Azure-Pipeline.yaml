@@ -325,9 +325,9 @@ steps:
    - task: DotNetCoreCLI@2
      displayName: 'Pack Framework.MassTransit'
      inputs:
-       command: custom
+       command: 'custom'
        projects: '**/Framework.MassTransit.csproj'
-       custom: pack
+       custom: 'pack'
        arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
 ##################################################################################################
    - powershell: |
