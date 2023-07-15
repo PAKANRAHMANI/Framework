@@ -69,7 +69,11 @@ namespace Framework.AspNetCore.MiddleWares
                 ContractResolver = new CamelCasePropertyNamesContractResolver()
             };
 
-            await context.Response.WriteAsync(JsonConvert.SerializeObject(errors, jsonSerializerSettings));
+            var errorModel = new
+            {
+                errors = errors
+            };
+            await context.Response.WriteAsync(JsonConvert.SerializeObject(errorModel, jsonSerializerSettings));
         }
 
         private async Task UnhandledException(HttpContext httpContext, Exception exception)
