@@ -24,7 +24,7 @@ namespace Framework.AspNetCore
             options.Conventions.Add(new CqrsConvention());
         }
 
-        public static void ConfigureApiBehaviorModelStateError(this IMvcBuilder mvcBuilder)
+        public static IMvcBuilder ConfigureApiBehaviorModelStateError(this IMvcBuilder mvcBuilder)
         {
             mvcBuilder.ConfigureApiBehaviorOptions(options =>
             {
@@ -37,6 +37,7 @@ namespace Framework.AspNetCore
                     return new BadRequestObjectResult(response);
                 };
             });
+            return mvcBuilder;
         }
     }
 }
