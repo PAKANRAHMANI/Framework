@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using Framework.AspNetCore.MiddleWares;
+using Framework.AspNetCore.Response;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,6 +22,21 @@ namespace Framework.AspNetCore
         public static void AddCqrsConvention(this MvcOptions options)
         {
             options.Conventions.Add(new CqrsConvention());
+        }
+
+        public static void ConfigureApiBehaviorModelStateError(this IMvcBuilder mvcBuilder)
+        {
+            mvcBuilder.ConfigureApiBehaviorOptions(options =>
+            {
+                options.InvalidModelStateResponseFactory = c =>
+                {
+                    var messages = c.ModelState.GetAllErrors();
+
+                    var response = messages.Select(msg => ExceptionDetails.Create(msg, 0, ""));
+
+                    return new BadRequestObjectResult(response);
+                };
+            });
         }
     }
 }

@@ -24,7 +24,7 @@ namespace Framework.AspNetCore
 
                     model.AttributeRouteModel = new AttributeRouteModel
                     {
-                        Template = "/v{version:apiVersion}/" + controllerName
+                        Template = $"{controllerName}"
                     };
                 }
             }

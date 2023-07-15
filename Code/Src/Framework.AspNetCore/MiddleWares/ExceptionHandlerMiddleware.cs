@@ -8,6 +8,7 @@ using Framework.Core.Logging;
 using Sentry;
 using System.Net;
 using System.Collections.Generic;
+using Newtonsoft.Json.Serialization;
 
 namespace Framework.AspNetCore.MiddleWares
 {
@@ -62,7 +63,13 @@ namespace Framework.AspNetCore.MiddleWares
             context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
             //context.Response.StatusCode = (int)error.Code;
             context.Response.ContentType = "application/json";
-            await context.Response.WriteAsync(JsonConvert.SerializeObject(errors));
+
+            var jsonSerializerSettings = new JsonSerializerSettings
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver()
+            };
+
+            await context.Response.WriteAsync(JsonConvert.SerializeObject(errors, jsonSerializerSettings));
         }
 
         private async Task UnhandledException(HttpContext httpContext, Exception exception)
