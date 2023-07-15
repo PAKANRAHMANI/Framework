@@ -24,7 +24,7 @@ namespace Framework.AspNetCore
 
                     model.AttributeRouteModel = new AttributeRouteModel
                     {
-                        Template = $"{controllerName}"
+                        Template = model.AttributeRouteModel?.Template?.Replace("[controller]", controllerName) ?? controllerName
                     };
                 }
             }
