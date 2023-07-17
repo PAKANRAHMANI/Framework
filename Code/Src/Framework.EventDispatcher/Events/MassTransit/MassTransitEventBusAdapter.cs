@@ -13,11 +13,6 @@ namespace Framework.EventProcessor.Events.MassTransit
         {
             _config = config.Value;
         }
-        public Task Publish<T>(T @event) where T : IEvent
-        {
-            return _bus.Publish(@event);
-        }
-
         public async Task Start()
         {
             _bus = Bus.Factory.CreateUsingRabbitMq(sbc =>

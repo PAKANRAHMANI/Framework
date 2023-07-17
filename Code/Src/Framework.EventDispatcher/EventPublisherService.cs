@@ -9,17 +9,17 @@ using Microsoft.Extensions.Logging;
 
 namespace Framework.EventProcessor
 {
-    public class EventWorker : BackgroundService, IDataStoreChangeTrackerObserver
+    public class EventPublisherService : BackgroundService, IDataStoreChangeTrackerObserver
     {
-        private readonly ILogger<EventWorker> _logger;
+        private readonly ILogger<EventPublisherService> _logger;
         private readonly IDataStoreObservable _dataStore;
         private readonly IEventBus _eventBus;
         private readonly IEventTypeResolver _eventTypeResolver;
         private readonly IEventFilter _eventFilter;
         private readonly IEventTransformerLookUp _transformerLookUp;
 
-        public EventWorker(
-            ILogger<EventWorker> logger,
+        public EventPublisherService(
+            ILogger<EventPublisherService> logger,
             IDataStoreObservable dataStore,
             IEventBus eventBus,
             IEventTypeResolver eventTypeResolver,

@@ -9,10 +9,11 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="Confluent.Kafka" />
 		<PackageReference Include="MongoDB.Driver" />
-		<PackageReference Include="Dapper"  />
-		<PackageReference Include="MassTransit.RabbitMQ"  />
-		<PackageReference Include="Microsoft.Data.SqlClient"  />
+		<PackageReference Include="Dapper" />
+		<PackageReference Include="MassTransit.RabbitMQ" />
+		<PackageReference Include="Microsoft.Data.SqlClient" />
 		<PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
 		<PackageReference Include="PrivateSetterContractResolver" Version="2.1.0" />
 	</ItemGroup>
