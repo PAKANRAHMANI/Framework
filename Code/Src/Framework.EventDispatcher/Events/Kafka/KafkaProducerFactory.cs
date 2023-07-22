@@ -1,20 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Confluent.Kafka;
 using Framework.Core.Streaming;
 
 namespace Framework.EventProcessor.Events.Kafka
 {
-    internal static class KafkaProducerFactory<TKey, TMessage> where TMessage : IStream
+    public static class KafkaProducerFactory<TKey, TMessage>
     {
-        internal static KafkaProducer<TKey, TMessage> Create(bool useOfSpecificPartition,ProducerConfiguration configuration)
+        public static IProducer<TKey, TMessage> Create(ProducerConfiguration configuration)
         {
-            if (useOfSpecificPartition)
-                return new KafkaPartitionProducer<TKey, TMessage>(configuration);
+            var config = new ProducerConfig()
+            {
+                BootstrapServers = configuration.BootstrapServer,
+                MessageTimeoutMs = configuration.MessageTimeoutMs,
+                Acks = configuration.Acks,
+                EnableIdempotence = configuration.EnableIdempotence
+            };
 
-            return new KafkaTopicProducer<TKey, TMessage>(configuration);
+            return new ProducerBuilder<TKey, TMessage>(config).Build();
         }
     }
 }

@@ -16,6 +16,7 @@
 		<PackageReference Include="Microsoft.Data.SqlClient" />
 		<PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
 		<PackageReference Include="PrivateSetterContractResolver" Version="2.1.0" />
+		<PackageReference Include="MassTransit.AspNetCore" />
 	</ItemGroup>
 
 	<ItemGroup>

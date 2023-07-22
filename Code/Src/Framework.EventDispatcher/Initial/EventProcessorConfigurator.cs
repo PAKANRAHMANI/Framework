@@ -7,16 +7,22 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using Framework.EventProcessor.DataStore;
 using Framework.EventProcessor.DataStore.MongoDB;
+using Framework.EventProcessor.Events.Kafka;
+using Framework.EventProcessor.Services;
+using MassTransit;
+using MassTransit.MultiBus;
 
 namespace Framework.EventProcessor.Initial
 {
     public class EventProcessorConfigurator
     {
         private readonly IServiceCollection _services;
+        private ServiceConfig _serviceConfig;
 
         public EventProcessorConfigurator(IServiceCollection serviceCollection)
         {
             _services = serviceCollection;
+            _serviceConfig = new ServiceConfig();
         }
 
         public EventProcessorConfigurator ReadFromSqlServer(Action<SqlStoreConfig> config)
@@ -27,7 +33,7 @@ namespace Framework.EventProcessor.Initial
 
             return this;
         }
-        public EventProcessorConfigurator ReadFromMongoDB(Action<MongoStoreConfig> config)
+        public EventProcessorConfigurator ReadFromMongoDb(Action<MongoStoreConfig> config)
         {
             _services.AddSingleton<IDataStoreObservable, MongoDBDataStore>();
 
@@ -43,6 +49,82 @@ namespace Framework.EventProcessor.Initial
 
             return this;
         }
+        public EventProcessorConfigurator ProduceMessageWithKafka(Action<ProducerConfiguration> config)
+        {
+            RegisterMessageProducer(config);
+
+            _services.AddHostedService<MessageProducerService>();
+
+            return this;
+        }
+        public EventProcessorConfigurator SecondaryDeliveryWithKafka(Action<SecondaryProducerConfiguration> config)
+        {
+            RegisterSecondaryMessageProducer(config);
+
+            _serviceConfig.SendWithKafka = true;
+
+            return this;
+        }
+        public EventProcessorConfigurator SecondaryDeliveryWithMassTransit(Action<SecondaryMassTransitConfiguration> config, bool useOfMultipleBus = false)
+        {
+            _services.Configure<SecondaryMassTransitConfiguration>(config);
+
+            _serviceConfig.SendWithMassTransit = true;
+
+            _serviceConfig.EnableMultipleBus = useOfMultipleBus;
+
+            var massTransitConfig = new SecondaryMassTransitConfiguration();
+
+            config.Invoke(massTransitConfig);
+
+            if (useOfMultipleBus)
+                RegisterSecondBus(_services, massTransitConfig);
+
+            return this;
+        }
+
+        private void RegisterSecondBus(IServiceCollection services, SecondaryMassTransitConfiguration config)
+        {
+            services.AddMassTransit<ISecondBus>(x =>
+            {
+                x.UsingRabbitMq((context, cfg) =>
+                {
+                    cfg.Host(config.RabbitMqConnectionString);
+                });
+            });
+        }
+
+        private void RegisterMessageProducer(Action<ProducerConfiguration> config)
+        {
+            var producerConfig = new ProducerConfiguration();
+
+            config.Invoke(producerConfig);
+
+            _services.Configure<ProducerConfiguration>(config);
+
+            var kafkaProducer = KafkaProducerFactory<object, object>.Create(producerConfig);
+
+            var producer = MessageProducerFactory.Create(kafkaProducer, producerConfig);
+
+            _services.AddSingleton(producer);
+        }
+        private void RegisterSecondaryMessageProducer(Action<SecondaryProducerConfiguration> config)
+        {
+            var producerConfig = new SecondaryProducerConfiguration();
+
+            config.Invoke(producerConfig);
+
+            _services.Configure<SecondaryProducerConfiguration>(config);
+
+            // var kafkaProducer = KafkaSecondaryProducerFactory<object, object>.Create(producerConfig);
+        }
+
+        public EventProcessorConfigurator EnableSendingMessageToSecondaryBroker()
+        {
+            _serviceConfig.EnableSecondarySending = true;
+            return this;
+        }
+
         public EventProcessorConfigurator WithFilter(IEventFilter filter)
         {
             _services.AddSingleton(filter);

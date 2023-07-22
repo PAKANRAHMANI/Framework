@@ -1,0 +1,49 @@
+﻿using Framework.Core.Events;
+using Framework.EventProcessor.DataStore;
+using Framework.EventProcessor.Events;
+using Framework.EventProcessor.Events.Kafka;
+using Framework.EventProcessor.Filtering;
+using Framework.EventProcessor.Transformation;
+using Microsoft.Extensions.Logging;
+
+namespace Framework.EventProcessor.Services
+{
+    public class MessageProducerService : TemplateService
+    {
+        private readonly ILogger<MessageProducerService> _logger;
+        private readonly MessageProducer _producer;
+        private readonly ProducerConfiguration _producerConfiguration;
+        private readonly IKafkaValidator _kafkaValidator;
+
+        public MessageProducerService(
+            IEventTypeResolver eventTypeResolver,
+            IEventFilter eventFilter,
+            IEventTransformerLookUp transformerLookUp,
+            ILogger<MessageProducerService> logger,
+            IDataStoreObservable dataStore,
+            MessageProducer producer,
+            ProducerConfiguration producerConfiguration,
+            IKafkaValidator kafkaValidator
+            ) : base(eventTypeResolver, eventFilter, transformerLookUp, logger, dataStore)
+        {
+            _logger = logger;
+            _producer = producer;
+            _producerConfiguration = producerConfiguration;
+            _kafkaValidator = kafkaValidator;
+        }
+
+
+        protected override Task Start()
+        {
+            if (!_kafkaValidator.TopicIsExist(_producerConfiguration.TopicName))
+                _logger.LogWarning("Topic Is Not Exist");
+
+            return Task.CompletedTask;
+        }
+
+        protected override void Send(IEvent @event)
+        {
+            _producer.Produce(_producerConfiguration.TopicKey, @event);
+        }
+    }
+}

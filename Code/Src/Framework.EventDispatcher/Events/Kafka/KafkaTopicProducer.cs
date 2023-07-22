@@ -1,16 +1,15 @@
-﻿using Framework.Core.Streaming;
-namespace Framework.EventProcessor.Events.Kafka;
+﻿namespace Framework.EventProcessor.Events.Kafka;
 using Confluent.Kafka;
 
-internal class KafkaTopicProducer<TKey, TMessage> : KafkaProducer<TKey, TMessage> where TMessage : IStream
+public class KafkaTopicProducer : MessageProducer
 {
-    internal KafkaTopicProducer(ProducerConfiguration configuration) : base(configuration)
+    public KafkaTopicProducer(IProducer<object, object> producer, ProducerConfiguration configuration) : base(configuration, producer)
     {
     }
 
-    protected override void Produce(TKey key, TMessage message, Action<DeliveryResult<TKey, TMessage>> action = null)
+    public override void Produce<TKey, TMessage>(TKey key, TMessage message, Action<DeliveryResult<object, object>> action = null)
     {
-        Producer.Produce(Configuration.TopicName, new Message<TKey, TMessage>
+        Producer.Produce(Configuration.TopicName, new Message<object, object>
         {
             Value = message,
             Key = key

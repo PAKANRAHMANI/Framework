@@ -2,7 +2,7 @@
 
 namespace Framework.EventProcessor.Events.Kafka
 {
-    public class ProducerConfiguration 
+    public class SecondaryProducerConfiguration 
     {
         public string BootstrapServer { get; set; }
         public int MessageTimeoutMs { get; set; }

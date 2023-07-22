@@ -3,15 +3,15 @@ using Framework.Core.Streaming;
 
 namespace Framework.EventProcessor.Events.Kafka
 {
-    internal class KafkaPartitionProducer<TKey, TMessage> : KafkaProducer<TKey, TMessage> where TMessage : IStream
+    internal class KafkaPartitionProducer : MessageProducer
     {
-        internal KafkaPartitionProducer(ProducerConfiguration configuration) : base(configuration)
+        public KafkaPartitionProducer(IProducer<object, object> producer, ProducerConfiguration configuration) : base(configuration, producer)
         {
         }
 
-        protected override void Produce(TKey key, TMessage message, Action<DeliveryResult<TKey, TMessage>> action = null)
+        public override void Produce<TKey, TMessage>(TKey key, TMessage message, Action<DeliveryResult<object, object>> action = null)
         {
-            Producer.Produce(new TopicPartition(Configuration.TopicName, new Partition(Configuration.PartitionNumber)), new Message<TKey, TMessage>
+            Producer.Produce(new TopicPartition(Configuration.TopicName, new Partition(Configuration.PartitionNumber)), new Message<object, object>
             {
                 Value = message,
                 Key = key
