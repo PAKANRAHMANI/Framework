@@ -2,8 +2,8 @@
 
 public class TokenManagementConfiguration
 {
-    public string StsBaseUrl { get; init; }
-    public string ClientId { get; init; }
-    public string SecretKey { get; init; }
-    public string Scope { get; init; }
+    public string StsBaseUrl { get; set; }
+    public string ClientId { get; set; }
+    public string SecretKey { get; set; }
+    public string Scope { get; set; }
 }
