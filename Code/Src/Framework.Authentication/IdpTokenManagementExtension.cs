@@ -25,7 +25,23 @@ public static class IdpTokenManagementExtension
 
         return services;
     }
+    public static IServiceCollection RegisterWorkerTokenConfiguration(this IServiceCollection services, Action<TokenManagementConfiguration> options)
+    {
+        var tokenManagementConfiguration = new TokenManagementConfiguration();
 
+        options.Invoke(tokenManagementConfiguration);
+
+        services.AddScoped(_ => tokenManagementConfiguration);
+
+        services.AddScoped<ITokenManagement, WorkerTokenManagement>();
+
+        services.AddHttpClient(Constants.ClientName, a =>
+        {
+            a.BaseAddress = new Uri(tokenManagementConfiguration.StsBaseUrl);
+        });
+
+        return services;
+    }
     public static void RegisterAuthentication(this IServiceCollection services, Action<AuthenticationConfig> options)
     {
         var identityServerConfig = new AuthenticationConfig();

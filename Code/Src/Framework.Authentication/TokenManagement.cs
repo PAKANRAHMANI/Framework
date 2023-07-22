@@ -1,10 +1,10 @@
 ﻿using Framework.Authentication.Configuration;
+using Framework.Core.Logging;
 using IdentityModel.Client;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Framework.Core.Logging;
 using static IdentityModel.OidcConstants;
 
 namespace Framework.Authentication
