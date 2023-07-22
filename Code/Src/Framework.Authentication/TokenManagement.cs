@@ -126,7 +126,7 @@ namespace Framework.Authentication
         private void WriteMessage(string message, string methodName)
         {
             _logger.Write(
-                "class: {className} | method: {methodName} | log-event: {logEvent} | redis configured with config: {@config}.",
+                "class: {className} | method: {methodName} | log-event: {logEvent},message: {@message}.",
                 LogLevel.Information,
                 nameof(TokenManagement), methodName, "Getting Token", message);
         }

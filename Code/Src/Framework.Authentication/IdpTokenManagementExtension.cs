@@ -26,7 +26,7 @@ public static class IdpTokenManagementExtension
         return services;
     }
 
-    public static void AddAuthentication(this IServiceCollection services, Action<AuthenticationConfig> options)
+    public static void RegisterAuthentication(this IServiceCollection services, Action<AuthenticationConfig> options)
     {
         var identityServerConfig = new AuthenticationConfig();
 
