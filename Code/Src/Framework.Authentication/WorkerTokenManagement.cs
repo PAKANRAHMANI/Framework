@@ -43,6 +43,17 @@ public class WorkerTokenManagement : ITokenManagement
             throw;
         }
     }
+
+    public Task<string> GetUserToken()
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<TokenResponse> ExchangeToken()
+    {
+        throw new NotImplementedException();
+    }
+
     private ClientCredentialsTokenRequest CreteClientCredentialsTokenRequest(DiscoveryDocumentResponse discoveryDocument)
     {
         var tokenRequest = new ClientCredentialsTokenRequest
