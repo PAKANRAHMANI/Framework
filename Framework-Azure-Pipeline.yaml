@@ -41,294 +41,294 @@ steps:
        projects: '**/*.Tests.Integration.csproj'
        arguments: '--configuration $(BuildConfiguration)'
 ##################################################################################################
-   - powershell: |
-      [xml]$project = Get-Content -Path ./Code/Src/Framework.Application/Framework.Application.csproj
-      $version = $project.Project.PropertyGroup.Version
-      echo "version: "
-      echo $version
-      echo "##vso[task.setvariable variable=version]$version"
- 
-     displayName: 'Get Version of Framework.Application'
-##################################################################################################
-   - task: DotNetCoreCLI@2
-     displayName: 'Pack Framework.Application'
-     inputs:
-       command: custom
-       projects: '**/Framework.Application.csproj'
-       custom: pack
-       arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
-##################################################################################################
-   - powershell: |
-      [xml]$project = Get-Content -Path ./Code/Src/Framework.Application.Contracts/Framework.Application.Contracts.csproj
-      $version = $project.Project.PropertyGroup.Version
-      echo "version: "
-      echo $version
-      echo "##vso[task.setvariable variable=version]$version"
- 
-     displayName: 'Get Version of Framework.Application.Contracts'
-##################################################################################################
-   - task: DotNetCoreCLI@2
-     displayName: 'Pack Framework.Application.Contracts'
-     inputs:
-       command: custom
-       projects: '**/Framework.Application.Contracts.csproj'
-       custom: pack
-       arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
-##################################################################################################
-   - powershell: |
-      [xml]$project = Get-Content -Path ./Code/Src/Framework.AspNetCore/Framework.AspNetCore.csproj
-      $version = $project.Project.PropertyGroup.Version
-      echo "version: "
-      echo $version
-      echo "##vso[task.setvariable variable=version]$version"
- 
-     displayName: 'Get Version of Framework.AspNetCore'
-##################################################################################################
-   - task: DotNetCoreCLI@2
-     displayName: 'Pack Framework.AspNetCore'
-     inputs:
-       command: custom
-       projects: '**/Framework.AspNetCore.csproj'
-       custom: pack
-       arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
-##################################################################################################
-   - powershell: |
-      [xml]$project = Get-Content -Path ./Code/Src/Framework.Authorization/Framework.Authorization.csproj
-      $version = $project.Project.PropertyGroup.Version
-      echo "version: "
-      echo $version
-      echo "##vso[task.setvariable variable=version]$version"
- 
-     displayName: 'Get Version of Framework.Authorization'
-##################################################################################################
-   - task: DotNetCoreCLI@2
-     displayName: 'Pack Framework.Authorization'
-     inputs:
-       command: custom
-       projects: '**/Framework.Authorization.csproj'
-       custom: pack
-       arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
-##################################################################################################
-   - powershell: |
-      [xml]$project = Get-Content -Path ./Code/Src/Framework.Config/Framework.Config.csproj
-      $version = $project.Project.PropertyGroup.Version
-      echo "version: "
-      echo $version
-      echo "##vso[task.setvariable variable=version]$version"
- 
-     displayName: 'Get Version of Framework.Config'
-##################################################################################################
-   - task: DotNetCoreCLI@2
-     displayName: 'Pack Framework.Config'
-     inputs:
-       command: custom
-       projects: '**/Framework.Config.csproj'
-       custom: pack
-       arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
-##################################################################################################
-   - powershell: |
-      [xml]$project = Get-Content -Path ./Code/Src/Framework.Config.Autofac/Framework.Config.Autofac.csproj
-      $version = $project.Project.PropertyGroup.Version
-      echo "version: "
-      echo $version
-      echo "##vso[task.setvariable variable=version]$version"
- 
-     displayName: 'Get Version of Framework.Config.Autofac'
-##################################################################################################
-   - task: DotNetCoreCLI@2
-     displayName: 'Pack Framework.Config.Autofac'
-     inputs:
-       command: custom
-       projects: '**/Framework.Config.Autofac.csproj'
-       custom: pack
-       arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
-##################################################################################################
-   - powershell: |
-      [xml]$project = Get-Content -Path ./Code/Src/Framework.Consul/Framework.Consul.csproj
-      $version = $project.Project.PropertyGroup.Version
-      echo "version: "
-      echo $version
-      echo "##vso[task.setvariable variable=version]$version"
- 
-     displayName: 'Get Version of Framework.Consul'
-##################################################################################################
-   - task: DotNetCoreCLI@2
-     displayName: 'Pack Framework.Consul'
-     inputs:
-       command: custom
-       projects: '**/Framework.Consul.csproj'
-       custom: pack
-       arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) /p:GeneratePackageOnBuild=false --output $(Build.ArtifactStagingDirectory)'
-##################################################################################################
-   - powershell: |
-      [xml]$project = Get-Content -Path ./Code/Src/Framework.Core/Framework.Core.csproj
-      $version = $project.Project.PropertyGroup.Version
-      echo "version: "
-      echo $version
-      echo "##vso[task.setvariable variable=version]$version"
- 
-     displayName: 'Get Version of Framework.Core'
-##################################################################################################
-   - task: DotNetCoreCLI@2
-     displayName: 'Pack Framework.Core'
-     inputs:
-       command: custom
-       projects: '**/Framework.Core.csproj'
-       custom: pack
-       arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
-##################################################################################################
-   - powershell: |
-      [xml]$project = Get-Content -Path ./Code/Src/Framework.DataAccess.EF/Framework.DataAccess.EF.csproj
-      $version = $project.Project.PropertyGroup.Version
-      echo "version: "
-      echo $version
-      echo "##vso[task.setvariable variable=version]$version"
- 
-     displayName: 'Get Version of Framework.DataAccess.EF'
-##################################################################################################
-   - task: DotNetCoreCLI@2
-     displayName: 'Pack Framework.DataAccess.EF'
-     inputs:
-       command: custom
-       projects: '**/Framework.DataAccess.EF.csproj'
-       custom: pack
-       arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
-##################################################################################################
-   - powershell: |
-      [xml]$project = Get-Content -Path ./Code/Src/Framework.DataAccess.Mongo/Framework.DataAccess.Mongo.csproj
-      $version = $project.Project.PropertyGroup.Version
-      echo "version: "
-      echo $version
-      echo "##vso[task.setvariable variable=version]$version"
- 
-     displayName: 'Get Version of Framework.DataAccess.Mongo'
-##################################################################################################
-   - task: DotNetCoreCLI@2
-     displayName: 'Pack Framework.DataAccess.Mongo'
-     inputs:
-       command: custom
-       projects: '**/Framework.DataAccess.Mongo.csproj'
-       custom: pack
-       arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
-##################################################################################################
-   - powershell: |
-      [xml]$project = Get-Content -Path ./Code/Src/Framework.DataAccess.NH/Framework.DataAccess.NH.csproj
-      $version = $project.Project.PropertyGroup.Version
-      echo "version: "
-      echo $version
-      echo "##vso[task.setvariable variable=version]$version"
- 
-     displayName: 'Get Version of Framework.DataAccess.NH'
-##################################################################################################
-   - task: DotNetCoreCLI@2
-     displayName: 'Pack Framework.DataAccess.NH'
-     inputs:
-       command: custom
-       projects: '**/Framework.DataAccess.NH.csproj'
-       custom: pack
-       arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
-##################################################################################################
-   - powershell: |
-      [xml]$project = Get-Content -Path ./Code/Src/Framework.Domain/Framework.Domain.csproj
-      $version = $project.Project.PropertyGroup.Version
-      echo "version: "
-      echo $version
-      echo "##vso[task.setvariable variable=version]$version"
- 
-     displayName: 'Get Version of Framework.Domain'
-##################################################################################################
-   - task: DotNetCoreCLI@2
-     displayName: 'Pack Framework.Domain'
-     inputs:
-       command: custom
-       projects: '**/Framework.Domain.csproj'
-       custom: pack
-       arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
-##################################################################################################
-   - powershell: |
-      [xml]$project = Get-Content -Path ./Code/Src/Framework.EasyNetQ/Framework.EasyNetQ.csproj
-      $version = $project.Project.PropertyGroup.Version
-      echo "version: "
-      echo $version
-      echo "##vso[task.setvariable variable=version]$version"
- 
-     displayName: 'Get Version of Framework.EasyNetQ'
-##################################################################################################
-   - task: DotNetCoreCLI@2
-     displayName: 'Pack Framework.EasyNetQ'
-     inputs:
-       command: custom
-       projects: '**/Framework.EasyNetQ.csproj'
-       custom: pack
-       arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
-##################################################################################################
-   - powershell: |
-      [xml]$project = Get-Content -Path ./Code/Src/Framework.FileUpload/Framework.FileUpload.csproj
-      $version = $project.Project.PropertyGroup.Version
-      echo "version: "
-      echo $version
-      echo "##vso[task.setvariable variable=version]$version"
- 
-     displayName: 'Get Version of Framework.FileUpload'
-##################################################################################################
-   - task: DotNetCoreCLI@2
-     displayName: 'Pack Framework.FileUpload'
-     inputs:
-       command: custom
-       projects: '**/Framework.FileUpload.csproj'
-       custom: pack
-       arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
-##################################################################################################
-   - powershell: |
-      [xml]$project = Get-Content -Path ./Code/Src/Framework.Kafka/Framework.Kafka.csproj
-      $version = $project.Project.PropertyGroup.Version
-      echo "version: "
-      echo $version
-      echo "##vso[task.setvariable variable=version]$version"
- 
-     displayName: 'Get Version of Framework.Kafka'
-##################################################################################################
-   - task: DotNetCoreCLI@2
-     displayName: 'Pack Framework.Kafka'
-     inputs:
-       command: custom
-       projects: '**/Framework.Kafka.csproj'
-       custom: pack
-       arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
-##################################################################################################
-   - powershell: |
-      [xml]$project = Get-Content -Path ./Code/Src/Framework.Logging.SeriLog/Framework.Logging.SeriLog.csproj
-      $version = $project.Project.PropertyGroup.Version
-      echo "version: "
-      echo $version
-      echo "##vso[task.setvariable variable=version]$version"
- 
-     displayName: 'Get Version of Framework.Logging.SeriLog'
-##################################################################################################
-   - task: DotNetCoreCLI@2
-     displayName: 'Pack Framework.Logging.SeriLog'
-     inputs:
-       command: custom
-       projects: '**/Framework.Logging.SeriLog.csproj'
-       custom: pack
-       arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
-##################################################################################################
 #    - powershell: |
-#       [xml]$project = Get-Content -Path ./Code/Src/Framework.MassTransit/Framework.MassTransit.csproj
+#       [xml]$project = Get-Content -Path ./Code/Src/Framework.Application/Framework.Application.csproj
 #       $version = $project.Project.PropertyGroup.Version
 #       echo "version: "
 #       echo $version
 #       echo "##vso[task.setvariable variable=version]$version"
  
-#      displayName: 'Get Version of Framework.MassTransit'
+#      displayName: 'Get Version of Framework.Application'
 # ##################################################################################################
 #    - task: DotNetCoreCLI@2
-#      displayName: 'Pack Framework.MassTransit'
+#      displayName: 'Pack Framework.Application'
 #      inputs:
-#        command: 'custom'
-#        projects: '**/Framework.MassTransit.csproj'
-#        custom: 'pack'
+#        command: custom
+#        projects: '**/Framework.Application.csproj'
+#        custom: pack
 #        arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
+# ##################################################################################################
+#    - powershell: |
+#       [xml]$project = Get-Content -Path ./Code/Src/Framework.Application.Contracts/Framework.Application.Contracts.csproj
+#       $version = $project.Project.PropertyGroup.Version
+#       echo "version: "
+#       echo $version
+#       echo "##vso[task.setvariable variable=version]$version"
+ 
+#      displayName: 'Get Version of Framework.Application.Contracts'
+# ##################################################################################################
+#    - task: DotNetCoreCLI@2
+#      displayName: 'Pack Framework.Application.Contracts'
+#      inputs:
+#        command: custom
+#        projects: '**/Framework.Application.Contracts.csproj'
+#        custom: pack
+#        arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
+# ##################################################################################################
+#    - powershell: |
+#       [xml]$project = Get-Content -Path ./Code/Src/Framework.AspNetCore/Framework.AspNetCore.csproj
+#       $version = $project.Project.PropertyGroup.Version
+#       echo "version: "
+#       echo $version
+#       echo "##vso[task.setvariable variable=version]$version"
+ 
+#      displayName: 'Get Version of Framework.AspNetCore'
+# ##################################################################################################
+#    - task: DotNetCoreCLI@2
+#      displayName: 'Pack Framework.AspNetCore'
+#      inputs:
+#        command: custom
+#        projects: '**/Framework.AspNetCore.csproj'
+#        custom: pack
+#        arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
+# ##################################################################################################
+#    - powershell: |
+#       [xml]$project = Get-Content -Path ./Code/Src/Framework.Authorization/Framework.Authorization.csproj
+#       $version = $project.Project.PropertyGroup.Version
+#       echo "version: "
+#       echo $version
+#       echo "##vso[task.setvariable variable=version]$version"
+ 
+#      displayName: 'Get Version of Framework.Authorization'
+# ##################################################################################################
+#    - task: DotNetCoreCLI@2
+#      displayName: 'Pack Framework.Authorization'
+#      inputs:
+#        command: custom
+#        projects: '**/Framework.Authorization.csproj'
+#        custom: pack
+#        arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
+# ##################################################################################################
+#    - powershell: |
+#       [xml]$project = Get-Content -Path ./Code/Src/Framework.Config/Framework.Config.csproj
+#       $version = $project.Project.PropertyGroup.Version
+#       echo "version: "
+#       echo $version
+#       echo "##vso[task.setvariable variable=version]$version"
+ 
+#      displayName: 'Get Version of Framework.Config'
+# ##################################################################################################
+#    - task: DotNetCoreCLI@2
+#      displayName: 'Pack Framework.Config'
+#      inputs:
+#        command: custom
+#        projects: '**/Framework.Config.csproj'
+#        custom: pack
+#        arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
+# ##################################################################################################
+#    - powershell: |
+#       [xml]$project = Get-Content -Path ./Code/Src/Framework.Config.Autofac/Framework.Config.Autofac.csproj
+#       $version = $project.Project.PropertyGroup.Version
+#       echo "version: "
+#       echo $version
+#       echo "##vso[task.setvariable variable=version]$version"
+ 
+#      displayName: 'Get Version of Framework.Config.Autofac'
+# ##################################################################################################
+#    - task: DotNetCoreCLI@2
+#      displayName: 'Pack Framework.Config.Autofac'
+#      inputs:
+#        command: custom
+#        projects: '**/Framework.Config.Autofac.csproj'
+#        custom: pack
+#        arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
+# ##################################################################################################
+#    - powershell: |
+#       [xml]$project = Get-Content -Path ./Code/Src/Framework.Consul/Framework.Consul.csproj
+#       $version = $project.Project.PropertyGroup.Version
+#       echo "version: "
+#       echo $version
+#       echo "##vso[task.setvariable variable=version]$version"
+ 
+#      displayName: 'Get Version of Framework.Consul'
+# ##################################################################################################
+#    - task: DotNetCoreCLI@2
+#      displayName: 'Pack Framework.Consul'
+#      inputs:
+#        command: custom
+#        projects: '**/Framework.Consul.csproj'
+#        custom: pack
+#        arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) /p:GeneratePackageOnBuild=false --output $(Build.ArtifactStagingDirectory)'
+# ##################################################################################################
+#    - powershell: |
+#       [xml]$project = Get-Content -Path ./Code/Src/Framework.Core/Framework.Core.csproj
+#       $version = $project.Project.PropertyGroup.Version
+#       echo "version: "
+#       echo $version
+#       echo "##vso[task.setvariable variable=version]$version"
+ 
+#      displayName: 'Get Version of Framework.Core'
+# ##################################################################################################
+#    - task: DotNetCoreCLI@2
+#      displayName: 'Pack Framework.Core'
+#      inputs:
+#        command: custom
+#        projects: '**/Framework.Core.csproj'
+#        custom: pack
+#        arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
+# ##################################################################################################
+#    - powershell: |
+#       [xml]$project = Get-Content -Path ./Code/Src/Framework.DataAccess.EF/Framework.DataAccess.EF.csproj
+#       $version = $project.Project.PropertyGroup.Version
+#       echo "version: "
+#       echo $version
+#       echo "##vso[task.setvariable variable=version]$version"
+ 
+#      displayName: 'Get Version of Framework.DataAccess.EF'
+# ##################################################################################################
+#    - task: DotNetCoreCLI@2
+#      displayName: 'Pack Framework.DataAccess.EF'
+#      inputs:
+#        command: custom
+#        projects: '**/Framework.DataAccess.EF.csproj'
+#        custom: pack
+#        arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
+# ##################################################################################################
+#    - powershell: |
+#       [xml]$project = Get-Content -Path ./Code/Src/Framework.DataAccess.Mongo/Framework.DataAccess.Mongo.csproj
+#       $version = $project.Project.PropertyGroup.Version
+#       echo "version: "
+#       echo $version
+#       echo "##vso[task.setvariable variable=version]$version"
+ 
+#      displayName: 'Get Version of Framework.DataAccess.Mongo'
+# ##################################################################################################
+#    - task: DotNetCoreCLI@2
+#      displayName: 'Pack Framework.DataAccess.Mongo'
+#      inputs:
+#        command: custom
+#        projects: '**/Framework.DataAccess.Mongo.csproj'
+#        custom: pack
+#        arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
+# ##################################################################################################
+#    - powershell: |
+#       [xml]$project = Get-Content -Path ./Code/Src/Framework.DataAccess.NH/Framework.DataAccess.NH.csproj
+#       $version = $project.Project.PropertyGroup.Version
+#       echo "version: "
+#       echo $version
+#       echo "##vso[task.setvariable variable=version]$version"
+ 
+#      displayName: 'Get Version of Framework.DataAccess.NH'
+# ##################################################################################################
+#    - task: DotNetCoreCLI@2
+#      displayName: 'Pack Framework.DataAccess.NH'
+#      inputs:
+#        command: custom
+#        projects: '**/Framework.DataAccess.NH.csproj'
+#        custom: pack
+#        arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
+# ##################################################################################################
+#    - powershell: |
+#       [xml]$project = Get-Content -Path ./Code/Src/Framework.Domain/Framework.Domain.csproj
+#       $version = $project.Project.PropertyGroup.Version
+#       echo "version: "
+#       echo $version
+#       echo "##vso[task.setvariable variable=version]$version"
+ 
+#      displayName: 'Get Version of Framework.Domain'
+# ##################################################################################################
+#    - task: DotNetCoreCLI@2
+#      displayName: 'Pack Framework.Domain'
+#      inputs:
+#        command: custom
+#        projects: '**/Framework.Domain.csproj'
+#        custom: pack
+#        arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
+# ##################################################################################################
+#    - powershell: |
+#       [xml]$project = Get-Content -Path ./Code/Src/Framework.EasyNetQ/Framework.EasyNetQ.csproj
+#       $version = $project.Project.PropertyGroup.Version
+#       echo "version: "
+#       echo $version
+#       echo "##vso[task.setvariable variable=version]$version"
+ 
+#      displayName: 'Get Version of Framework.EasyNetQ'
+# ##################################################################################################
+#    - task: DotNetCoreCLI@2
+#      displayName: 'Pack Framework.EasyNetQ'
+#      inputs:
+#        command: custom
+#        projects: '**/Framework.EasyNetQ.csproj'
+#        custom: pack
+#        arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
+# ##################################################################################################
+#    - powershell: |
+#       [xml]$project = Get-Content -Path ./Code/Src/Framework.FileUpload/Framework.FileUpload.csproj
+#       $version = $project.Project.PropertyGroup.Version
+#       echo "version: "
+#       echo $version
+#       echo "##vso[task.setvariable variable=version]$version"
+ 
+#      displayName: 'Get Version of Framework.FileUpload'
+# ##################################################################################################
+#    - task: DotNetCoreCLI@2
+#      displayName: 'Pack Framework.FileUpload'
+#      inputs:
+#        command: custom
+#        projects: '**/Framework.FileUpload.csproj'
+#        custom: pack
+#        arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
+# ##################################################################################################
+#    - powershell: |
+#       [xml]$project = Get-Content -Path ./Code/Src/Framework.Kafka/Framework.Kafka.csproj
+#       $version = $project.Project.PropertyGroup.Version
+#       echo "version: "
+#       echo $version
+#       echo "##vso[task.setvariable variable=version]$version"
+ 
+#      displayName: 'Get Version of Framework.Kafka'
+# ##################################################################################################
+#    - task: DotNetCoreCLI@2
+#      displayName: 'Pack Framework.Kafka'
+#      inputs:
+#        command: custom
+#        projects: '**/Framework.Kafka.csproj'
+#        custom: pack
+#        arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
+# ##################################################################################################
+#    - powershell: |
+#       [xml]$project = Get-Content -Path ./Code/Src/Framework.Logging.SeriLog/Framework.Logging.SeriLog.csproj
+#       $version = $project.Project.PropertyGroup.Version
+#       echo "version: "
+#       echo $version
+#       echo "##vso[task.setvariable variable=version]$version"
+ 
+#      displayName: 'Get Version of Framework.Logging.SeriLog'
+# ##################################################################################################
+#    - task: DotNetCoreCLI@2
+#      displayName: 'Pack Framework.Logging.SeriLog'
+#      inputs:
+#        command: custom
+#        projects: '**/Framework.Logging.SeriLog.csproj'
+#        custom: pack
+#        arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
+##################################################################################################
+   - powershell: |
+      [xml]$project = Get-Content -Path ./Code/Src/Framework.MassTransit/Framework.MassTransit.csproj
+      $version = $project.Project.PropertyGroup.Version
+      echo "version: "
+      echo $version
+      echo "##vso[task.setvariable variable=version]$version"
+ 
+     displayName: 'Get Version of Framework.MassTransit'
+##################################################################################################
+   - task: DotNetCoreCLI@2
+     displayName: 'Pack Framework.MassTransit'
+     inputs:
+       command: 'custom'
+       projects: '**/Framework.MassTransit.csproj'
+       custom: 'pack'
+       arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
 ##################################################################################################
    - powershell: |
       [xml]$project = Get-Content -Path ./Code/Src/Framework.Messages/Framework.Messages.csproj
