@@ -3,22 +3,24 @@ using Framework.EventProcessor.Events;
 using Framework.EventProcessor.Events.MassTransit;
 using Framework.EventProcessor.Filtering;
 using Framework.EventProcessor.Transformation;
-using Microsoft.Extensions.DependencyInjection;
-using System.Reflection;
 using Framework.EventProcessor.DataStore;
 using Framework.EventProcessor.DataStore.MongoDB;
 using Framework.EventProcessor.Events.Kafka;
 using Framework.EventProcessor.Services;
+using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
 using MassTransit;
 using MassTransit.MultiBus;
 
 namespace Framework.EventProcessor.Initial
 {
+    //TODO:convert to step builder
     public class EventProcessorConfigurator
     {
         private readonly IServiceCollection _services;
-        private ServiceConfig _serviceConfig;
-
+        private readonly ServiceConfig _serviceConfig;
+        private Action<SecondaryProducerConfiguration> _secondaryProducerConfigurationAction;
+        private Action<SecondaryMassTransitConfiguration> _secondaryMassTransitConfiguration;
         public EventProcessorConfigurator(IServiceCollection serviceCollection)
         {
             _services = serviceCollection;
@@ -35,7 +37,7 @@ namespace Framework.EventProcessor.Initial
         }
         public EventProcessorConfigurator ReadFromMongoDb(Action<MongoStoreConfig> config)
         {
-            _services.AddSingleton<IDataStoreObservable, MongoDBDataStore>();
+            _services.AddSingleton<IDataStoreObservable, MongoDbDataStore>();
 
             _services.Configure<MongoStoreConfig>(config);
 
@@ -46,6 +48,8 @@ namespace Framework.EventProcessor.Initial
             _services.AddSingleton<IEventBus, MassTransitEventBusAdapter>();
 
             _services.Configure<MassTransitConfig>(config);
+
+            _services.AddHostedService<EventPublisherService>();
 
             return this;
         }
@@ -59,66 +63,20 @@ namespace Framework.EventProcessor.Initial
         }
         public EventProcessorConfigurator SecondaryDeliveryWithKafka(Action<SecondaryProducerConfiguration> config)
         {
-            RegisterSecondaryMessageProducer(config);
-
             _serviceConfig.SendWithKafka = true;
 
+            _secondaryProducerConfigurationAction = config;
+
             return this;
         }
-        public EventProcessorConfigurator SecondaryDeliveryWithMassTransit(Action<SecondaryMassTransitConfiguration> config, bool useOfMultipleBus = false)
+        public EventProcessorConfigurator SecondaryDeliveryWithMassTransit(Action<SecondaryMassTransitConfiguration> config)
         {
-            _services.Configure<SecondaryMassTransitConfiguration>(config);
-
             _serviceConfig.SendWithMassTransit = true;
 
-            _serviceConfig.EnableMultipleBus = useOfMultipleBus;
-
-            var massTransitConfig = new SecondaryMassTransitConfiguration();
-
-            config.Invoke(massTransitConfig);
-
-            if (useOfMultipleBus)
-                RegisterSecondBus(_services, massTransitConfig);
+            _secondaryMassTransitConfiguration = config;
 
             return this;
         }
-
-        private void RegisterSecondBus(IServiceCollection services, SecondaryMassTransitConfiguration config)
-        {
-            services.AddMassTransit<ISecondBus>(x =>
-            {
-                x.UsingRabbitMq((context, cfg) =>
-                {
-                    cfg.Host(config.RabbitMqConnectionString);
-                });
-            });
-        }
-
-        private void RegisterMessageProducer(Action<ProducerConfiguration> config)
-        {
-            var producerConfig = new ProducerConfiguration();
-
-            config.Invoke(producerConfig);
-
-            _services.Configure<ProducerConfiguration>(config);
-
-            var kafkaProducer = KafkaProducerFactory<object, object>.Create(producerConfig);
-
-            var producer = MessageProducerFactory.Create(kafkaProducer, producerConfig);
-
-            _services.AddSingleton(producer);
-        }
-        private void RegisterSecondaryMessageProducer(Action<SecondaryProducerConfiguration> config)
-        {
-            var producerConfig = new SecondaryProducerConfiguration();
-
-            config.Invoke(producerConfig);
-
-            _services.Configure<SecondaryProducerConfiguration>(config);
-
-            // var kafkaProducer = KafkaSecondaryProducerFactory<object, object>.Create(producerConfig);
-        }
-
         public EventProcessorConfigurator EnableSendingMessageToSecondaryBroker()
         {
             _serviceConfig.EnableSecondarySending = true;
@@ -164,5 +122,58 @@ namespace Framework.EventProcessor.Initial
         {
             return UseEventTransformersInAssemblies();
         }
+
+        //TODO:change return 
+        public EventProcessorConfigurator Build()
+        {
+            _services.AddSingleton<IKafkaValidator, KafkaValidator>();
+
+            RegisterSecondaryProducer(_secondaryProducerConfigurationAction);
+
+            RegisterSecondaryBus(_secondaryMassTransitConfiguration);
+
+            _services.AddSingleton(_serviceConfig);
+
+            return this;
+        }
+        private void RegisterMessageProducer(Action<ProducerConfiguration> config)
+        {
+            var producerConfig = new ProducerConfiguration();
+
+            config.Invoke(producerConfig);
+
+            _services.Configure<ProducerConfiguration>(config);
+
+            var kafkaProducer = KafkaProducerFactory<object, object>.Create(producerConfig);
+
+            var producer = MessageProducerFactory.Create(kafkaProducer, producerConfig);
+
+            _services.AddSingleton(producer);
+        }
+        private void RegisterSecondaryBus(Action<SecondaryMassTransitConfiguration> config)
+        {
+            _services.Configure<SecondaryMassTransitConfiguration>(config);
+
+            var secondaryMassTransitConfiguration = new SecondaryMassTransitConfiguration();
+
+            config.Invoke(secondaryMassTransitConfiguration);
+
+            _services.AddMassTransit<ISecondBus>(x =>
+            {
+                x.UsingRabbitMq((context, cfg) =>
+                {
+                    cfg.Host(secondaryMassTransitConfiguration.RabbitMqConnectionString);
+                });
+            });
+        }
+        private void RegisterSecondaryProducer(Action<SecondaryProducerConfiguration> config)
+        {
+            var producerConfig = new SecondaryProducerConfiguration();
+
+            config.Invoke(producerConfig);
+
+            _services.Configure<SecondaryProducerConfiguration>(config);
+        }
+
     }
 }

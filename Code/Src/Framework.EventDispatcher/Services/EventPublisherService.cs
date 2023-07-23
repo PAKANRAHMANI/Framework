@@ -1,9 +1,13 @@
 ﻿using Framework.Core.Events;
 using Framework.EventProcessor.DataStore;
 using Framework.EventProcessor.Events;
+using Framework.EventProcessor.Events.Kafka;
 using Framework.EventProcessor.Filtering;
 using Framework.EventProcessor.Transformation;
+using MassTransit.ExtensionsDependencyInjectionIntegration;
+using MassTransit;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using IEventPublisher = Framework.EventProcessor.Events.IEventPublisher;
 
 namespace Framework.EventProcessor.Services
@@ -19,8 +23,12 @@ namespace Framework.EventProcessor.Services
             ILogger<EventPublisherService> logger,
             IDataStoreObservable dataStore,
             IEventPublisher publisher,
-            IEventBus eventBus
-            ) : base(eventTypeResolver, eventFilter, transformerLookUp, logger, dataStore)
+            IEventBus eventBus,
+            ServiceConfig serviceConfig,
+            IOptions<SecondaryProducerConfiguration> secondaryProducerConfiguration,
+            Bind<ISecondBus, IPublishEndpoint> secondaryPublishEndpoint
+            ) : base(eventTypeResolver, eventFilter, transformerLookUp, logger, dataStore,
+            serviceConfig, secondaryProducerConfiguration, secondaryPublishEndpoint)
         {
             _publisher = publisher;
             _eventBus = eventBus;

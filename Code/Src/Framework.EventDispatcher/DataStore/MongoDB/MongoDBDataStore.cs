@@ -3,18 +3,20 @@ using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System.Timers;
+using Framework.EventProcessor.Services;
 using MongoDB.Driver;
 using Timer = System.Timers.Timer;
 namespace Framework.EventProcessor.DataStore.MongoDB
 {
-    public class MongoDBDataStore : IDataStoreObservable
+    //Todo:test console log 
+    public class MongoDbDataStore : IDataStoreObservable
     {
         private readonly MongoStoreConfig _mongoStoreConfig;
-        private readonly ILogger<EventWorker> _logger;
+        private readonly ILogger<TemplateService> _logger;
         private readonly Timer _timer;
         private IDataStoreChangeTrackerObserver _dataStoreChangeTracker;
 
-        public MongoDBDataStore(IOptions<MongoStoreConfig> mongoStoreConfig, ILogger<EventWorker> logger)
+        public MongoDbDataStore(IOptions<MongoStoreConfig> mongoStoreConfig, ILogger<TemplateService> logger)
         {
             _mongoStoreConfig = mongoStoreConfig.Value;
             _logger = logger;

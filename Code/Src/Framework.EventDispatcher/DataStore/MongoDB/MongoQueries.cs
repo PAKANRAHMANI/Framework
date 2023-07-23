@@ -2,6 +2,7 @@
 
 namespace Framework.EventProcessor.DataStore.MongoDB
 {
+    //TODO:handle cursor null in queries
     public static class MongoQueries
     {
         public static long GetCursorPosition(this IMongoDatabase database, string documentName)

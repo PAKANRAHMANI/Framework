@@ -5,11 +5,9 @@ namespace Framework.EventProcessor.Events.Kafka
 {
     public class KafkaValidator : IKafkaValidator
     {
-        private readonly ProducerConfiguration _configuration;
         private readonly AdminClientConfig _adminClientConfig;
         public KafkaValidator(ProducerConfiguration configuration)
         {
-            _configuration = configuration;
             _adminClientConfig = new AdminClientConfig()
             {
                 BootstrapServers = configuration.BootstrapServer

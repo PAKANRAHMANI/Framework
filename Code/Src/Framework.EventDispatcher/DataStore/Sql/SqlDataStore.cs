@@ -1,4 +1,5 @@
 ﻿using System.Timers;
+using Framework.EventProcessor.Services;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -9,10 +10,10 @@ namespace Framework.EventProcessor.DataStore.Sql;
 public class SqlDataStore : IDataStoreObservable
 {
     private IDataStoreChangeTrackerObserver _dataStoreChangeTracker;
-    private readonly ILogger<EventWorker> _logger;
+    private readonly ILogger<TemplateService> _logger;
     private readonly SqlStoreConfig _sqlStoreConfig;
     private readonly Timer _timer;
-    public SqlDataStore(IOptions<SqlStoreConfig> sqlStoreConfig, ILogger<EventWorker> logger)
+    public SqlDataStore(IOptions<SqlStoreConfig> sqlStoreConfig, ILogger<TemplateService> logger)
     {
         _logger = logger;
         _sqlStoreConfig = sqlStoreConfig.Value;

@@ -11,6 +11,5 @@ namespace Framework.EventProcessor.Services
         public bool EnableSecondarySending { get; set; } = false;
         public bool SendWithKafka { get; set; } = false;
         public bool SendWithMassTransit { get; set; } = false;
-        public bool EnableMultipleBus { get; set; } = false;
     }
 }

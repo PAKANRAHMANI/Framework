@@ -4,7 +4,10 @@ using Framework.EventProcessor.Events;
 using Framework.EventProcessor.Events.Kafka;
 using Framework.EventProcessor.Filtering;
 using Framework.EventProcessor.Transformation;
+using MassTransit;
+using MassTransit.ExtensionsDependencyInjectionIntegration;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace Framework.EventProcessor.Services
 {
@@ -23,8 +26,12 @@ namespace Framework.EventProcessor.Services
             IDataStoreObservable dataStore,
             MessageProducer producer,
             ProducerConfiguration producerConfiguration,
-            IKafkaValidator kafkaValidator
-            ) : base(eventTypeResolver, eventFilter, transformerLookUp, logger, dataStore)
+            IKafkaValidator kafkaValidator,
+            ServiceConfig serviceConfig,
+            IOptions<SecondaryProducerConfiguration> secondaryProducerConfiguration,
+            Bind<ISecondBus, IPublishEndpoint> secondaryPublishEndpoint
+            ) : base(eventTypeResolver, eventFilter, transformerLookUp, logger, dataStore,
+            serviceConfig, secondaryProducerConfiguration, secondaryPublishEndpoint)
         {
             _logger = logger;
             _producer = producer;
