@@ -8,7 +8,7 @@ namespace Framework.EventProcessor.Services
 {
     public class ServiceConfig
     {
-        public bool EnableSecondarySending { get; set; } = false;
+        public bool EnableSecondarySending { get; set; } 
         public bool SendWithKafka { get; set; } = false;
         public bool SendWithMassTransit { get; set; } = false;
     }

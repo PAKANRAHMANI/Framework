@@ -14,20 +14,28 @@ using MassTransit.MultiBus;
 
 namespace Framework.EventProcessor.Initial
 {
-    //TODO:convert to step builder
-    public class EventProcessorConfigurator
+    public class EventProcessorBuilder :
+        IDataStoreBuilder,
+        IEventLookup,
+        IEventProcessorFilter,
+        IEventTransformer,
+        IEventSenderBuilder,
+        IEnableSecondSenderBuilder,
+        ISecondaryDeliveryEvent,
+        IEventProcessor
     {
         private readonly IServiceCollection _services;
         private readonly ServiceConfig _serviceConfig;
         private Action<SecondaryProducerConfiguration> _secondaryProducerConfigurationAction;
         private Action<SecondaryMassTransitConfiguration> _secondaryMassTransitConfiguration;
-        public EventProcessorConfigurator(IServiceCollection serviceCollection)
+        private EventProcessorBuilder(IServiceCollection serviceCollection)
         {
             _services = serviceCollection;
             _serviceConfig = new ServiceConfig();
         }
+        public static IDataStoreBuilder Setup(IServiceCollection serviceCollection) => new EventProcessorBuilder(serviceCollection);
 
-        public EventProcessorConfigurator ReadFromSqlServer(Action<SqlStoreConfig> config)
+        public IEventLookup ReadFromSqlServer(Action<SqlStoreConfig> config)
         {
             _services.AddSingleton<IDataStoreObservable, SqlDataStore>();
 
@@ -35,7 +43,8 @@ namespace Framework.EventProcessor.Initial
 
             return this;
         }
-        public EventProcessorConfigurator ReadFromMongoDb(Action<MongoStoreConfig> config)
+
+        public IEventLookup ReadFromMongoDb(Action<MongoStoreConfig> config)
         {
             _services.AddSingleton<IDataStoreObservable, MongoDbDataStore>();
 
@@ -43,58 +52,19 @@ namespace Framework.EventProcessor.Initial
 
             return this;
         }
-        public EventProcessorConfigurator PublishWithMassTransit(Action<MassTransitConfig> config)
-        {
-            _services.AddSingleton<IEventBus, MassTransitEventBusAdapter>();
 
-            _services.Configure<MassTransitConfig>(config);
-
-            _services.AddHostedService<EventPublisherService>();
-
-            return this;
-        }
-        public EventProcessorConfigurator ProduceMessageWithKafka(Action<ProducerConfiguration> config)
-        {
-            RegisterMessageProducer(config);
-
-            _services.AddHostedService<MessageProducerService>();
-
-            return this;
-        }
-        public EventProcessorConfigurator SecondaryDeliveryWithKafka(Action<SecondaryProducerConfiguration> config)
-        {
-            _serviceConfig.SendWithKafka = true;
-
-            _secondaryProducerConfigurationAction = config;
-
-            return this;
-        }
-        public EventProcessorConfigurator SecondaryDeliveryWithMassTransit(Action<SecondaryMassTransitConfiguration> config)
-        {
-            _serviceConfig.SendWithMassTransit = true;
-
-            _secondaryMassTransitConfiguration = config;
-
-            return this;
-        }
-        public EventProcessorConfigurator EnableSendingMessageToSecondaryBroker()
-        {
-            _serviceConfig.EnableSecondarySending = true;
-            return this;
-        }
-
-        public EventProcessorConfigurator WithFilter(IEventFilter filter)
+        public IEventTransformer WithFilter(IEventFilter filter)
         {
             _services.AddSingleton(filter);
             return this;
         }
 
-        public EventProcessorConfigurator WithNoFilter()
+        public IEventTransformer WithNoFilter()
         {
             return WithFilter(new NoFilter());
         }
 
-        public EventProcessorConfigurator UseEventsInAssemblies(params Assembly[] assemblies)
+        public IEventProcessorFilter UseEventsInAssemblies(params Assembly[] assemblies)
         {
             var eventTypeResolver = new EventTypeResolver();
             if (assemblies.Length > 0)
@@ -106,7 +76,7 @@ namespace Framework.EventProcessor.Initial
             return this;
         }
 
-        public EventProcessorConfigurator UseEventTransformersInAssemblies(params Assembly[] assemblies)
+        public IEventSenderBuilder UseEventTransformersInAssemblies(params Assembly[] assemblies)
         {
             var transformerLookUp = new EventTransformerLookUp();
             if (assemblies.Length > 0)
@@ -118,13 +88,62 @@ namespace Framework.EventProcessor.Initial
             return this;
         }
 
-        public EventProcessorConfigurator WithNoEventTransformer()
+        public IEventSenderBuilder WithNoEventTransformer()
         {
             return UseEventTransformersInAssemblies();
         }
 
-        //TODO:change return 
-        public EventProcessorConfigurator Build()
+        public IEnableSecondSenderBuilder PublishEventWithMassTransit(Action<MassTransitConfig> config)
+        {
+            _services.AddSingleton<IEventBus, MassTransitEventBusAdapter>();
+
+            _services.Configure<MassTransitConfig>(config);
+
+            _services.AddHostedService<EventPublisherService>();
+
+            return this;
+        }
+
+        public IEnableSecondSenderBuilder ProduceMessageWithKafka(Action<ProducerConfiguration> config)
+        {
+            RegisterMessageProducer(config);
+
+            _services.AddHostedService<MessageProducerService>();
+
+            return this;
+        }
+
+        public ISecondaryDeliveryEvent EnableSendingMessageToSecondaryBroker()
+        {
+            _serviceConfig.EnableSecondarySending = true;
+            return this;
+        }
+
+        public IEventProcessor DisableSendingMessageToSecondaryBroker()
+        {
+            _serviceConfig.EnableSecondarySending = false;
+            return this;
+        }
+
+        public IEventProcessor SecondaryDeliveryWithKafka(Action<SecondaryProducerConfiguration> config)
+        {
+            _serviceConfig.SendWithKafka = true;
+
+            _secondaryProducerConfigurationAction = config;
+
+            return this;
+        }
+
+        public IEventProcessor SecondaryDeliveryWithMassTransit(Action<SecondaryMassTransitConfiguration> config)
+        {
+            _serviceConfig.SendWithMassTransit = true;
+
+            _secondaryMassTransitConfiguration = config;
+
+            return this;
+        }
+
+        public void Build()
         {
             _services.AddSingleton<IKafkaValidator, KafkaValidator>();
 
@@ -133,8 +152,6 @@ namespace Framework.EventProcessor.Initial
             RegisterSecondaryBus(_secondaryMassTransitConfiguration);
 
             _services.AddSingleton(_serviceConfig);
-
-            return this;
         }
         private void RegisterMessageProducer(Action<ProducerConfiguration> config)
         {
@@ -174,6 +191,5 @@ namespace Framework.EventProcessor.Initial
 
             _services.Configure<SecondaryProducerConfiguration>(config);
         }
-
     }
 }
