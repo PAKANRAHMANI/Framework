@@ -43,7 +43,7 @@ namespace Framework.Testing.Core.Stubs
         {
             var claims = new List<Claim>()
             {
-                new Claim(ClaimTypes.NameIdentifier,"1"),
+                new Claim("sub","1"),
                 new Claim(ClaimTypes.Email,"pakan.rahmani@gmail.com"),
                 new Claim(ClaimTypes.Name,"pakan rahmani"),
             };
