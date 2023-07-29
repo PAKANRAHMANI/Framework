@@ -8,5 +8,7 @@ namespace Framework.Core
     public interface ICurrentUser
     {
         ClaimsPrincipal Get();
+        TKey GetUserIdFromNameIdentifier<TKey>();
+        TKey GetUserIdFromSub<TKey>();
     }
 }
