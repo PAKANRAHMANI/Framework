@@ -6,7 +6,7 @@ namespace Framework.Core.Events
     {
         public Guid EventId { get; protected set; }
         public DateTime PublishDateTime { get; protected set; }
-        public Type AggregateType { get; protected set; }
+        public string AggregateType { get; protected set; }
 
         protected DomainEvent()
         {

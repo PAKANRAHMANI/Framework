@@ -20,8 +20,6 @@ namespace Framework.DataAccess.EF.Mapping
 
             builder.HasKey("Id");
 
-            builder.Property(a=>a.AggregateType)
-                .HasConversion(b=>b.FullName,c=>Type.GetType(c));
         }
     }
 }
