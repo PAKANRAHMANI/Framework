@@ -9,9 +9,6 @@ variables:
 - name: BuildParameters.RestoreBuildProjects
   value: '**/*.csproj'
 ##################################################################################################
-pool:
-  name:  SoftwareCollectionDockerPool
-##################################################################################################
 steps:
    - task: DotNetCoreCLI@2
      displayName: Restore
