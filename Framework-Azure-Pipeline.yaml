@@ -514,8 +514,30 @@ steps:
        custom: pack
        arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
 ##################################################################################################
-
-
+   - task: DotNetCoreCLI@2
+     displayName: 'Pack Framework.Idempotency'
+     inputs:
+       command: custom
+       projects: '**/Framework.Idempotency.csproj'
+       custom: pack
+       arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
+##################################################################################################
+   - task: DotNetCoreCLI@2
+     displayName: 'Pack Framework.Idempotency.Mongo'
+     inputs:
+       command: custom
+       projects: '**/Framework.Idempotency.Mongo.csproj'
+       custom: pack
+       arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
+##################################################################################################
+   - task: DotNetCoreCLI@2
+     displayName: 'Pack Framework.Idempotency.Sql'
+     inputs:
+       command: custom
+       projects: '**/Framework.Idempotency.Sql.csproj'
+       custom: pack
+       arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
+##################################################################################################
    - task: PublishBuildArtifacts@1
      displayName: 'Publish Artifact: pack'
      inputs:
