@@ -514,6 +514,15 @@ steps:
        custom: pack
        arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
 ##################################################################################################
+   - powershell: |
+      [xml]$project = Get-Content -Path ./Code/Src/Framework.Idempotency/Framework.Idempotency.csproj
+      $version = $project.Project.PropertyGroup.Version
+      echo "version: "
+      echo $version
+      echo "##vso[task.setvariable variable=version]$version"
+ 
+     displayName: 'Get Version of Framework.Idempotency'
+##################################################################################################
    - task: DotNetCoreCLI@2
      displayName: 'Pack Framework.Idempotency'
      inputs:
@@ -522,6 +531,15 @@ steps:
        custom: pack
        arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
 ##################################################################################################
+   - powershell: |
+      [xml]$project = Get-Content -Path ./Code/Src/Framework.Idempotency.Mongo/Framework.Idempotency.Mongo.csproj
+      $version = $project.Project.PropertyGroup.Version
+      echo "version: "
+      echo $version
+      echo "##vso[task.setvariable variable=version]$version"
+ 
+     displayName: 'Get Version of Framework.Idempotency.Mongo'
+##################################################################################################
    - task: DotNetCoreCLI@2
      displayName: 'Pack Framework.Idempotency.Mongo'
      inputs:
@@ -529,6 +547,15 @@ steps:
        projects: '**/Framework.Idempotency.Mongo.csproj'
        custom: pack
        arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
+##################################################################################################
+   - powershell: |
+      [xml]$project = Get-Content -Path ./Code/Src/Framework.Idempotency.Sql/Framework.Idempotency.Sql.csproj
+      $version = $project.Project.PropertyGroup.Version
+      echo "version: "
+      echo $version
+      echo "##vso[task.setvariable variable=version]$version"
+ 
+     displayName: 'Get Version of Framework.Idempotency.Sql'
 ##################################################################################################
    - task: DotNetCoreCLI@2
      displayName: 'Pack Framework.Idempotency.Sql'
