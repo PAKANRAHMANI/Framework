@@ -1,5 +1,4 @@
 ﻿using Framework.Messages;
-using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using RabbitMQ.Client;
@@ -8,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Extensions.Options;
 
 namespace Framework.RabbitMQ;
 
@@ -15,21 +15,20 @@ public sealed class RabbitMqMessageSender : IRabbitMqMessageSender
 {
 	private readonly IModel _channel;
 	private readonly IAcknowledgeManagement _acknowledgeManagement;
-	private readonly JsonSerializerSettings _jsonSerializerSettings;
+    private readonly JsonSerializerSettings _jsonSerializerSettings;
 	private EventHandler<BasicAckEventArgs> _acknowledgeEventHandler;
-
-	public RabbitMqMessageSender(IAcknowledgeManagement acknowledgeManagement, IConfiguration configuration)
+    
+    public RabbitMqMessageSender(IAcknowledgeManagement acknowledgeManagement, IOptions<RabbitConfiguration> rabbitConfig)
 	{
-		var rabbitConfig = configuration.GetSection("RabbitConfiguration").Get<RabbitConfiguration>();
-
-		var factory = new ConnectionFactory { Uri = new Uri(rabbitConfig.Host) };
+		var factory = new ConnectionFactory { Uri = new Uri(rabbitConfig.Value.Host) };
 		var connection = factory.CreateConnection();
 		_channel = connection.CreateModel();
 		_channel.ConfirmSelect();
 		_channel.WaitForConfirmsOrDie(TimeSpan.FromMilliseconds(1000));
 		_acknowledgeManagement = acknowledgeManagement;
+      
 
-		_jsonSerializerSettings = new JsonSerializerSettings
+        _jsonSerializerSettings = new JsonSerializerSettings
 		{
 			Formatting = Formatting.Indented,
 			ContractResolver = new CamelCasePropertyNamesContractResolver()
