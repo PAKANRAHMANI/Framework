@@ -25,7 +25,7 @@ public abstract class TemplateService : BackgroundService, IDataStoreChangeTrack
     private readonly ServiceConfig _serviceConfig;
     private readonly IOptions<SecondaryProducerConfiguration> _secondaryProducerConfiguration;
     private readonly Bind<ISecondBus, IPublishEndpoint> _secondaryPublishEndpoint;
-
+    private ISubscription _subscription;
     protected TemplateService(
         IEventTypeResolver eventTypeResolver,
         IEventFilter eventFilter,
@@ -95,7 +95,7 @@ public abstract class TemplateService : BackgroundService, IDataStoreChangeTrack
     }
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        while (!stoppingToken.IsCancellationRequested)
+        if (!stoppingToken.IsCancellationRequested)
         {
             try
             {
@@ -103,15 +103,22 @@ public abstract class TemplateService : BackgroundService, IDataStoreChangeTrack
 
                 _logger.LogInformation("Event host Service running at: {time}", DateTimeOffset.Now);
 
-                _dataStore.SubscribeForChanges();
+                _subscription = _dataStore.SubscribeForChanges();
 
                 _logger.LogInformation("Subscribed to data store");
             }
             catch (Exception exception)
             {
                 _logger.LogError(exception.Message);
+
+                _subscription.UnSubscribe();
             }
         }
+    }
+
+    public override void Dispose()
+    {
+        _subscription.UnSubscribe();
     }
     protected abstract Task Start();
     protected abstract void Send(IEvent @event);
