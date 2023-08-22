@@ -65,13 +65,13 @@ public static class IdpTokenManagementExtension
                 };
             });
 
-        services.AddAuthentication("token")
-            .AddOAuth2Introspection("token", configureOption =>
-            {
-                configureOption.Authority = identityServerConfig.Authority;
-                configureOption.ClientId = identityServerConfig.ClientId;
-                configureOption.ClientSecret = identityServerConfig.ClientSecret;
-            });
+        //services.AddAuthentication("token")
+        //    .AddOAuth2Introspection("token", configureOption =>
+        //    {
+        //        configureOption.Authority = identityServerConfig.Authority;
+        //        configureOption.ClientId = identityServerConfig.ClientId;
+        //        configureOption.ClientSecret = identityServerConfig.ClientSecret;
+        //    });
 
         services.AddAuthorization(authorizationOptions =>
         {
