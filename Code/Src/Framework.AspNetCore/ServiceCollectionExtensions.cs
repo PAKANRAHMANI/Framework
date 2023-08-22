@@ -32,7 +32,7 @@ namespace Framework.AspNetCore
                 {
                     var messages = c.ModelState.GetAllErrors();
 
-                    var response = messages.Select(msg => ExceptionDetails.Create(msg, 0, ""));
+                    var response = new ErrorResponseModel { Errors = messages.Select(msg => ExceptionDetails.Create(msg, 0, "")).ToList() };
 
                     return new BadRequestObjectResult(response);
                 };
