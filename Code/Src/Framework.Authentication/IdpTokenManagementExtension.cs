@@ -79,7 +79,5 @@ public static class IdpTokenManagementExtension
                 .RequireAuthenticatedUser()
                 .Build();
         });
-
-        services.AddAuthorization();
     }
 }
