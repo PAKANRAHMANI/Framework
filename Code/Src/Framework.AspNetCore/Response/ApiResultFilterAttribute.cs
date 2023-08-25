@@ -36,9 +36,9 @@ public class ApiResultFilterAttribute : ActionFilterAttribute
                 }
                 else if (objectResult.StatusCode.Value >= 400 && objectResult.StatusCode.Value < 600)
                 {
-                    if (objectResult.Value is IEnumerable<ExceptionDetails> errorModels)
+                    if (objectResult.Value is ErrorResponseModel errorModels)
                     {
-                        objectResult.Value = ResponseModel.FromError(errorModels.ToList());
+                        objectResult.Value = ResponseModel.FromError(errorModels.Errors.ToList());
                     }
                     else
                     {
