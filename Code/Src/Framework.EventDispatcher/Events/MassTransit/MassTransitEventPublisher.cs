@@ -11,8 +11,8 @@ public class MassTransitEventPublisher : IEventPublisher
     {
         _publishEndpoint = publishEndpoint;
     }
-    public Task Publish<T>(T @event) where T : IEvent
+    public async Task Publish<T>(T @event) where T : IEvent
     {
-        return _publishEndpoint.Publish(@event);
+        await _publishEndpoint.Publish(@event);
     }
 }

@@ -1,6 +1,4 @@
 ﻿using System.Timers;
-using Framework.EventProcessor.Services;
-using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Timer = System.Timers.Timer;
@@ -10,10 +8,10 @@ namespace Framework.EventProcessor.DataStore.Sql;
 public class SqlDataStore : IDataStoreObservable
 {
     private IDataStoreChangeTrackerObserver _dataStoreChangeTracker;
-    private readonly ILogger<TemplateService> _logger;
+    private readonly ILogger<SqlDataStore> _logger;
     private readonly SqlStoreConfig _sqlStoreConfig;
     private readonly Timer _timer;
-    public SqlDataStore(IOptions<SqlStoreConfig> sqlStoreConfig, ILogger<TemplateService> logger)
+    public SqlDataStore(IOptions<SqlStoreConfig> sqlStoreConfig, ILogger<SqlDataStore> logger)
     {
         _logger = logger;
         _sqlStoreConfig = sqlStoreConfig.Value;
@@ -22,7 +20,7 @@ public class SqlDataStore : IDataStoreObservable
     }
     public void SetSubscriber(IDataStoreChangeTrackerObserver changeTracker)
     {
-       this._dataStoreChangeTracker = changeTracker;
+        this._dataStoreChangeTracker = changeTracker;
     }
 
     public ISubscription SubscribeForChanges()
@@ -35,22 +33,19 @@ public class SqlDataStore : IDataStoreObservable
     {
         _timer.Stop();
 
-        using (var sqlConnection = new SqlConnection(_sqlStoreConfig.ConnectionString))
+        var cursorPosition = SqlQueries.GetCursorPosition(_sqlStoreConfig.ConnectionString, _sqlStoreConfig.CursorTable);
+
+        var events = SqlQueries.GetEventsFromPosition(_sqlStoreConfig.ConnectionString, cursorPosition, _sqlStoreConfig.EventTable);
+
+        if (events.Any())
         {
-            var cursorPosition = sqlConnection.GetCursorPosition(_sqlStoreConfig.CursorTable);
+            _logger.LogInformation($"{events.Count} Events found in Tables");
 
-            var events = sqlConnection.GetEventsFromPosition(cursorPosition, _sqlStoreConfig.EventTable);
+            this._dataStoreChangeTracker.ChangeDetected(events).Wait();
 
-            if (events.Any())
-            {
-                _logger.LogInformation($"{events.Count} Events found in Tables");
+            SqlQueries.MoveCursorPosition(_sqlStoreConfig.ConnectionString, events.Last().Id, _sqlStoreConfig.CursorTable);
 
-                this._dataStoreChangeTracker.ChangeDetected(events);
-
-                sqlConnection.MoveCursorPosition(events.Last().Id, _sqlStoreConfig.CursorTable);
-
-                _logger.LogInformation($"Cursor moved to position {events.Last().Id}");
-            }
+            _logger.LogInformation($"Cursor moved to position {events.Last().Id}");
         }
 
         _timer.Start();

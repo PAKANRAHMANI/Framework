@@ -48,9 +48,9 @@ namespace Framework.EventProcessor.Services
             return Task.CompletedTask;
         }
 
-        protected override void Send(IEvent @event)
+        protected override async Task Send(IEvent @event)
         {
-            _producer.Produce(_producerConfiguration.TopicKey, @event);
+           await _producer.ProduceAsync(_producerConfiguration.TopicKey, @event);
         }
     }
 }

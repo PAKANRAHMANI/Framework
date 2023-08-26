@@ -6,12 +6,12 @@ using Framework.EventProcessor.Events.Kafka;
 using Framework.EventProcessor.Filtering;
 using Framework.EventProcessor.Serialization;
 using Framework.EventProcessor.Transformation;
-using MassTransit.ExtensionsDependencyInjectionIntegration;
-using MassTransit;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Framework.EventProcessor.Handlers;
+using MassTransit;
+using MassTransit.ExtensionsDependencyInjectionIntegration;
 
 namespace Framework.EventProcessor.Services;
 
@@ -48,7 +48,7 @@ public abstract class TemplateService : BackgroundService, IDataStoreChangeTrack
         _dataStore.SetSubscriber(this);
 
     }
-    public void ChangeDetected(List<EventItem> events)
+    public async Task ChangeDetected(List<EventItem> events)
     {
         foreach (var eventItem in events)
         {
@@ -67,7 +67,7 @@ public abstract class TemplateService : BackgroundService, IDataStoreChangeTrack
             {
                 eventToPublish = TransformEvent(eventToPublish, eventItem);
 
-                Send(eventToPublish);
+                await Send(eventToPublish);
 
                 SecondarySendMessage(eventToPublish);
 
@@ -93,6 +93,10 @@ public abstract class TemplateService : BackgroundService, IDataStoreChangeTrack
 
         handlers.Handle(new SecondaryData(_serviceConfig, @event));
     }
+    public override void Dispose()
+    {
+        _subscription.UnSubscribe();
+    }
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         if (!stoppingToken.IsCancellationRequested)
@@ -115,13 +119,8 @@ public abstract class TemplateService : BackgroundService, IDataStoreChangeTrack
             }
         }
     }
-
-    public override void Dispose()
-    {
-        _subscription.UnSubscribe();
-    }
     protected abstract Task Start();
-    protected abstract void Send(IEvent @event);
+    protected abstract Task Send(IEvent @event);
     private IEvent TransformEvent(IEvent @event, EventItem item)
     {
         var transformer = _transformerLookUp.LookUpTransformer(@event);

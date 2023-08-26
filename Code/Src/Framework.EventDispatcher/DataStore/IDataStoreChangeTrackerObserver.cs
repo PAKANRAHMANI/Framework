@@ -2,5 +2,5 @@
 
 public interface IDataStoreChangeTrackerObserver
 {
-    void ChangeDetected(List<EventItem> events);
+    Task ChangeDetected(List<EventItem> events);
 }

@@ -12,5 +12,5 @@ public abstract class MessageProducer
         Producer = producer;
     }
 
-    public abstract void Produce<TKey, TMessage>(TKey key, TMessage message, Action<DeliveryResult<object, object>> action = null);
+    public abstract Task<DeliveryResult<object, object>> ProduceAsync<TKey, TMessage>(TKey key, TMessage message, CancellationToken cancellationToken = default);
 }

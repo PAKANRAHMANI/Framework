@@ -15,9 +15,13 @@ namespace Framework.EventProcessor.Events.MassTransit
         }
         public async Task Start()
         {
-            _bus = Bus.Factory.CreateUsingRabbitMq(sbc =>
+            _bus = Bus.Factory.CreateUsingRabbitMq(rabbitMqBusFactoryConfigurator =>
             {
-                sbc.Host(_config.RabbitMqConnectionString);
+                rabbitMqBusFactoryConfigurator.Host(new Uri(_config.RabbitMqConnectionString), rabbitMqHostConfigurator =>
+                {
+                    rabbitMqHostConfigurator.Username(_config.RabbitMqUserName);
+                    rabbitMqHostConfigurator.Password(_config.RabbitMqPassword);
+                });
             });
 
             await _bus.StartAsync();

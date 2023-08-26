@@ -4,8 +4,8 @@ using Framework.EventProcessor.Events;
 using Framework.EventProcessor.Events.Kafka;
 using Framework.EventProcessor.Filtering;
 using Framework.EventProcessor.Transformation;
-using MassTransit.ExtensionsDependencyInjectionIntegration;
 using MassTransit;
+using MassTransit.ExtensionsDependencyInjectionIntegration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using IEventPublisher = Framework.EventProcessor.Events.IEventPublisher;
@@ -39,9 +39,9 @@ namespace Framework.EventProcessor.Services
             await _eventBus.Start();
         }
 
-        protected override void Send(IEvent @event)
+        protected override async Task Send(IEvent @event)
         {
-            _publisher.Publish(@event);
+           await _publisher.Publish(@event);
         }
     }
 }

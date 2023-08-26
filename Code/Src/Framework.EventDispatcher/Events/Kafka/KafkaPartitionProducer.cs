@@ -1,5 +1,4 @@
 ﻿using Confluent.Kafka;
-using Framework.Core.Streaming;
 
 namespace Framework.EventProcessor.Events.Kafka
 {
@@ -8,14 +7,13 @@ namespace Framework.EventProcessor.Events.Kafka
         public KafkaPartitionProducer(IProducer<object, object> producer, ProducerConfiguration configuration) : base(configuration, producer)
         {
         }
-
-        public override void Produce<TKey, TMessage>(TKey key, TMessage message, Action<DeliveryResult<object, object>> action = null)
+        public override async Task<DeliveryResult<object, object>> ProduceAsync<TKey, TMessage>(TKey key, TMessage message, CancellationToken cancellationToken = default)
         {
-            Producer.Produce(new TopicPartition(Configuration.TopicName, new Partition(Configuration.PartitionNumber)), new Message<object, object>
+            return await Producer.ProduceAsync(new TopicPartition(Configuration.TopicName, new Partition(Configuration.PartitionNumber)), new Message<object, object>
             {
                 Value = message,
                 Key = key
-            }, action);
+            }, cancellationToken);
         }
     }
 

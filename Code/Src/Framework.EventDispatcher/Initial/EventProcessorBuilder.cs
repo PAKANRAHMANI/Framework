@@ -11,6 +11,8 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using MassTransit;
 using MassTransit.MultiBus;
+using Confluent.Kafka;
+using MassTransit.RabbitMqTransport.Configurators;
 
 namespace Framework.EventProcessor.Initial
 {
@@ -97,6 +99,8 @@ namespace Framework.EventProcessor.Initial
         {
             _services.AddSingleton<IEventBus, MassTransitEventBusAdapter>();
 
+            _services.AddSingleton<IEventPublisher, MassTransitEventPublisher>();
+
             _services.Configure<MassTransitConfig>(config);
 
             _services.AddHostedService<EventPublisherService>();
@@ -177,9 +181,13 @@ namespace Framework.EventProcessor.Initial
 
             _services.AddMassTransit<ISecondBus>(x =>
             {
-                x.UsingRabbitMq((context, cfg) =>
+                x.UsingRabbitMq((context, rabbitMqBusFactoryConfigurator) =>
                 {
-                    cfg.Host(secondaryMassTransitConfiguration.RabbitMqConnectionString);
+                    rabbitMqBusFactoryConfigurator.Host(new Uri(secondaryMassTransitConfiguration.RabbitMqConnectionString), rabbitMqHostConfigurator =>
+                    {
+                        rabbitMqHostConfigurator.Username(secondaryMassTransitConfiguration.RabbitMqUserName);
+                        rabbitMqHostConfigurator.Password(secondaryMassTransitConfiguration.RabbitMqPassword);
+                    });
                 });
             });
         }

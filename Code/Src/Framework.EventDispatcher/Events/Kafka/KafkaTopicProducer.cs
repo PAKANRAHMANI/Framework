@@ -7,12 +7,12 @@ public class KafkaTopicProducer : MessageProducer
     {
     }
 
-    public override void Produce<TKey, TMessage>(TKey key, TMessage message, Action<DeliveryResult<object, object>> action = null)
+    public override async Task<DeliveryResult<object, object>> ProduceAsync<TKey, TMessage>(TKey key, TMessage message, CancellationToken cancellationToken = default)
     {
-        Producer.Produce(Configuration.TopicName, new Message<object, object>
+        return await Producer.ProduceAsync(Configuration.TopicName, new Message<object, object>
         {
             Value = message,
             Key = key
-        }, action);
+        }, cancellationToken);
     }
 }
