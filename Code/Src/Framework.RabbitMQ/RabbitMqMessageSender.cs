@@ -18,9 +18,9 @@ public sealed class RabbitMqMessageSender : IRabbitMqMessageSender
     private readonly JsonSerializerSettings _jsonSerializerSettings;
 	private EventHandler<BasicAckEventArgs> _acknowledgeEventHandler;
     
-    public RabbitMqMessageSender(IAcknowledgeManagement acknowledgeManagement, IOptions<RabbitConfiguration> rabbitConfig)
+    public RabbitMqMessageSender(IAcknowledgeManagement acknowledgeManagement, RabbitConfiguration rabbitConfig)
 	{
-		var factory = new ConnectionFactory { Uri = new Uri(rabbitConfig.Value.Host) };
+		var factory = new ConnectionFactory { Uri = new Uri(rabbitConfig.Host) };
 		var connection = factory.CreateConnection();
 		_channel = connection.CreateModel();
 		_channel.ConfirmSelect();
