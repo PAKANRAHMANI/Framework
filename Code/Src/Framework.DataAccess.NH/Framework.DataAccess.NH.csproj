@@ -1,19 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-	  <TargetFramework>net6.0</TargetFramework>
-	   <Version>4.1.2</Version>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<Version>4.1.4</Version>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="NHibernate" />
-    <PackageReference Include="System.Data.SqlClient" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="NHibernate" />
+		<PackageReference Include="System.Data.SqlClient" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Framework.Config\Framework.Config.csproj" >
-	     
-    </ProjectReference>
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Framework.Config\Framework.Config.csproj" />
+	</ItemGroup>
 
 </Project>

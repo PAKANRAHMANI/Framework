@@ -1,16 +1,19 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>disable</Nullable>
-	<Version>4.1.2</Version>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>disable</Nullable>
+		<Version>4.1.4</Version>
+	</PropertyGroup>
+
 	<ItemGroup>
 		<PackageReference Include="MassTransit.AspNetCore" />
 	</ItemGroup>
+
 	<ItemGroup>
-	  <ProjectReference Include="..\Framework.Core\Framework.Core.csproj" />
-	  <ProjectReference Include="..\Framework.MassTransit\Framework.MassTransit.csproj" />
+		<ProjectReference Include="..\Framework.Core\Framework.Core.csproj" />
+		<ProjectReference Include="..\Framework.MassTransit\Framework.MassTransit.csproj" />
 	</ItemGroup>
+
 </Project>

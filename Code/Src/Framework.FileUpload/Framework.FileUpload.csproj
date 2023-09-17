@@ -2,13 +2,14 @@
 
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
-		  <Version>4.1.2</Version>
+		<Version>4.1.4</Version>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<PackageReference Include="FluentFTP" />
 		<PackageReference Include="Microsoft.Extensions.Options" />
 	</ItemGroup>
+
 	<ItemGroup>
 		<ProjectReference Include="..\Framework.Config\Framework.Config.csproj" />
 	</ItemGroup>

@@ -1,16 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>disable</Nullable>
-	<Version>4.1.2</Version>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>disable</Nullable>
+		<Version>4.1.4</Version>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Framework.Idempotency\Framework.Idempotency.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Framework.Idempotency\Framework.Idempotency.csproj" />
+	</ItemGroup>
+
 	<ItemGroup>
 		<PackageReference Include="MongoDB.Driver" />
 	</ItemGroup>
+
 </Project>
