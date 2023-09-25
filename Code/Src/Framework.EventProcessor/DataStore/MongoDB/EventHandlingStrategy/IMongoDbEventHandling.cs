@@ -1,4 +1,4 @@
-﻿namespace Framework.EventProcessor.DataStore.MongoDB.EventHandelingStrategy
+﻿namespace Framework.EventProcessor.DataStore.MongoDB.EventHandlingStrategy
 {
     public interface IMongoDbEventHandling
     {
