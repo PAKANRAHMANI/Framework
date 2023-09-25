@@ -481,7 +481,7 @@ steps:
        arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
 ##################################################################################################
    - powershell: |
-      [xml]$project = Get-Content -Path ./Code/Src/Framework.EventDispatcher/Framework.EventProcessor.csproj
+      [xml]$project = Get-Content -Path ./Code/Src/Framework.EventProcessor/Framework.EventProcessor.csproj
       $version = $project.Project.PropertyGroup.Version
       echo "version: "
       echo $version
