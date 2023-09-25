@@ -2,6 +2,11 @@
 
 public class CacheConfiguration
 {
-	public RedisCacheConfiguration RedisCacheConfiguration { get; set; }
-	public RedisHashsetCacheConfiguration RedisHashsetCacheConfiguration { get; set; }
+    public CacheConfiguration()
+    {
+        RedisCacheConfiguration = new RedisCacheConfiguration();
+        RedisHashsetCacheConfiguration = new RedisHashsetCacheConfiguration();
+    }
+    public RedisCacheConfiguration RedisCacheConfiguration { get; set; }
+    public RedisHashsetCacheConfiguration RedisHashsetCacheConfiguration { get; set; }
 }
