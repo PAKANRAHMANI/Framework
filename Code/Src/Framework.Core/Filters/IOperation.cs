@@ -8,6 +8,6 @@ namespace Framework.Core.Filters
 {
     public interface IOperation<T>
     {
-        T Apply(T input);
+        Task<T> Apply(T input);
     }
 }

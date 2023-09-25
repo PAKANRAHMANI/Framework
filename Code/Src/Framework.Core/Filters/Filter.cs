@@ -1,4 +1,6 @@
-﻿namespace Framework.Core.Filters
+﻿using System.Threading.Tasks;
+
+namespace Framework.Core.Filters
 {
     public class Filter<T> : IFilter<T>
     {
@@ -15,11 +17,11 @@
             this._nextFilter = next;
         }
 
-        public T Apply(T obj)
+        public async Task<T> Apply(T obj)
         {
-            obj = _operation.Apply(obj);
+            obj = await _operation.Apply(obj);
 
-            return _nextFilter.Apply(obj);
+            return await _nextFilter.Apply(obj);
         }
 
     }

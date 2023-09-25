@@ -9,6 +9,6 @@ namespace Framework.Core.Filters
     public interface IFilter<T>
     {
         void SetNext(IFilter<T> next);
-        T Apply(T obj);
+        Task<T> Apply(T obj);
     }
 }

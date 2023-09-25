@@ -15,9 +15,9 @@ namespace Framework.Core.Filters
             throw new NotSupportedException("Can't set next on EndFilter");
         }
 
-        public T Apply(T obj)
+        public async Task<T> Apply(T obj)
         {
-            return obj;
+            return await Task.FromResult(obj);
         }
     }
 }
