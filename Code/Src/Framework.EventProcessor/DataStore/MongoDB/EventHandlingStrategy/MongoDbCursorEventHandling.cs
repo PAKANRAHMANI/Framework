@@ -8,13 +8,11 @@ public class MongoDbCursorEventHandling : IMongoDbEventHandling
 {
     private readonly IMongoDatabase _database;
     private readonly MongoStoreConfig _mongoStoreConfig;
-    private readonly ILogger<MongoDbFlagEventHandling> _logger;
 
-    public MongoDbCursorEventHandling(IMongoDatabase database, MongoStoreConfig mongoStoreConfig, ILogger<MongoDbFlagEventHandling> logger)
+    public MongoDbCursorEventHandling(IMongoDatabase database, MongoStoreConfig mongoStoreConfig)
     {
         _database = database;
         _mongoStoreConfig = mongoStoreConfig;
-        _logger = logger;
     }
     public List<EventItem> GetEvents(string collectionName)
     {
@@ -56,7 +54,8 @@ public class MongoDbCursorEventHandling : IMongoDbEventHandling
         }
         catch (Exception exception)
         {
-            _logger.LogError(exception.Message);
+            Console.WriteLine(exception.Message);
+            throw;
         }
     }
 

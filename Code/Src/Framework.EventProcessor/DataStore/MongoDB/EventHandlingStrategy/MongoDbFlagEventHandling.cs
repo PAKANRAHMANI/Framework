@@ -6,12 +6,10 @@ namespace Framework.EventProcessor.DataStore.MongoDB.EventHandlingStrategy;
 public class MongoDbFlagEventHandling : IMongoDbEventHandling
 {
     private readonly IMongoDatabase _database;
-    private readonly ILogger<MongoDbFlagEventHandling> _logger;
 
-    public MongoDbFlagEventHandling(IMongoDatabase database, ILogger<MongoDbFlagEventHandling> logger)
+    public MongoDbFlagEventHandling(IMongoDatabase database)
     {
         _database = database;
-        _logger = logger;
     }
 
     public List<EventItem> GetEvents(string collectionName)
@@ -42,7 +40,8 @@ public class MongoDbFlagEventHandling : IMongoDbEventHandling
         }
         catch (Exception exception)
         {
-            _logger.LogError(exception.Message);
+            Console.WriteLine(exception.Message);
+            throw;
         }
     }
 }
