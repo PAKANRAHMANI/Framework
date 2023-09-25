@@ -1,5 +1,5 @@
 ﻿using Framework.EventProcessor.Configurations;
-using Framework.EventProcessor.DataStore.MongoDB.EventHandelingStrategy;
+using Framework.EventProcessor.DataStore.MongoDB.EventHandlingStrategy;
 using MongoDB.Driver;
 
 namespace Framework.EventProcessor.DataStore.MongoDB

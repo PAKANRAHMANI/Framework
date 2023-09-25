@@ -1,7 +1,7 @@
 ﻿using Framework.EventProcessor.Configurations;
 using MongoDB.Driver;
 
-namespace Framework.EventProcessor.DataStore.MongoDB.EventHandelingStrategy;
+namespace Framework.EventProcessor.DataStore.MongoDB.EventHandlingStrategy;
 
 public class MongoDbCursorEventHandling : IMongoDbEventHandling
 {

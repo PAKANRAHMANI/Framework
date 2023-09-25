@@ -1,9 +1,9 @@
 ﻿using Framework.EventProcessor.Configurations;
 using Framework.EventProcessor.DataStore.ChangeTrackers;
-using Framework.EventProcessor.DataStore.MongoDB.EventHandelingStrategy;
 using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
 using System.Timers;
+using Framework.EventProcessor.DataStore.MongoDB.EventHandlingStrategy;
 using Timer = System.Timers.Timer;
 
 namespace Framework.EventProcessor.DataStore.MongoDB
