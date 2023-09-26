@@ -113,11 +113,7 @@ namespace Framework.EventProcessor.Initial
             {
                 x.UsingRabbitMq((_, rabbitMqBusFactoryConfigurator) =>
                 {
-                    rabbitMqBusFactoryConfigurator.Host(new Uri(massTransitConfig.RabbitMqConnectionString), rabbitMqHostConfigurator =>
-                    {
-                        rabbitMqHostConfigurator.Username(massTransitConfig.RabbitMqUserName);
-                        rabbitMqHostConfigurator.Password(massTransitConfig.RabbitMqPassword);
-                    });
+                    rabbitMqBusFactoryConfigurator.Host(massTransitConfig.RabbitMqConnectionString);
                 });
             });
 
@@ -206,11 +202,7 @@ namespace Framework.EventProcessor.Initial
             {
                 x.UsingRabbitMq((_, rabbitMqBusFactoryConfigurator) =>
                 {
-                    rabbitMqBusFactoryConfigurator.Host(new Uri(secondaryMassTransitConfiguration.RabbitMqConnectionString), rabbitMqHostConfigurator =>
-                    {
-                        rabbitMqHostConfigurator.Username(secondaryMassTransitConfiguration.RabbitMqUserName);
-                        rabbitMqHostConfigurator.Password(secondaryMassTransitConfiguration.RabbitMqPassword);
-                    });
+                    rabbitMqBusFactoryConfigurator.Host(secondaryMassTransitConfiguration.RabbitMqConnectionString);
                 });
             });
 
