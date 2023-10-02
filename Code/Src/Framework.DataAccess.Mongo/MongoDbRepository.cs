@@ -93,8 +93,14 @@ namespace Framework.DataAccess.Mongo
             var domainEvent = GetDomainEvents(aggregate);
             var distributedEvent = GetDistributedEvents(aggregate);
 
+            var sequenceHelper = new MongoSequenceHelper(Database);
+
             if (domainEvent.Any())
             {
+                foreach (var @event in domainEvent)
+                {
+                    @event.Id = sequenceHelper.GetNextId(_config.SequenceCollectionName);
+                }
                 await Database.GetCollection<DomainEventStructure>("DomainEvents").InsertManyAsync(domainEvent);
                 aggregate.ClearEvents();
             }
@@ -102,6 +108,10 @@ namespace Framework.DataAccess.Mongo
 
             if (distributedEvent.Any())
             {
+                foreach (var @event in distributedEvent)
+                {
+                    @event.Id = sequenceHelper.GetNextId(_config.SequenceCollectionName);
+                }
                 await Database.GetCollection<DistributedEventStructure>("DistributedEvents").InsertManyAsync(distributedEvent);
                 aggregate.ClearEvents();
             }

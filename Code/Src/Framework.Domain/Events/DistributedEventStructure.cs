@@ -4,6 +4,7 @@ namespace Framework.Domain.Events
 {
     public class DistributedEventStructure
     {
+        public long Id { get; set; }
         public Guid EventId { get; set; }
         public string EventType { get; set; }
         public string Body { get; set; }
