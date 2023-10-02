@@ -2,7 +2,7 @@
 
 namespace Framework.Idempotency.Mongo
 {
-    public static class SqlIdempotencyExtension
+    public static class MongoIdempotencyExtension
     {
         public static IServiceCollection UseInboxPatternWithMongo(this IServiceCollection services, Action<MongoConfiguration> config)
         {

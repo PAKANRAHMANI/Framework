@@ -47,5 +47,5 @@ public abstract class MassTransitIdempotentConsumer<T> : IConsumer<T> where T : 
         }
 
     }
-    protected abstract Task ConsumeMessage(IEvent message);
+    protected abstract Task ConsumeMessage(T message);
 }
