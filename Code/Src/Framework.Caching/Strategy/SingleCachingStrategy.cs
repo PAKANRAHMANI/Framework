@@ -11,7 +11,7 @@ namespace Framework.Caching.Strategy
             _caching = caching;
         }
 
-        public T Get<T>(string key, int? expirationTimeInMinutes = null) where T : class
+        public T Get<T>(string key, int? expirationTimeInMinutes = null, Func<T> query = null) where T : class
         {
             return _caching.Get<T>(key);
         }

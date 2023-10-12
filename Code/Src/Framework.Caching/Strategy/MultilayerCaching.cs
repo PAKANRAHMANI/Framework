@@ -1,4 +1,5 @@
 ﻿using Framework.Caching.Types;
+using Newtonsoft.Json.Linq;
 
 namespace Framework.Caching.Strategy;
 
@@ -13,7 +14,7 @@ public class MultilayerCaching : ICache
         _redisCache = redisCache;
     }
 
-    public T Get<T>(string key, int? expirationTimeInMinutes = null) where T : class
+    public T Get<T>(string key, int? expirationTimeInMinutes = null, Func<T> query = null) where T : class
     {
         var memoryData = _memoryCache.Get<T>(key);
 
@@ -28,10 +29,17 @@ public class MultilayerCaching : ICache
 
             return redisData;
         }
+        var data = query?.Invoke();
 
-        return null;
+        if (expirationTimeInMinutes == null) return data;
+
+        _memoryCache.Set(key, data, expirationTimeInMinutes.Value);
+
+        _redisCache.Set(key, data, expirationTimeInMinutes.Value);
+
+        return data;
     }
-    
+
     public void Set<T>(string key, T value, int expirationTimeInMinutes) where T : class
     {
         _memoryCache.Set(key, value, expirationTimeInMinutes);

@@ -6,7 +6,8 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Framework.Caching.Initial
 {
-    public class CacheBuilder:
+    //TODO:seperate dll for Icache And rename sterategy folder
+    public class CacheBuilder :
         ICachingStrategyBuilder,
         ICachingTypeBuilder
     {
@@ -54,6 +55,8 @@ namespace Framework.Caching.Initial
 
             config.Invoke(cacheConfig);
 
+            _serviceCollection.AddMemoryCache();
+
             _serviceCollection.AddSingleton<InMemoryCacheConfiguration>(cacheConfig);
 
             _serviceCollection.AddSingleton<ICacheControl, InMemoryCache>();
@@ -65,6 +68,8 @@ namespace Framework.Caching.Initial
             var cacheConfig = new DistributedCacheConfiguration();
 
             config.Invoke(cacheConfig);
+
+            _serviceCollection.AddSingleton<IRedisDataBaseResolver, RedisDataBaseResolver>();
 
             _serviceCollection.AddSingleton<DistributedCacheConfiguration>(cacheConfig);
 
