@@ -84,6 +84,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Framework.Idempotency.Mongo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Framework.EventProcessor", "Src\Framework.EventProcessor\Framework.EventProcessor.csproj", "{725E5504-EF7E-4970-BB31-8D0B4BDA69A5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Framework.Caching", "Src\Framework.Caching\Framework.Caching.csproj", "{932F522B-5AFF-4316-8053-3910F0B02319}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -224,6 +226,10 @@ Global
 		{725E5504-EF7E-4970-BB31-8D0B4BDA69A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{725E5504-EF7E-4970-BB31-8D0B4BDA69A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{725E5504-EF7E-4970-BB31-8D0B4BDA69A5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{932F522B-5AFF-4316-8053-3910F0B02319}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{932F522B-5AFF-4316-8053-3910F0B02319}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{932F522B-5AFF-4316-8053-3910F0B02319}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{932F522B-5AFF-4316-8053-3910F0B02319}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -264,6 +270,7 @@ Global
 		{7A68CC10-C393-4D13-A54D-7E455D596D12} = {25A183FD-7661-4697-96E4-895E57A64352}
 		{35ADA45F-F02E-42A9-A26E-1AB2141E0490} = {25A183FD-7661-4697-96E4-895E57A64352}
 		{725E5504-EF7E-4970-BB31-8D0B4BDA69A5} = {25A183FD-7661-4697-96E4-895E57A64352}
+		{932F522B-5AFF-4316-8053-3910F0B02319} = {25A183FD-7661-4697-96E4-895E57A64352}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {FD22E860-CCCE-47C1-B1BE-51511F2D9BF8}
