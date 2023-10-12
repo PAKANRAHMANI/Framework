@@ -8,9 +8,9 @@ namespace Framework.Idempotency.Sql
     {
         private readonly SqlConfiguration _sqlConfiguration;
 
-        public SqlDuplicateMessageHandler(IOptions<SqlConfiguration> sqlConfiguration)
+        public SqlDuplicateMessageHandler(SqlConfiguration sqlConfiguration)
         {
-            _sqlConfiguration = sqlConfiguration.Value;
+            _sqlConfiguration = sqlConfiguration;
         }
         public async Task<bool> HasMessageBeenProcessedBefore(Guid eventId)
         {
@@ -39,8 +39,8 @@ namespace Framework.Idempotency.Sql
 
                 var sqlCommand = new SqlCommand(command, connection);
 
-                sqlCommand.Parameters.Add($"@{_sqlConfiguration.FieldName}", SqlDbType.NVarChar).Value= eventId;
-                sqlCommand.Parameters.Add($"@{_sqlConfiguration.ReceivedDate}", SqlDbType.DateTime2).Value= receivedDate;
+                sqlCommand.Parameters.Add($"@{_sqlConfiguration.FieldName}", SqlDbType.NVarChar).Value = eventId;
+                sqlCommand.Parameters.Add($"@{_sqlConfiguration.ReceivedDate}", SqlDbType.DateTime2).Value = receivedDate;
 
                 await sqlCommand.ExecuteNonQueryAsync();
             }

@@ -41,7 +41,7 @@ public class MongoDbCursorEventHandling : IMongoDbEventHandling
             if (cursor is null)
                 return;
 
-            var @event = eventIds.FirstOrDefault();
+            var @event = eventIds.LastOrDefault();
 
             if (@event is not null)
             {
