@@ -1,12 +1,12 @@
-﻿using Framework.Caching.Types;
+﻿using Framework.Caching.Extensions.Abstractions;
 
-namespace Framework.Caching.Strategy
+namespace Framework.Caching
 {
-    public class SingleCachingStrategy : ICache
+    public class SingleLevelCache : ICache
     {
         private readonly ICacheControl _caching;
 
-        public SingleCachingStrategy(ICacheControl caching)
+        public SingleLevelCache(ICacheControl caching)
         {
             _caching = caching;
         }

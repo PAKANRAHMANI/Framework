@@ -1,6 +1,6 @@
-﻿using Framework.Caching.Configurations;
+﻿using Framework.Caching.Extensions.Configuration;
 
-namespace Framework.Caching.Initial;
+namespace Framework.Caching.Extensions.DependencyInjection;
 
 public interface ICachingTypeBuilder
 {

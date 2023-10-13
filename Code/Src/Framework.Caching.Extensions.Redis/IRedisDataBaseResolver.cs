@@ -1,6 +1,6 @@
 ﻿using StackExchange.Redis;
 
-namespace Framework.Caching.Providers.Redis;
+namespace Framework.Caching.Extensions.Redis;
 
 public interface IRedisDataBaseResolver
 {

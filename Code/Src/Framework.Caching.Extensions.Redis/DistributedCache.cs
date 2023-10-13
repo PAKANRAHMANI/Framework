@@ -1,11 +1,11 @@
-﻿using Framework.Caching.Configurations;
-using Framework.Caching.Providers.Redis;
+﻿using Framework.Caching.Extensions.Abstractions;
+using Framework.Caching.Extensions.Configuration;
 using Newtonsoft.Json;
 using StackExchange.Redis;
 
-namespace Framework.Caching.Types
+namespace Framework.Caching.Extensions.Redis
 {
-    public class DistributedCache : ICacheControl
+    public class DistributedCache : IDistributedCache
     {
         private readonly IDatabase _database;
         private readonly DistributedCacheConfiguration _distributedCacheConfiguration;

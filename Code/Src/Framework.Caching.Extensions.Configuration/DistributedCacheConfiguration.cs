@@ -1,4 +1,4 @@
-﻿namespace Framework.Caching.Configurations
+﻿namespace Framework.Caching.Extensions.Configuration
 {
     public class DistributedCacheConfiguration
     {

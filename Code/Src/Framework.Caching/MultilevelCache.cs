@@ -1,14 +1,13 @@
-﻿using Framework.Caching.Types;
-using Newtonsoft.Json.Linq;
+﻿using Framework.Caching.Extensions.Abstractions;
 
-namespace Framework.Caching.Strategy;
+namespace Framework.Caching;
 
-public class MultilayerCaching : ICache
+public class MultilevelCache : ICache
 {
-    private readonly InMemoryCache _memoryCache;
-    private readonly DistributedCache _redisCache;
+    private readonly IInMemoryCache _memoryCache;
+    private readonly IDistributedCache _redisCache;
 
-    public MultilayerCaching(InMemoryCache memoryCache, DistributedCache redisCache)
+    public MultilevelCache(IInMemoryCache memoryCache, IDistributedCache redisCache)
     {
         _memoryCache = memoryCache;
         _redisCache = redisCache;

@@ -1,12 +1,11 @@
-﻿using Framework.Caching.Configurations;
-using Framework.Caching.Providers.Redis;
-using Framework.Caching.Strategy;
-using Framework.Caching.Types;
+﻿using Framework.Caching.Extensions.Abstractions;
+using Framework.Caching.Extensions.Configuration;
+using Framework.Caching.Extensions.DotnetCore;
+using Framework.Caching.Extensions.Redis;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Framework.Caching.Initial
+namespace Framework.Caching.Extensions.DependencyInjection
 {
-    //TODO:seperate dll for Icache And rename sterategy folder
     public class CacheBuilder :
         ICachingStrategyBuilder,
         ICachingTypeBuilder
@@ -20,13 +19,13 @@ namespace Framework.Caching.Initial
         public static ICachingStrategyBuilder Setup(IServiceCollection serviceCollection) => new CacheBuilder(serviceCollection);
 
 
-        public void MultiLayerCache(Action<CacheConfiguration> config)
+        public void MultilevelCache(Action<CacheConfiguration> config)
         {
             _serviceCollection.AddMemoryCache();
 
             _serviceCollection.AddSingleton<IRedisDataBaseResolver, RedisDataBaseResolver>();
 
-            _serviceCollection.AddSingleton<ICache, MultilayerCaching>();
+            _serviceCollection.AddSingleton<ICache, MultilevelCache>();
 
             _serviceCollection.AddSingleton<InMemoryCache>();
 
@@ -42,9 +41,9 @@ namespace Framework.Caching.Initial
 
         }
 
-        public ICachingTypeBuilder SingleCache()
+        public ICachingTypeBuilder SingleLevelCache()
         {
-            _serviceCollection.AddSingleton<ICache, SingleCachingStrategy>();
+            _serviceCollection.AddSingleton<ICache, SingleLevelCache>();
 
             return this;
         }

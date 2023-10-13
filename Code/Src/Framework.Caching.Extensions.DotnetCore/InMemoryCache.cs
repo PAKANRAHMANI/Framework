@@ -1,9 +1,10 @@
-﻿using Framework.Caching.Configurations;
+﻿using Framework.Caching.Extensions.Abstractions;
+using Framework.Caching.Extensions.Configuration;
 using Microsoft.Extensions.Caching.Memory;
 
-namespace Framework.Caching.Types;
+namespace Framework.Caching.Extensions.DotnetCore;
 
-public class InMemoryCache : ICacheControl
+public class InMemoryCache : IInMemoryCache
 {
     private readonly IMemoryCache _memoryCache;
     private readonly InMemoryCacheConfiguration _cacheConfiguration;
@@ -19,7 +20,7 @@ public class InMemoryCache : ICacheControl
         var cacheEntryOptions = new MemoryCacheEntryOptions()
                 .SetAbsoluteExpiration(TimeSpan.FromMinutes(expirationTimeInMinutes))
                 .SetSize(_cacheConfiguration.SizeLimit)
-                .SetPriority(_cacheConfiguration.CachePriority);
+                .SetPriority((CacheItemPriority)_cacheConfiguration.CachePriority);
 
         _memoryCache.Set(key, value, cacheEntryOptions);
     }

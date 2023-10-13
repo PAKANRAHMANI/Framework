@@ -1,4 +1,4 @@
-﻿namespace Framework.Caching.Strategy;
+﻿namespace Framework.Caching;
 
 public interface ICache
 {

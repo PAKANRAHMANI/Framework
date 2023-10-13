@@ -1,4 +1,4 @@
-﻿namespace Framework.Caching.Types
+﻿namespace Framework.Caching.Extensions.Abstractions
 {
     public interface ICacheControl
     {

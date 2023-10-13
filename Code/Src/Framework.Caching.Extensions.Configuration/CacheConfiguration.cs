@@ -1,6 +1,4 @@
-﻿using Framework.Caching.Initial;
-
-namespace Framework.Caching.Configurations;
+﻿namespace Framework.Caching.Extensions.Configuration;
 
 public class CacheConfiguration
 {
