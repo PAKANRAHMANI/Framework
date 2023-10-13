@@ -27,9 +27,9 @@ namespace Framework.Caching.Extensions.DependencyInjection
 
             _serviceCollection.AddSingleton<ICache, MultilevelCache>();
 
-            _serviceCollection.AddSingleton<InMemoryCache>();
+            _serviceCollection.AddSingleton<IInMemoryCache,InMemoryCache>();
 
-            _serviceCollection.AddSingleton<DistributedCache>();
+            _serviceCollection.AddSingleton<IDistributedCache,DistributedCache>();
 
             var cacheConfig = new CacheConfiguration();
 
