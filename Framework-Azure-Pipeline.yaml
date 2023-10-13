@@ -565,6 +565,108 @@ steps:
        custom: pack
        arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
 ##################################################################################################
+   - powershell: |
+      [xml]$project = Get-Content -Path ./Code/Src/Framework.Caching/Framework.Caching.csproj
+      $version = $project.Project.PropertyGroup.Version
+      echo "version: "
+      echo $version
+      echo "##vso[task.setvariable variable=version]$version"
+ 
+     displayName: 'Get Version of Framework.Caching'
+##################################################################################################
+   - task: DotNetCoreCLI@2
+     displayName: 'Pack Framework.Caching'
+     inputs:
+       command: custom
+       projects: '**/Framework.Caching.csproj'
+       custom: pack
+       arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
+##################################################################################################
+   - powershell: |
+      [xml]$project = Get-Content -Path ./Code/Src/Framework.Caching.Extensions.Abstractions/Framework.Caching.Extensions.Abstractions.csproj
+      $version = $project.Project.PropertyGroup.Version
+      echo "version: "
+      echo $version
+      echo "##vso[task.setvariable variable=version]$version"
+ 
+     displayName: 'Get Version of Framework.Caching.Extensions.Abstractions'
+##################################################################################################
+   - task: DotNetCoreCLI@2
+     displayName: 'Pack Framework.Caching.Extensions.Abstractions'
+     inputs:
+       command: custom
+       projects: '**/Framework.Caching.Extensions.Abstractions.csproj'
+       custom: pack
+       arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
+##################################################################################################
+   - powershell: |
+      [xml]$project = Get-Content -Path ./Code/Src/Framework.Caching.Extensions.Configuration/Framework.Caching.Extensions.Configuration.csproj
+      $version = $project.Project.PropertyGroup.Version
+      echo "version: "
+      echo $version
+      echo "##vso[task.setvariable variable=version]$version"
+ 
+     displayName: 'Get Version of Framework.Caching.Extensions.Configuration'
+##################################################################################################
+   - task: DotNetCoreCLI@2
+     displayName: 'Pack Framework.Caching.Extensions.Configuration'
+     inputs:
+       command: custom
+       projects: '**/Framework.Caching.Extensions.Configuration.csproj'
+       custom: pack
+       arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
+##################################################################################################
+   - powershell: |
+      [xml]$project = Get-Content -Path ./Code/Src/Framework.Caching.Extensions.DotnetCore/Framework.Caching.Extensions.DotnetCore.csproj
+      $version = $project.Project.PropertyGroup.Version
+      echo "version: "
+      echo $version
+      echo "##vso[task.setvariable variable=version]$version"
+ 
+     displayName: 'Get Version of Framework.Caching.Extensions.DotnetCore'
+##################################################################################################
+   - task: DotNetCoreCLI@2
+     displayName: 'Pack Framework.Caching.Extensions.DotnetCore'
+     inputs:
+       command: custom
+       projects: '**/Framework.Caching.Extensions.DotnetCore.csproj'
+       custom: pack
+       arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
+##################################################################################################
+   - powershell: |
+      [xml]$project = Get-Content -Path ./Code/Src/Framework.Caching.Extensions.Redis/Framework.Caching.Extensions.Redis.csproj
+      $version = $project.Project.PropertyGroup.Version
+      echo "version: "
+      echo $version
+      echo "##vso[task.setvariable variable=version]$version"
+ 
+     displayName: 'Get Version of Framework.Caching.Extensions.Redis'
+##################################################################################################
+   - task: DotNetCoreCLI@2
+     displayName: 'Pack Framework.Caching.Extensions.Redis'
+     inputs:
+       command: custom
+       projects: '**/Framework.Caching.Extensions.Redis.csproj'
+       custom: pack
+       arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
+##################################################################################################
+   - powershell: |
+      [xml]$project = Get-Content -Path ./Code/Src/Framework.Caching.Extensions.DependencyInjection/Framework.Caching.Extensions.DependencyInjection.csproj
+      $version = $project.Project.PropertyGroup.Version
+      echo "version: "
+      echo $version
+      echo "##vso[task.setvariable variable=version]$version"
+ 
+     displayName: 'Get Version of Framework.Caching.Extensions.DependencyInjection'
+##################################################################################################
+   - task: DotNetCoreCLI@2
+     displayName: 'Pack Framework.Caching.Extensions.DependencyInjection'
+     inputs:
+       command: custom
+       projects: '**/Framework.Caching.Extensions.DependencyInjection.csproj'
+       custom: pack
+       arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
+##################################################################################################
    - task: PublishBuildArtifacts@1
      displayName: 'Publish Artifact: pack'
      inputs:
