@@ -9,9 +9,9 @@ public class InMemoryCache : IInMemoryCache
     private readonly IMemoryCache _memoryCache;
     private readonly InMemoryCacheConfiguration _cacheConfiguration;
 
-    public InMemoryCache(IMemoryCache memoryCache,InMemoryCacheConfiguration cacheConfiguration)
+    public InMemoryCache(IInMemoryCacheProvider inMemoryCacheProvider, InMemoryCacheConfiguration cacheConfiguration)
     {
-        _memoryCache = memoryCache;
+        _memoryCache = inMemoryCacheProvider.GetMemoryCache();
         _cacheConfiguration = cacheConfiguration;
     }
 
@@ -19,7 +19,6 @@ public class InMemoryCache : IInMemoryCache
     {
         var cacheEntryOptions = new MemoryCacheEntryOptions()
                 .SetAbsoluteExpiration(TimeSpan.FromMinutes(expirationTimeInMinutes))
-                .SetSize(_cacheConfiguration.SizeLimit)
                 .SetPriority((CacheItemPriority)_cacheConfiguration.CachePriority);
 
         _memoryCache.Set(key, value, cacheEntryOptions);

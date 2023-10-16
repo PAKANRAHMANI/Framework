@@ -6,74 +6,77 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Framework.Caching.Extensions.DependencyInjection
 {
-    public class CacheBuilder :
-        ICachingStrategyBuilder,
-        ICachingTypeBuilder
-    {
-        private readonly IServiceCollection _serviceCollection;
+	public class CacheBuilder :
+		ICachingStrategyBuilder,
+		ICachingTypeBuilder
+	{
+		private readonly IServiceCollection _serviceCollection;
 
-        private CacheBuilder(IServiceCollection serviceCollection)
-        {
-            _serviceCollection = serviceCollection;
-        }
-        public static ICachingStrategyBuilder Setup(IServiceCollection serviceCollection) => new CacheBuilder(serviceCollection);
+		private CacheBuilder(IServiceCollection serviceCollection)
+		{
+			_serviceCollection = serviceCollection;
+		}
+		public static ICachingStrategyBuilder Setup(IServiceCollection serviceCollection) => new CacheBuilder(serviceCollection);
 
 
-        public void MultilevelCache(Action<CacheConfiguration> config)
-        {
-            _serviceCollection.AddMemoryCache();
+		public void MultilevelCache(Action<CacheConfiguration> config)
+		{
+			_serviceCollection.AddMemoryCache();
 
-            _serviceCollection.AddSingleton<IRedisDataBaseResolver, RedisDataBaseResolver>();
+			_serviceCollection.AddSingleton<IRedisDataBaseResolver, RedisDataBaseResolver>();
 
-            _serviceCollection.AddSingleton<ICache, MultilevelCache>();
+			_serviceCollection.AddSingleton<ICache, MultilevelCache>();
 
-            _serviceCollection.AddSingleton<IInMemoryCache,InMemoryCache>();
+			_serviceCollection.AddSingleton<IInMemoryCache, InMemoryCache>();
 
-            _serviceCollection.AddSingleton<IDistributedCache,DistributedCache>();
+			_serviceCollection.AddSingleton<IDistributedCache, DistributedCache>();
 
-            var cacheConfig = new CacheConfiguration();
+			var cacheConfig = new CacheConfiguration();
 
-            config.Invoke(cacheConfig);
+			config.Invoke(cacheConfig);
 
-            _serviceCollection.AddSingleton<DistributedCacheConfiguration>(cacheConfig.DistributedCacheConfiguration);
+			_serviceCollection.AddSingleton<DistributedCacheConfiguration>(cacheConfig.DistributedCacheConfiguration);
 
-            _serviceCollection.AddSingleton<InMemoryCacheConfiguration>(cacheConfig.InMemoryCacheConfiguration);
+			_serviceCollection.AddSingleton<InMemoryCacheConfiguration>(cacheConfig.InMemoryCacheConfiguration);
 
-        }
+			_serviceCollection.AddSingleton<IInMemoryCacheProvider, InMemoryCacheProvider>();
+		}
 
-        public ICachingTypeBuilder SingleLevelCache()
-        {
-            _serviceCollection.AddSingleton<ICache, SingleLevelCache>();
+		public ICachingTypeBuilder SingleLevelCache()
+		{
+			_serviceCollection.AddSingleton<ICache, SingleLevelCache>();
 
-            return this;
-        }
+			return this;
+		}
 
-        public void UseInMemoryCache(Action<InMemoryCacheConfiguration> config)
-        {
-            var cacheConfig = new InMemoryCacheConfiguration();
+		public void UseInMemoryCache(Action<InMemoryCacheConfiguration> config)
+		{
+			var cacheConfig = new InMemoryCacheConfiguration();
 
-            config.Invoke(cacheConfig);
+			config.Invoke(cacheConfig);
 
-            _serviceCollection.AddMemoryCache();
+			_serviceCollection.AddMemoryCache();
 
-            _serviceCollection.AddSingleton<InMemoryCacheConfiguration>(cacheConfig);
+			_serviceCollection.AddSingleton<InMemoryCacheConfiguration>(cacheConfig);
 
-            _serviceCollection.AddSingleton<ICacheControl, InMemoryCache>();
+			_serviceCollection.AddSingleton<ICacheControl, InMemoryCache>();
 
-        }
+			_serviceCollection.AddSingleton<IInMemoryCacheProvider, InMemoryCacheProvider>();
 
-        public void UseDistributedCache(Action<DistributedCacheConfiguration> config)
-        {
-            var cacheConfig = new DistributedCacheConfiguration();
+		}
 
-            config.Invoke(cacheConfig);
+		public void UseDistributedCache(Action<DistributedCacheConfiguration> config)
+		{
+			var cacheConfig = new DistributedCacheConfiguration();
 
-            _serviceCollection.AddSingleton<IRedisDataBaseResolver, RedisDataBaseResolver>();
+			config.Invoke(cacheConfig);
 
-            _serviceCollection.AddSingleton<DistributedCacheConfiguration>(cacheConfig);
+			_serviceCollection.AddSingleton<IRedisDataBaseResolver, RedisDataBaseResolver>();
 
-            _serviceCollection.AddSingleton<ICacheControl, DistributedCache>();
+			_serviceCollection.AddSingleton<DistributedCacheConfiguration>(cacheConfig);
 
-        }
-    }
+			_serviceCollection.AddSingleton<ICacheControl, DistributedCache>();
+
+		}
+	}
 }
