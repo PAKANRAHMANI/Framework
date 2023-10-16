@@ -16,13 +16,13 @@ namespace Framework.Caching.Extensions.Redis
             _database = redisHelper.GetDatabase(distributedCacheConfiguration.Connection, distributedCacheConfiguration.DbNumber);
         }
 
-        public void Set<T>(string key, T value, int expirationTimeInMinutes) where T : class
+        public void Set<T>(string key, T value, int expirationTimeInSecond) where T : class
         {
             if (_distributedCacheConfiguration.UseFromInstanceNameInKey)
                 key = _distributedCacheConfiguration.InstanceName + key;
             var data = JsonConvert.SerializeObject(value);
 
-            var expiresIn = TimeSpan.FromMinutes(expirationTimeInMinutes);
+            var expiresIn = TimeSpan.FromSeconds(expirationTimeInSecond);
 
             _database.StringSet(key, data, expiresIn);
         }

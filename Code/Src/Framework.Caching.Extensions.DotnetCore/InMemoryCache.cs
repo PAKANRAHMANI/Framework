@@ -15,10 +15,10 @@ public class InMemoryCache : IInMemoryCache
         _cacheConfiguration = cacheConfiguration;
     }
 
-    public void Set<T>(string key, T value, int expirationTimeInMinutes) where T : class
+    public void Set<T>(string key, T value, int expirationTimeInSecond) where T : class
     {
         var cacheEntryOptions = new MemoryCacheEntryOptions()
-                .SetAbsoluteExpiration(TimeSpan.FromMinutes(expirationTimeInMinutes))
+                .SetAbsoluteExpiration(TimeSpan.FromSeconds(expirationTimeInSecond))
                 .SetPriority((CacheItemPriority)_cacheConfiguration.CachePriority);
 
         _memoryCache.Set(key, value, cacheEntryOptions);

@@ -13,28 +13,26 @@ public class MultilevelCache : ICache
         _redisCache = redisCache;
     }
 
-    public T Get<T>(string key, int? expirationTimeInMinutes = null, Func<T> query = null) where T : class
+    public T Get<T>(string key, Func<T> query, int expirationTimeInSecond) where T : class
     {
         var memoryData = _memoryCache.Get<T>(key);
 
-        if (memoryData is not null)
-            return memoryData;
+		if (memoryData is not null)
+			return memoryData;
 
-        var redisData = _redisCache.Get<T>(key);
+		var redisData = _redisCache.Get<T>(key);
 
         if (redisData is not null)
         {
-            if (expirationTimeInMinutes != null) _memoryCache.Set(key, redisData, expirationTimeInMinutes.Value);
+            _memoryCache.Set(key, redisData, expirationTimeInSecond);
 
             return redisData;
         }
         var data = query?.Invoke();
 
-        if (expirationTimeInMinutes == null) return data;
+        _memoryCache.Set(key, data, expirationTimeInSecond);
 
-        _memoryCache.Set(key, data, expirationTimeInMinutes.Value);
-
-        _redisCache.Set(key, data, expirationTimeInMinutes.Value);
+        _redisCache.Set(key, data, expirationTimeInSecond);
 
         return data;
     }
