@@ -2,7 +2,5 @@
 
 public class InMemoryCacheConfiguration
 {
-    public long SizeLimit { get; set; }
-    public CachePriority CachePriority { get; set; }
-    public double CompactionPercentage { get; set; }
+	public CachePriority CachePriority { get; set; }
 }
