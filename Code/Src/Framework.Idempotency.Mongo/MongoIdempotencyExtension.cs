@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Framework.Core;
+using Microsoft.Extensions.DependencyInjection;
+using MongoDB.Driver;
 
 namespace Framework.Idempotency.Mongo
 {
@@ -6,15 +8,23 @@ namespace Framework.Idempotency.Mongo
     {
         public static IServiceCollection UseInboxPatternWithMongo(this IServiceCollection services, Action<MongoConfiguration> config)
         {
-            var sqlConfiguration = new MongoConfiguration();
+            var mongoConfiguration = new MongoConfiguration();
 
-            config.Invoke(sqlConfiguration);
+            config.Invoke(mongoConfiguration);
 
-            services.AddSingleton(sqlConfiguration);
+            services.AddSingleton(mongoConfiguration);
+
+            services.AddSingleton<IMongoDatabase>(CreateMongoDb(mongoConfiguration));
 
             services.AddSingleton<IDuplicateMessageHandler, MongoDuplicateMessageHandler>();
 
             return services;
+        }
+        private static IMongoDatabase CreateMongoDb(MongoConfiguration mongoConfiguration)
+        {
+            var client = new MongoClient(mongoConfiguration.Connection);
+
+            return client.GetDatabase(mongoConfiguration.DatabaseName);
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace Framework.MassTransit
+﻿namespace Framework.MassTransit.Message
 {
     public class MassTransitHost
     {

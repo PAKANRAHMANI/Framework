@@ -1,8 +1,7 @@
-﻿using Framework.Core.Events;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
+using Framework.Core.Events;
 
-namespace Framework.MassTransit
+namespace Framework.MassTransit.Message
 {
     public static class FrameworkBaseEventTypes
 	{

@@ -1,6 +1,6 @@
 ﻿using Framework.Core;
 using Framework.Core.Events;
-using Framework.MassTransit;
+using Framework.MassTransit.Message;
 using MassTransit;
 using Newtonsoft.Json;
 
@@ -9,15 +9,12 @@ namespace Framework.Idempotency;
 public abstract class MassTransitIdempotentConsumer<T> : IConsumer<T> where T : class, IEvent
 {
     private readonly IDuplicateMessageHandler _duplicateHandler;
-    private readonly IUnitOfWork _unitOfWork;
 
     protected MassTransitIdempotentConsumer(
-        IDuplicateMessageHandler duplicateHandler,
-        IUnitOfWork unitOfWork
-        )
+        IDuplicateMessageHandler duplicateHandler
+    )
     {
         _duplicateHandler = duplicateHandler;
-        _unitOfWork = unitOfWork;
     }
     public async Task Consume(ConsumeContext<T> context)
     {
@@ -28,22 +25,17 @@ public abstract class MassTransitIdempotentConsumer<T> : IConsumer<T> where T : 
 
             if (message != null)
             {
-                await _unitOfWork.Begin();
-
                 if (!await _duplicateHandler.HasMessageBeenProcessedBefore(message.EventId))
                 {
                     await ConsumeMessage(message);
 
                     await _duplicateHandler.MarkMessageAsProcessed(message.EventId, DateTime.UtcNow);
-
-                    await _unitOfWork.Commit();
                 }
             }
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-            await _unitOfWork.RollBack();
-            throw;
+            Console.WriteLine(ex.Message);
         }
 
     }

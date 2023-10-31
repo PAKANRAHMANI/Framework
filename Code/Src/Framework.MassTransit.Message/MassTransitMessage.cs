@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using Newtonsoft.Json.Linq;
-
-namespace Framework.MassTransit
+﻿using Newtonsoft.Json.Linq;
+namespace Framework.MassTransit.Message
 {
     public class MassTransitMessage
     {

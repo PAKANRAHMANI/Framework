@@ -84,17 +84,19 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Framework.Idempotency.Mongo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Framework.EventProcessor", "Src\Framework.EventProcessor\Framework.EventProcessor.csproj", "{725E5504-EF7E-4970-BB31-8D0B4BDA69A5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Framework.Caching", "Src\Framework.Caching\Framework.Caching.csproj", "{932F522B-5AFF-4316-8053-3910F0B02319}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Framework.Caching", "Src\Framework.Caching\Framework.Caching.csproj", "{932F522B-5AFF-4316-8053-3910F0B02319}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Framework.Caching.Extensions.DependencyInjection", "Src\Framework.Caching.Extensions.DependencyInjection\Framework.Caching.Extensions.DependencyInjection.csproj", "{977779CC-1678-4400-9143-235B53538BBF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Framework.Caching.Extensions.DependencyInjection", "Src\Framework.Caching.Extensions.DependencyInjection\Framework.Caching.Extensions.DependencyInjection.csproj", "{977779CC-1678-4400-9143-235B53538BBF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Framework.Caching.Extensions.Redis", "Src\Framework.Caching.Extensions.Redis\Framework.Caching.Extensions.Redis.csproj", "{AEBFBAC0-433B-4655-BF15-DB52381417D8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Framework.Caching.Extensions.Redis", "Src\Framework.Caching.Extensions.Redis\Framework.Caching.Extensions.Redis.csproj", "{AEBFBAC0-433B-4655-BF15-DB52381417D8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Framework.Caching.Extensions.Configuration", "Src\Framework.Caching.Extensions.Configuration\Framework.Caching.Extensions.Configuration.csproj", "{B5037B58-2603-4330-9EF6-AD7A4432C401}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Framework.Caching.Extensions.Configuration", "Src\Framework.Caching.Extensions.Configuration\Framework.Caching.Extensions.Configuration.csproj", "{B5037B58-2603-4330-9EF6-AD7A4432C401}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Framework.Caching.Extensions.DotnetCore", "Src\Framework.Caching.Extensions.DotnetCore\Framework.Caching.Extensions.DotnetCore.csproj", "{F0E0B777-2EE5-4003-AE69-1F7AAA20DD9F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Framework.Caching.Extensions.DotnetCore", "Src\Framework.Caching.Extensions.DotnetCore\Framework.Caching.Extensions.DotnetCore.csproj", "{F0E0B777-2EE5-4003-AE69-1F7AAA20DD9F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Framework.Caching.Extensions.Abstractions", "Src\Framework.Caching.Extensions.Abstractions\Framework.Caching.Extensions.Abstractions.csproj", "{6D88DB88-083D-4143-9CEA-4801A9C38D8A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Framework.Caching.Extensions.Abstractions", "Src\Framework.Caching.Extensions.Abstractions\Framework.Caching.Extensions.Abstractions.csproj", "{6D88DB88-083D-4143-9CEA-4801A9C38D8A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Framework.MassTransit.Message", "Src\Framework.MassTransit.Message\Framework.MassTransit.Message.csproj", "{110463A6-A0D4-4022-B79E-8B235A7EECD4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -260,6 +262,10 @@ Global
 		{6D88DB88-083D-4143-9CEA-4801A9C38D8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6D88DB88-083D-4143-9CEA-4801A9C38D8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6D88DB88-083D-4143-9CEA-4801A9C38D8A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{110463A6-A0D4-4022-B79E-8B235A7EECD4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{110463A6-A0D4-4022-B79E-8B235A7EECD4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{110463A6-A0D4-4022-B79E-8B235A7EECD4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{110463A6-A0D4-4022-B79E-8B235A7EECD4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -306,6 +312,7 @@ Global
 		{B5037B58-2603-4330-9EF6-AD7A4432C401} = {25A183FD-7661-4697-96E4-895E57A64352}
 		{F0E0B777-2EE5-4003-AE69-1F7AAA20DD9F} = {25A183FD-7661-4697-96E4-895E57A64352}
 		{6D88DB88-083D-4143-9CEA-4801A9C38D8A} = {25A183FD-7661-4697-96E4-895E57A64352}
+		{110463A6-A0D4-4022-B79E-8B235A7EECD4} = {25A183FD-7661-4697-96E4-895E57A64352}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {FD22E860-CCCE-47C1-B1BE-51511F2D9BF8}
