@@ -32,6 +32,7 @@ namespace Framework.EventProcessor.Initial
     {
         private readonly IServiceCollection _services;
         private readonly Dictionary<int, Type> _operations = new();
+        private Dictionary<Type, string> _kafkaKeys = new();
         private int _operationPriority = 0;
         private EventProcessorBuilder(IServiceCollection serviceCollection)
         {
@@ -126,15 +127,18 @@ namespace Framework.EventProcessor.Initial
             return this;
         }
 
-        public IEnableSecondSenderBuilder ProduceMessageWithKafka(Action<ProducerConfiguration> config)
+        public IEnableSecondSenderBuilder ProduceMessageWithKafka(Action<ProducerConfiguration> config, List<EventKafkaKey> kafkaKeys)
         {
             RegisterMessageProducer(config);
 
             _operations.Add(++_operationPriority, typeof(PublishEventToKafka));
 
+            _kafkaKeys = kafkaKeys.ToDictionary(a => a.EventType, b => b.KafkaKey);
+
+            _services.AddSingleton(_kafkaKeys);
+
             return this;
         }
-
         public ISecondaryDeliveryEvent EnableSendingMessageToSecondaryBroker()
         {
             return this;
@@ -173,7 +177,7 @@ namespace Framework.EventProcessor.Initial
             _services.AddSingleton(_operations);
 
             _services.AddSingleton<IDataStoreChangeTrackerObserver, DataStoreChangeTrackerObserver>();
-            
+
             _services.AddHostedService<EventWorker>();
         }
         private void RegisterMessageProducer(Action<ProducerConfiguration> config)
@@ -207,7 +211,7 @@ namespace Framework.EventProcessor.Initial
             });
 
             _services.AddSingleton<IEventSecondPublisher, MassTransitMultiBusEventPublisher>();
-            
+
         }
         private void RegisterSecondaryProducer(Action<SecondaryProducerConfiguration> config)
         {
