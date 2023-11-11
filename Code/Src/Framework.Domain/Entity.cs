@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using Framework.Core.Utilities;
 
 namespace Framework.Domain
 {
     public abstract class Entity<TKey> : IEntity
     {
-        public byte[] RowVersion { get; private set; }
+        public byte[] RowVersion { get; protected set; }
         public DateTime CreationDateTime { get; protected set; }
         public DateTime? LastUpdateDateTime { get; private set; }
         public DateTime? DeleteDateTime { get; private set; }
@@ -35,7 +36,10 @@ namespace Framework.Domain
             return EqualityComparer<TKey>.Default.GetHashCode(Id);
         }
 
-
+        public void MarkAsRowVersion()
+        {
+            this.RowVersion = DateTimeOffset.UtcNow.GetBytes();
+        }
 
         public void MarkAsUpdated()
         {

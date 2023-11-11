@@ -10,5 +10,6 @@ namespace Framework.Domain
         void MarkAsUpdated();
 
         void MarkAsDeleted();
+        void MarkAsRowVersion();
     }
 }

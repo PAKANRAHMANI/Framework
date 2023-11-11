@@ -12,7 +12,7 @@ namespace Framework.DataAccess.Mongo
             var mapperTypes = assembly.GetTypes().Where(a => typeof(IBsonMapping).IsAssignableFrom(a)).ToList();
             foreach (var instanceOfMapper in mapperTypes.Select(mapper => (IBsonMapping)Activator.CreateInstance(mapper)))
             {
-                instanceOfMapper.Register();
+                instanceOfMapper?.Register();
             }
         }
     }

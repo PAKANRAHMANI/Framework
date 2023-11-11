@@ -1,13 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Threading.Tasks;
-using Framework.Core.Events;
+﻿using Framework.Core.Exceptions;
+using Framework.Core.Utilities;
 using Framework.Domain;
 using Framework.Domain.Events;
 using Humanizer;
 using MongoDB.Driver;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection.Metadata;
+using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace Framework.DataAccess.Mongo
 {
@@ -29,48 +32,77 @@ namespace Framework.DataAccess.Mongo
 
         public async Task Create(T aggregate)
         {
+            aggregate.MarkAsRowVersion();
+
             if (_config.UseTransaction)
             {
                 await Database.GetCollection<T>(typeof(T).Name.Pluralize()).InsertOneAsync(_session, aggregate);
 
                 await PersistEvents(aggregate);
-
             }
-
             else
                 await Database.GetCollection<T>(typeof(T).Name.Pluralize()).InsertOneAsync(aggregate);
         }
 
         public async Task Update(T aggregate)
         {
-            var filter = Builders<T>.Filter.Eq(s => s.Id, aggregate.Id);
+            var currentRowVersion = aggregate.RowVersion;
+
+            aggregate.MarkAsRowVersion();
+
+            var filter = Builders<T>.Filter.Eq(s => s.Id, aggregate.Id) &
+                         Builders<T>.Filter.Eq(r => r.RowVersion, currentRowVersion);
+
+            ReplaceOneResult result;
 
             if (_config.UseTransaction)
             {
-                await Database.GetCollection<T>(typeof(T).Name.Pluralize()).ReplaceOneAsync(_session, filter, aggregate);
+                result = await Database.GetCollection<T>(typeof(T).Name.Pluralize()).ReplaceOneAsync(_session, filter, aggregate);
 
                 await PersistEvents(aggregate);
             }
 
             else
-                await Database.GetCollection<T>(typeof(T).Name.Pluralize()).ReplaceOneAsync(filter, aggregate);
+                result = await Database.GetCollection<T>(typeof(T).Name.Pluralize()).ReplaceOneAsync(filter, aggregate);
+
+            if (!result.IsAcknowledged)
+            {
+                Throw.Infrastructure.MongoDbNotAcknowledged();
+            }
+
+            if (result.ModifiedCount == 0 && await Database.GetCollection<T>(typeof(T).Name.Pluralize()).CountDocumentsAsync(r => r.Id.Equals(aggregate.Id)) == 1)
+            {
+                Throw.Infrastructure.MongoDbConcurrencyReplaceOneFail();
+            }
         }
 
         public async Task Remove(T aggregate)
         {
-            var filter = Builders<T>.Filter.Eq(s => s.Id, aggregate.Id);
+            var filter = Builders<T>.Filter.Eq(s => s.Id, aggregate.Id) &
+                         Builders<T>.Filter.Eq(r => r.RowVersion, aggregate.RowVersion);
 
             var update = Builders<T>.Update.Set(a => a.IsDeleted, aggregate.IsDeleted);
 
+            UpdateResult result;
+
             if (_config.UseTransaction)
             {
-                await Database.GetCollection<T>(typeof(T).Name.Pluralize()).UpdateOneAsync(_session, filter, update);
+                result = await Database.GetCollection<T>(typeof(T).Name.Pluralize()).UpdateOneAsync(_session, filter, update);
 
                 await PersistEvents(aggregate);
             }
 
             else
-                await Database.GetCollection<T>(typeof(T).Name.Pluralize()).UpdateOneAsync(filter, update);
+                result = await Database.GetCollection<T>(typeof(T).Name.Pluralize()).UpdateOneAsync(filter, update);
+
+            if (!result.IsAcknowledged)
+            {
+                Throw.Infrastructure.MongoDbNotAcknowledged();
+            }
+            if (result.ModifiedCount == 0 && await Database.GetCollection<T>(typeof(T).Name.Pluralize()).CountDocumentsAsync(r => r.Id.Equals(aggregate.Id)) == 1)
+            {
+                Throw.Infrastructure.MongoDbConcurrencyReplaceOneFail();
+            }
         }
 
         public async Task<T> Get(TKey key)
@@ -87,7 +119,7 @@ namespace Framework.DataAccess.Mongo
 
             return _configurator.Config(aggregate);
         }
- 
+
         protected async Task PersistEvents(T aggregate)
         {
             var domainEvent = GetDomainEvents(aggregate);

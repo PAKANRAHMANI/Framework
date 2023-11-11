@@ -2,11 +2,11 @@
 
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
-		<Version>4.1.10</Version>
+		<Version>4.1.11</Version>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Humanizer.Core"  />
+		<PackageReference Include="Humanizer.Core" />
 		<PackageReference Include="MongoDB.Driver" />
 	</ItemGroup>
 
