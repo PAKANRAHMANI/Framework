@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using Confluent.Kafka;
 using System.Threading;
 using System.Threading.Tasks;
 using System.IO;
+using System.Linq;
+using System.Text;
 
 namespace Framework.Kafka
 {
@@ -45,6 +48,23 @@ namespace Framework.Kafka
             {
                 Value = message,
                 Key = key
+            }, cancellationToken);
+        }
+
+        public async Task<DeliveryResult<TKey, TMessage>> ProduceAsync(TKey key, TMessage message, KeyValuePair<string, string>[] headers, CancellationToken cancellationToken = default)
+        {
+            var kafkaHeaders = new Headers();
+
+            foreach (var header in headers)
+            {
+                kafkaHeaders.Add(new Header(header.Key, Encoding.UTF8.GetBytes(header.Value)));
+            }
+
+            return await _producer.ProduceAsync(_configuration.ProducerTopicName, new Message<TKey, TMessage>
+            {
+                Value = message,
+                Key = key,
+                Headers = kafkaHeaders
             }, cancellationToken);
         }
 
