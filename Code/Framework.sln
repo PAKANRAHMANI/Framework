@@ -98,6 +98,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Framework.Caching.Extension
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Framework.MassTransit.Message", "Src\Framework.MassTransit.Message\Framework.MassTransit.Message.csproj", "{110463A6-A0D4-4022-B79E-8B235A7EECD4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Framework.Security", "Src\Framework.Security\Framework.Security.csproj", "{E590FEA4-A00C-4E73-81ED-19F8049682BA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -266,6 +268,10 @@ Global
 		{110463A6-A0D4-4022-B79E-8B235A7EECD4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{110463A6-A0D4-4022-B79E-8B235A7EECD4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{110463A6-A0D4-4022-B79E-8B235A7EECD4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E590FEA4-A00C-4E73-81ED-19F8049682BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E590FEA4-A00C-4E73-81ED-19F8049682BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E590FEA4-A00C-4E73-81ED-19F8049682BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E590FEA4-A00C-4E73-81ED-19F8049682BA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -313,6 +319,7 @@ Global
 		{F0E0B777-2EE5-4003-AE69-1F7AAA20DD9F} = {25A183FD-7661-4697-96E4-895E57A64352}
 		{6D88DB88-083D-4143-9CEA-4801A9C38D8A} = {25A183FD-7661-4697-96E4-895E57A64352}
 		{110463A6-A0D4-4022-B79E-8B235A7EECD4} = {25A183FD-7661-4697-96E4-895E57A64352}
+		{E590FEA4-A00C-4E73-81ED-19F8049682BA} = {25A183FD-7661-4697-96E4-895E57A64352}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {FD22E860-CCCE-47C1-B1BE-51511F2D9BF8}
