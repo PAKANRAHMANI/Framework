@@ -3,7 +3,7 @@ using System.Globalization;
 
 namespace Framework.Utility;
 
-public static class DatetTimeExtentions
+public static class DateTimeExtensions
 {
     public static DateTime? ToMiladiDate(this string shamsiDate)
     {
