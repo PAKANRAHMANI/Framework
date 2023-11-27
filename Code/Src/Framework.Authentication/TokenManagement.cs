@@ -23,6 +23,30 @@ namespace Framework.Authentication
             _client = httpClientFactory.CreateClient(Constants.ClientName);
         }
 
+        public async Task<IdentityModel.Client.TokenResponse> ExchangeToken(string scope)
+        {
+            try
+            {
+                _tokenManagementConfiguration.Scope = scope;
+
+                var userToken = await GetUserToken();
+
+                var actorToken = await GetCredentialsToken();
+
+                var tokenResponse = await ExchangeForDelegation(userToken, actorToken);
+
+                if (tokenResponse.IsError == false) return tokenResponse;
+
+                WriteMessage($"can't exchange, message is:{tokenResponse.Error}, description:{tokenResponse.ErrorDescription}", "ExchangeToken");
+
+                throw new Exception("can't exchange Token");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
         public async Task<IdentityModel.Client.TokenResponse> ExchangeToken()
         {
             try

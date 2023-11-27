@@ -54,6 +54,11 @@ public class WorkerTokenManagement : ITokenManagement
         throw new NotImplementedException();
     }
 
+    public Task<TokenResponse> ExchangeToken(string scope)
+    {
+        throw new NotImplementedException();
+    }
+
     private ClientCredentialsTokenRequest CreteClientCredentialsTokenRequest(DiscoveryDocumentResponse discoveryDocument)
     {
         var tokenRequest = new ClientCredentialsTokenRequest

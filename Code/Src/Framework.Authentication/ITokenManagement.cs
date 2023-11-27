@@ -8,4 +8,5 @@ public interface ITokenManagement
     public Task<TokenResponse> GetCredentialsToken();
     public Task<string> GetUserToken();
     public Task<TokenResponse> ExchangeToken();
+    Task<TokenResponse> ExchangeToken(string scope);
 }
