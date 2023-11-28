@@ -1,5 +1,4 @@
 ﻿using Framework.Core.Exceptions;
-using Framework.Core.Utilities;
 using Framework.Domain;
 using Framework.Domain.Events;
 using Humanizer;
@@ -8,23 +7,21 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Reflection.Metadata;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace Framework.DataAccess.Mongo
 {
     public abstract class MongoDbRepository<TKey, T> : IRepository<TKey, T> where T : AggregateRoot<TKey>
     {
         protected readonly IMongoDatabase Database;
-        private readonly IAggregateRootConfigurator _configurator;
+        protected readonly IAggregateRootConfigurator Configurator;
         private readonly IClientSessionHandle _session;
         private readonly MongoDbConfig _config;
 
         protected MongoDbRepository(IMongoDatabase database, IMongoContext mongoContext, IAggregateRootConfigurator configurator, MongoDbConfig config)
         {
             Database = database;
-            _configurator = configurator;
+            Configurator = configurator;
             _session = mongoContext.GetSession();
             _config = config;
         }
@@ -111,13 +108,13 @@ namespace Framework.DataAccess.Mongo
 
             var aggregate = await Database.GetCollection<T>(typeof(T).Name.Pluralize()).Find(filter).FirstOrDefaultAsync();
 
-            return _configurator.Config(aggregate);
+            return Configurator.Config(aggregate);
         }
         public async Task<T> Get(Expression<Func<T, bool>> predicate)
         {
             var aggregate = await Database.GetCollection<T>(typeof(T).Name.Pluralize()).Find(predicate).FirstOrDefaultAsync();
 
-            return _configurator.Config(aggregate);
+            return Configurator.Config(aggregate);
         }
 
         protected async Task PersistEvents(T aggregate)

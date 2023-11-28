@@ -8,12 +8,12 @@ namespace Framework.DataAccess.EF
     public abstract class EfRepository<TKey, T> : IRepository<TKey, T> where T : class, IAggregateRoot
     {
         protected readonly FrameworkDbContext DbContext;
-        private readonly IAggregateRootConfigurator _configurator;
+        protected readonly IAggregateRootConfigurator Configurator;
         protected SequenceHelper Sequence { get; private set; }
         protected EfRepository(FrameworkDbContext dbContext, IAggregateRootConfigurator configurator)
         {
             this.DbContext = dbContext;
-            this._configurator = configurator;
+            this.Configurator = configurator;
             this.Sequence = new SequenceHelper(dbContext);
         }
 
@@ -34,14 +34,14 @@ namespace Framework.DataAccess.EF
         {
             var aggregate = await DbContext.Set<T>().FindAsync(key);
 
-            return _configurator.Config(aggregate);
+            return Configurator.Config(aggregate);
         }
 
         public async Task<T> Get(Expression<Func<T, bool>> predicate)
         {
             var aggregate = await DbContext.Set<T>().FindAsync(predicate);
 
-            return _configurator.Config(aggregate);
+            return Configurator.Config(aggregate);
         }
     }
 }
