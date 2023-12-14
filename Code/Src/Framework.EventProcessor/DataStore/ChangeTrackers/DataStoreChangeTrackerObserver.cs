@@ -3,13 +3,14 @@ using Framework.Core.Filters;
 using Framework.EventProcessor.Events;
 using Framework.EventProcessor.Extensions;
 using Framework.EventProcessor.Filtering;
+using Framework.EventProcessor.Initial;
 using Framework.EventProcessor.Serialization;
 using Framework.EventProcessor.Transformation;
 using Microsoft.Extensions.Logging;
 
 namespace Framework.EventProcessor.DataStore.ChangeTrackers;
 
-public class DataStoreChangeTrackerObserver : IDataStoreChangeTrackerObserver
+public class DataStoreChangeTrackerObserver : EventObservable, IDataStoreChangeTrackerObserver
 {
     private readonly IEventTypeResolver _eventTypeResolver;
     private readonly IEventTransformerLookUp _transformerLookUp;
@@ -17,14 +18,15 @@ public class DataStoreChangeTrackerObserver : IDataStoreChangeTrackerObserver
     private readonly IFilter<IEvent> _operation;
     private readonly ILogger<DataStoreChangeTrackerObserver> _logger;
 
-    public DataStoreChangeTrackerObserver(
+    internal DataStoreChangeTrackerObserver(
         IEventTypeResolver eventTypeResolver,
         IEventTransformerLookUp transformerLookUp,
         IEventFilter eventFilter,
         IServiceProvider services,
         Dictionary<int, Type> operations,
-        ILogger<DataStoreChangeTrackerObserver> logger
-    )
+        ILogger<DataStoreChangeTrackerObserver> logger,
+        IEnumerable<Receiver> observers
+    ) : base(observers.ToList())
     {
         _eventTypeResolver = eventTypeResolver;
         _transformerLookUp = transformerLookUp;
@@ -49,7 +51,11 @@ public class DataStoreChangeTrackerObserver : IDataStoreChangeTrackerObserver
 
             if (_eventFilter.ShouldPublish(eventToPublish))
             {
+                SendPrimaryEventToAllListeners(eventToPublish);
+
                 eventToPublish = TransformEvent.Transform(_transformerLookUp, eventToPublish);
+
+                SendTransformedEventToAllListeners(eventToPublish);
 
                 _logger.LogInformation($"Event '{eventItem.EventType}-{eventItem.EventId}' Transformed");
 

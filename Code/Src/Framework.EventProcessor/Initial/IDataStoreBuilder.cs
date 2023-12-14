@@ -2,7 +2,7 @@
 
 namespace Framework.EventProcessor.Initial
 {
-    public interface IDataStoreBuilder
+    internal interface IDataStoreBuilder
     {
         IEventLookup ReadFromSqlServer(Action<SqlStoreConfig> config);
 

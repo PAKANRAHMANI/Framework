@@ -20,13 +20,14 @@ using IEventPublisher = Framework.EventProcessor.Events.IEventPublisher;
 
 namespace Framework.EventProcessor.Initial
 {
-    public class EventProcessorBuilder :
+    internal class EventProcessorBuilder :
         IDataStoreBuilder,
         IEventLookup,
         IEventProcessorFilter,
         IEventTransformer,
         IEventSenderBuilder,
         IEnableSecondSenderBuilder,
+        IEventConsumer,
         ISecondaryDeliveryEvent,
         IEventProcessor
     {
@@ -34,6 +35,7 @@ namespace Framework.EventProcessor.Initial
         private readonly Dictionary<int, Type> _operations = new();
         private Dictionary<Type, KafkaConfig> _kafkaKeys = new();
         private int _operationPriority = 0;
+        private List<Receiver> _observers = new();
         private EventProcessorBuilder(IServiceCollection serviceCollection)
         {
             _services = serviceCollection;
@@ -143,13 +145,13 @@ namespace Framework.EventProcessor.Initial
         {
             return this;
         }
-
-        public IEventProcessor DisableSendingMessageToSecondaryBroker()
+        
+        public IEventConsumer DisableSendingMessageToSecondaryBroker()
         {
             return this;
         }
 
-        public IEventProcessor SecondaryDeliveryWithKafka(Action<SecondaryProducerConfiguration> config)
+        public IEventConsumer SecondaryDeliveryWithKafka(Action<SecondaryProducerConfiguration> config)
         {
             RegisterSecondaryProducer(config);
 
@@ -158,7 +160,7 @@ namespace Framework.EventProcessor.Initial
             return this;
         }
 
-        public IEventProcessor SecondaryDeliveryWithMassTransit(Action<SecondaryMassTransitConfiguration> config)
+        public IEventConsumer SecondaryDeliveryWithMassTransit(Action<SecondaryMassTransitConfiguration> config)
         {
 
             RegisterSecondaryBus(config);
@@ -168,6 +170,14 @@ namespace Framework.EventProcessor.Initial
             return this;
         }
 
+        public IEventProcessor EnableReceiveEvent(params Receiver[] receivers)
+        {
+            _observers = receivers.ToList();
+
+            _services.AddSingleton(_observers);
+
+            return  this;
+        }
         public void Build()
         {
             foreach (var operation in _operations)

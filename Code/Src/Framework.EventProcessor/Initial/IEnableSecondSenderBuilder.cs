@@ -1,7 +1,7 @@
 ﻿namespace Framework.EventProcessor.Initial;
 
-public interface IEnableSecondSenderBuilder
+internal interface IEnableSecondSenderBuilder
 {
     ISecondaryDeliveryEvent EnableSendingMessageToSecondaryBroker();
-    IEventProcessor DisableSendingMessageToSecondaryBroker();
+    IEventConsumer DisableSendingMessageToSecondaryBroker();
 }
