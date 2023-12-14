@@ -8,12 +8,12 @@ public class KafkaTopicProducer : MessageProducer
     {
     }
 
-    public override async Task<DeliveryResult<string, object>> ProduceAsync<TMessage>(string key, TMessage message, CancellationToken cancellationToken = default)
+    internal override async Task<DeliveryResult<string, object>> ProduceAsync<TMessage>(KafkaConfig kafkaConfig, TMessage message, CancellationToken cancellationToken = default)
     {
-        return await Producer.ProduceAsync(Configuration.TopicName, new Message<string, object>
+        return await Producer.ProduceAsync(kafkaConfig.Topic, new Message<string, object>
         {
             Value = message,
-            Key = key
+            Key = kafkaConfig.Key
         }, cancellationToken);
     }
 }

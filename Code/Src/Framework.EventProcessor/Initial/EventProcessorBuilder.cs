@@ -32,7 +32,7 @@ namespace Framework.EventProcessor.Initial
     {
         private readonly IServiceCollection _services;
         private readonly Dictionary<int, Type> _operations = new();
-        private Dictionary<Type, string> _kafkaKeys = new();
+        private Dictionary<Type, KafkaConfig> _kafkaKeys = new();
         private int _operationPriority = 0;
         private EventProcessorBuilder(IServiceCollection serviceCollection)
         {
@@ -127,13 +127,13 @@ namespace Framework.EventProcessor.Initial
             return this;
         }
 
-        public IEnableSecondSenderBuilder ProduceMessageWithKafka(Action<ProducerConfiguration> config, List<EventKafkaKey> kafkaKeys)
+        public IEnableSecondSenderBuilder ProduceMessageWithKafka(Action<ProducerConfiguration> config, List<EventKafka> kafkaKeys)
         {
             RegisterMessageProducer(config);
 
             _operations.Add(++_operationPriority, typeof(PublishEventToKafka));
 
-            _kafkaKeys = kafkaKeys.ToDictionary(a => a.EventType, b => b.KafkaKey);
+            _kafkaKeys = kafkaKeys.ToDictionary(a => a.EventType, b => b.KafkaConfig);
 
             _services.AddSingleton(_kafkaKeys);
 

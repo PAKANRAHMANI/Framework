@@ -1,8 +1,6 @@
-﻿using Framework.Core.Events;
-
-namespace Framework.EventProcessor.Events.Kafka;
+﻿namespace Framework.EventProcessor.Events.Kafka;
 using Confluent.Kafka;
-using Framework.EventProcessor.Configurations;
+using Configurations;
 
 public abstract class MessageProducer
 {
@@ -15,5 +13,5 @@ public abstract class MessageProducer
         Producer = producer;
     }
 
-    public abstract Task<DeliveryResult<string, object>> ProduceAsync<TMessage>(string key, TMessage message, CancellationToken cancellationToken = default) where TMessage : class;
+    internal abstract Task<DeliveryResult<string, object>> ProduceAsync<TMessage>(KafkaConfig kafkaConfig, TMessage message, CancellationToken cancellationToken = default) where TMessage : class;
 }

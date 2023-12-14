@@ -1,5 +1,4 @@
 ﻿using Confluent.Kafka;
-using Framework.Core.Events;
 using Framework.EventProcessor.Configurations;
 
 namespace Framework.EventProcessor.Events.Kafka
@@ -10,12 +9,12 @@ namespace Framework.EventProcessor.Events.Kafka
         {
         }
 
-        public override async Task<DeliveryResult<string, object>> ProduceAsync<TMessage>(string key, TMessage message, CancellationToken cancellationToken = default)
+        internal override async Task<DeliveryResult<string, object>> ProduceAsync<TMessage>(KafkaConfig kafkaConfig, TMessage message, CancellationToken cancellationToken = default)
         {
-            return await Producer.ProduceAsync(new TopicPartition(Configuration.TopicName, new Partition(Configuration.PartitionNumber)), new Message<string, object>
+            return await Producer.ProduceAsync(new TopicPartition(kafkaConfig.Topic, new Partition(Configuration.PartitionNumber)), new Message<string, object>
             {
                 Value = message,
-                Key = key
+                Key = kafkaConfig.Key
             }, cancellationToken);
         }
     }

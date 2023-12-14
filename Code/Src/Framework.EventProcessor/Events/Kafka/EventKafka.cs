@@ -1,8 +1,8 @@
 ﻿namespace Framework.EventProcessor.Events.Kafka
 {
-    public class EventKafkaKey
+    public class EventKafka
     {
-        public string KafkaKey { get; set; }
+        internal KafkaConfig KafkaConfig { get; set; }
         public Type EventType { get; set; }
     }
 }
