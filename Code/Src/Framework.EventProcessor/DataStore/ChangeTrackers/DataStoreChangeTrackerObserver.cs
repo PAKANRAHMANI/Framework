@@ -25,8 +25,8 @@ public class DataStoreChangeTrackerObserver : EventObservable, IDataStoreChangeT
         IServiceProvider services,
         Dictionary<int, Type> operations,
         ILogger<DataStoreChangeTrackerObserver> logger,
-        IEnumerable<Receiver> observers
-    ) : base(observers.ToList())
+        List<Receiver> observers
+    ) : base(observers)
     {
         _eventTypeResolver = eventTypeResolver;
         _transformerLookUp = transformerLookUp;
