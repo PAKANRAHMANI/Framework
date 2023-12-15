@@ -2,7 +2,7 @@
 
 namespace Framework.EventProcessor.Initial;
 
-internal interface IEventProcessorFilter
+public interface IEventProcessorFilter
 {
     IEventTransformer WithFilter(IEventFilter filter);
     IEventTransformer WithNoFilter();

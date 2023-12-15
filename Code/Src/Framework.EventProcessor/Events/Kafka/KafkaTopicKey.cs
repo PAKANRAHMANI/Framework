@@ -1,6 +1,6 @@
 ﻿namespace Framework.EventProcessor.Events.Kafka;
 
-internal sealed class KafkaConfig
+public sealed class KafkaTopicKey
 {
     public string Key { get; set; }
     public string Topic { get; set; }

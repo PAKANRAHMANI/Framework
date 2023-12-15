@@ -2,7 +2,7 @@
 
 namespace Framework.EventProcessor.Initial;
 
-internal interface IEventTransformer
+public interface IEventTransformer
 {
     IEventSenderBuilder UseEventTransformersInAssemblies(params Assembly[] assemblies);
     IEventSenderBuilder WithNoEventTransformer();

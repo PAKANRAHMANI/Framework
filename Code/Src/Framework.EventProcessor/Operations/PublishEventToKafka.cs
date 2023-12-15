@@ -9,9 +9,9 @@ public class PublishEventToKafka : IOperation<IEvent>
 {
     private readonly MessageProducer _producer;
     private readonly ProducerConfiguration _producerConfiguration;
-    private readonly Dictionary<Type, KafkaConfig> _kafkaKeys;
+    private readonly Dictionary<Type, KafkaTopicKey> _kafkaKeys;
 
-    internal PublishEventToKafka(MessageProducer producer, ProducerConfiguration producerConfiguration, Dictionary<Type, KafkaConfig> kafkaKeys)
+    public PublishEventToKafka(MessageProducer producer, ProducerConfiguration producerConfiguration, Dictionary<Type, KafkaTopicKey> kafkaKeys)
     {
         _producer = producer;
         _producerConfiguration = producerConfiguration;
@@ -28,7 +28,7 @@ public class PublishEventToKafka : IOperation<IEvent>
             await _producer.ProduceAsync(kafkaKey, input);
         }
         else
-            await _producer.ProduceAsync(new KafkaConfig { Key = _producerConfiguration.TopicKey, Topic = _producerConfiguration.TopicName }, input);
+            await _producer.ProduceAsync(new KafkaTopicKey { Key = _producerConfiguration.TopicKey, Topic = _producerConfiguration.TopicName }, input);
 
         return input;
     }

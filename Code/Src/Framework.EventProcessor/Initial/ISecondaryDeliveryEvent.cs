@@ -2,7 +2,7 @@
 
 namespace Framework.EventProcessor.Initial;
 
-internal interface ISecondaryDeliveryEvent
+public interface ISecondaryDeliveryEvent
 {
     IEventConsumer SecondaryDeliveryWithKafka(Action<SecondaryProducerConfiguration> config);
     IEventConsumer SecondaryDeliveryWithMassTransit(Action<SecondaryMassTransitConfiguration> config);

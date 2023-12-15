@@ -20,7 +20,7 @@ using IEventPublisher = Framework.EventProcessor.Events.IEventPublisher;
 
 namespace Framework.EventProcessor.Initial
 {
-    internal class EventProcessorBuilder :
+    public class EventProcessorBuilder :
         IDataStoreBuilder,
         IEventLookup,
         IEventProcessorFilter,
@@ -33,7 +33,7 @@ namespace Framework.EventProcessor.Initial
     {
         private readonly IServiceCollection _services;
         private readonly Dictionary<int, Type> _operations = new();
-        private Dictionary<Type, KafkaConfig> _kafkaKeys = new();
+        private Dictionary<Type, KafkaTopicKey> _kafkaKeys = new();
         private int _operationPriority = 0;
         private List<Receiver> _observers = new();
         private EventProcessorBuilder(IServiceCollection serviceCollection)
@@ -129,13 +129,13 @@ namespace Framework.EventProcessor.Initial
             return this;
         }
 
-        public IEnableSecondSenderBuilder ProduceMessageWithKafka(Action<ProducerConfiguration> config, List<EventKafka> kafkaKeys)
+        public IEnableSecondSenderBuilder ProduceMessageWithKafka(Action<ProducerConfiguration> config, params KafkaEvent[] kafkaEvents)
         {
             RegisterMessageProducer(config);
 
             _operations.Add(++_operationPriority, typeof(PublishEventToKafka));
 
-            _kafkaKeys = kafkaKeys.ToDictionary(a => a.EventType, b => b.KafkaConfig);
+            _kafkaKeys = kafkaEvents.ToDictionary(a => a.EventType, b => b.KafkaTopicKey);
 
             _services.AddSingleton(_kafkaKeys);
 
@@ -178,6 +178,12 @@ namespace Framework.EventProcessor.Initial
 
             return  this;
         }
+
+        public IEventProcessor DisableReceiveEvent()
+        {
+            return this;
+        }
+
         public void Build()
         {
             foreach (var operation in _operations)

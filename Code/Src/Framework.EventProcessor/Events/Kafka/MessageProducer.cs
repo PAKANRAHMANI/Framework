@@ -13,5 +13,5 @@ public abstract class MessageProducer
         Producer = producer;
     }
 
-    internal abstract Task<DeliveryResult<string, object>> ProduceAsync<TMessage>(KafkaConfig kafkaConfig, TMessage message, CancellationToken cancellationToken = default) where TMessage : class;
+    internal abstract Task<DeliveryResult<string, object>> ProduceAsync<TMessage>(KafkaTopicKey kafkaConfig, TMessage message, CancellationToken cancellationToken = default) where TMessage : class;
 }

@@ -2,7 +2,8 @@
 
 namespace Framework.EventProcessor.Initial;
 
-internal interface IEventConsumer
+public interface IEventConsumer
 {
     IEventProcessor EnableReceiveEvent(params Receiver[] receivers);
+    IEventProcessor DisableReceiveEvent();
 }

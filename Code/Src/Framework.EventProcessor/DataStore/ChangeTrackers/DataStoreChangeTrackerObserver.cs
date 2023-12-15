@@ -18,7 +18,7 @@ public class DataStoreChangeTrackerObserver : EventObservable, IDataStoreChangeT
     private readonly IFilter<IEvent> _operation;
     private readonly ILogger<DataStoreChangeTrackerObserver> _logger;
 
-    internal DataStoreChangeTrackerObserver(
+    public DataStoreChangeTrackerObserver(
         IEventTypeResolver eventTypeResolver,
         IEventTransformerLookUp transformerLookUp,
         IEventFilter eventFilter,

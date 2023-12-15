@@ -1,6 +1,4 @@
 ﻿using Confluent.Kafka;
-using Framework.Core.Events;
-using Framework.Core.Streaming;
 using Framework.EventProcessor.Configurations;
 
 namespace Framework.EventProcessor.Events.Kafka;

@@ -9,7 +9,7 @@ namespace Framework.EventProcessor.Events.Kafka
         {
         }
 
-        internal override async Task<DeliveryResult<string, object>> ProduceAsync<TMessage>(KafkaConfig kafkaConfig, TMessage message, CancellationToken cancellationToken = default)
+        internal override async Task<DeliveryResult<string, object>> ProduceAsync<TMessage>(KafkaTopicKey kafkaConfig, TMessage message, CancellationToken cancellationToken = default)
         {
             return await Producer.ProduceAsync(new TopicPartition(kafkaConfig.Topic, new Partition(Configuration.PartitionNumber)), new Message<string, object>
             {

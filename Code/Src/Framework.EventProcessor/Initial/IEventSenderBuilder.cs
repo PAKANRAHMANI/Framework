@@ -3,8 +3,8 @@ using Framework.EventProcessor.Events.Kafka;
 
 namespace Framework.EventProcessor.Initial;
 
-internal interface IEventSenderBuilder
+public interface IEventSenderBuilder
 {
     IEnableSecondSenderBuilder PublishEventWithMassTransit(Action<MassTransitConfig> config);
-    IEnableSecondSenderBuilder ProduceMessageWithKafka(Action<ProducerConfiguration> config, List<EventKafka> kafkaKeys);
+    IEnableSecondSenderBuilder ProduceMessageWithKafka(Action<ProducerConfiguration> config, params KafkaEvent[] kafkaEvents);
 }

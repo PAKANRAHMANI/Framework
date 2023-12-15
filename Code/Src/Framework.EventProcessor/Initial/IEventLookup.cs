@@ -2,7 +2,7 @@
 
 namespace Framework.EventProcessor.Initial;
 
-internal interface IEventLookup
+public interface IEventLookup
 {
     IEventProcessorFilter UseEventsInAssemblies(params Assembly[] assemblies);
 }
