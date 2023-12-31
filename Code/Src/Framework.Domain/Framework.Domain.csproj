@@ -10,7 +10,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Framework.Core\Framework.Core.csproj" />
+		<ProjectReference Include="..\Framework.Core\Framework.Core.csproj" >
+			<PrivateAssets>all</PrivateAssets>
+		</ProjectReference>
 	</ItemGroup>
 
 </Project>
