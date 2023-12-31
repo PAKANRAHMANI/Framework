@@ -181,6 +181,7 @@ namespace Framework.EventProcessor.Initial
 
         public IEventProcessor DisableReceiveEvent()
         {
+            _services.AddSingleton(_observers);
             return this;
         }
 
