@@ -8,7 +8,9 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Framework.Caching.Extensions.Abstractions\Framework.Caching.Extensions.Abstractions.csproj" />
+		<ProjectReference Include="..\Framework.Caching.Extensions.Abstractions\Framework.Caching.Extensions.Abstractions.csproj" >
+			<PrivateAssets>all</PrivateAssets>
+		</ProjectReference>
 	</ItemGroup>
 
 </Project>

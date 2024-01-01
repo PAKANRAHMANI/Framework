@@ -3,6 +3,7 @@
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
 		<Version>5.0.0</Version>
+		<Nullable>disable</Nullable>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -14,7 +15,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Framework.Core\Framework.Core.csproj" />
+		<ProjectReference Include="..\Framework.Core\Framework.Core.csproj" >
+			<PrivateAssets>all</PrivateAssets>
+		</ProjectReference>
 	</ItemGroup>
 
 </Project>

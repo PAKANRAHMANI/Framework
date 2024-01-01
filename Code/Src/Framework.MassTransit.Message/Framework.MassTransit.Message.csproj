@@ -13,8 +13,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Framework.Core\Framework.Core.csproj" />
-    <ProjectReference Include="..\Framework.Messages\Framework.Messages.csproj" />
+    <ProjectReference Include="..\Framework.Core\Framework.Core.csproj" >
+	    <PrivateAssets>all</PrivateAssets>
+    </ProjectReference>
+    <ProjectReference Include="..\Framework.Messages\Framework.Messages.csproj" >
+	    <PrivateAssets>all</PrivateAssets>
+    </ProjectReference>
   </ItemGroup>
 
 </Project>

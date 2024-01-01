@@ -1,5 +1,4 @@
-﻿using Framework.Core;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Driver;
 
 namespace Framework.Idempotency.Mongo

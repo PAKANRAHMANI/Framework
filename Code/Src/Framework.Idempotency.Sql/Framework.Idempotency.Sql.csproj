@@ -12,7 +12,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Framework.Idempotency\Framework.Idempotency.csproj" />
+		<ProjectReference Include="..\Framework.Idempotency\Framework.Idempotency.csproj" >
+			<PrivateAssets>all</PrivateAssets>
+		</ProjectReference>
 	</ItemGroup>
 
 </Project>
