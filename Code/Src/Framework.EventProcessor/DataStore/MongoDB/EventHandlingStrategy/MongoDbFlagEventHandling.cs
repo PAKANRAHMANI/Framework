@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Framework.Core.Logging;
 using MongoDB.Driver;
 
 namespace Framework.EventProcessor.DataStore.MongoDB.EventHandlingStrategy;
@@ -6,10 +6,12 @@ namespace Framework.EventProcessor.DataStore.MongoDB.EventHandlingStrategy;
 public class MongoDbFlagEventHandling : IMongoDbEventHandling
 {
     private readonly IMongoDatabase _database;
+    private readonly ILogger _logger;
 
-    public MongoDbFlagEventHandling(IMongoDatabase database)
+    public MongoDbFlagEventHandling(IMongoDatabase database,ILogger logger)
     {
         _database = database;
+        _logger = logger;
     }
 
     public List<EventItem> GetEvents(string collectionName)
@@ -20,6 +22,7 @@ public class MongoDbFlagEventHandling : IMongoDbEventHandling
             .Where(eventItem => eventItem.IsUsed == false)
             .OrderBy(item => item.Id)
             .ToList();
+
         return EventItemMapper.Map(events);
     }
 
@@ -40,8 +43,7 @@ public class MongoDbFlagEventHandling : IMongoDbEventHandling
         }
         catch (Exception exception)
         {
-            Console.WriteLine(exception.Message);
-            throw;
+            _logger.WriteException(exception);
         }
     }
 }

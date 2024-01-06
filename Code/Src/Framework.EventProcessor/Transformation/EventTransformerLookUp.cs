@@ -1,10 +1,17 @@
 ﻿using Framework.Core.Events;
 using System.Reflection;
+using Framework.Core.Logging;
 
 namespace Framework.EventProcessor.Transformation
 {
     public class EventTransformerLookUp : IEventTransformerLookUp
     {
+        private readonly ILogger _logger;
+
+        public EventTransformerLookUp(ILogger logger)
+        {
+            _logger = logger;
+        }
         private readonly Dictionary<string, Type> _transformers = new();
         public void AddTypesFromAssembly(Assembly assembly)
         {
@@ -27,11 +34,19 @@ namespace Framework.EventProcessor.Transformation
 
         public IEventTransformer LookUpTransformer(IEvent @event)
         {
-            var nameOfEvent = @event.GetType().Name;
+            try
+            {
+                var nameOfEvent = @event.GetType().Name;
 
-            if (!_transformers.ContainsKey(nameOfEvent)) return null;
+                if (!_transformers.ContainsKey(nameOfEvent)) return null;
 
-            return Activator.CreateInstance(_transformers[nameOfEvent]) as IEventTransformer;
+                return Activator.CreateInstance(_transformers[nameOfEvent]) as IEventTransformer;
+            }
+            catch (Exception e)
+            {
+                _logger.WriteException(e);
+                return null;
+            }
         }
     }
 }

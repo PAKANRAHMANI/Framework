@@ -1,19 +1,19 @@
-﻿using Framework.EventProcessor.DataStore;
+﻿using Framework.Core.Logging;
+using Framework.EventProcessor.DataStore;
 using Framework.EventProcessor.DataStore.ChangeTrackers;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
 
 namespace Framework.EventProcessor.Services;
 
 public class EventWorker : BackgroundService
 {
-    private readonly ILogger<EventWorker> _logger;
+    private readonly ILogger _logger;
     private readonly IDataStoreObservable _dataStore;
     private ISubscription _subscription;
 
     public EventWorker(
-        ILogger<EventWorker> logger,
+        ILogger logger,
         IDataStoreObservable dataStore,
         IDataStoreChangeTrackerObserver changeTrackerObserver
     )
@@ -29,25 +29,26 @@ public class EventWorker : BackgroundService
         {
             try
             {
-                _logger.LogInformation("Event host Service running at: {time}", DateTimeOffset.Now);
+                _logger.Write($"Event host Service running at: {DateTimeOffset.Now}",LogLevel.Information); 
 
                 _subscription = _dataStore.SubscribeForChanges();
 
-                _logger.LogInformation("Subscribed to data store");
+                _logger.Write($"Subscribed to data store", LogLevel.Information);
             }
             catch (Exception exception)
             {
-                _logger.LogError(exception.Message);
+                _logger.WriteException(exception);
 
                 _subscription.UnSubscribe();
             }
             finally
             {
-                await Task.CompletedTask;
+                _subscription = _dataStore.SubscribeForChanges();
             }
         }
         else
         {
+            _subscription.UnSubscribe();
             await Task.CompletedTask;
         }
 

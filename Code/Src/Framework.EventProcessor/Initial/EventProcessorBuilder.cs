@@ -16,6 +16,7 @@ using MassTransit.MultiBus;
 using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Driver;
 using System.Reflection;
+using Framework.Core.Logging;
 using IEventPublisher = Framework.EventProcessor.Events.IEventPublisher;
 
 namespace Framework.EventProcessor.Initial
@@ -36,11 +37,16 @@ namespace Framework.EventProcessor.Initial
         private Dictionary<Type, KafkaTopicKey> _kafkaKeys = new();
         private int _operationPriority = 0;
         private List<Receiver> _observers = new();
-        private EventProcessorBuilder(IServiceCollection serviceCollection)
+        private ILogger _logger;
+        private EventProcessorBuilder(IServiceCollection serviceCollection, Serilog.ILogger logger)
         {
             _services = serviceCollection;
+
+            _logger = new SerilogAdapter(logger);
+
+            _services.AddSingleton(typeof(ILogger), _logger);
         }
-        public static IDataStoreBuilder Setup(IServiceCollection serviceCollection) => new EventProcessorBuilder(serviceCollection);
+        public static IDataStoreBuilder Setup(IServiceCollection serviceCollection, Serilog.ILogger logger) => new EventProcessorBuilder(serviceCollection, logger);
 
         public IEventLookup ReadFromSqlServer(Action<SqlStoreConfig> config)
         {
@@ -91,7 +97,7 @@ namespace Framework.EventProcessor.Initial
 
         public IEventSenderBuilder UseEventTransformersInAssemblies(params Assembly[] assemblies)
         {
-            var transformerLookUp = new EventTransformerLookUp();
+            var transformerLookUp = new EventTransformerLookUp(_logger);
             if (assemblies.Length > 0)
             {
                 foreach (var assembly in assemblies)
@@ -145,7 +151,7 @@ namespace Framework.EventProcessor.Initial
         {
             return this;
         }
-        
+
         public IEventConsumer DisableSendingMessageToSecondaryBroker()
         {
             return this;
@@ -176,7 +182,7 @@ namespace Framework.EventProcessor.Initial
 
             _services.AddSingleton(_observers);
 
-            return  this;
+            return this;
         }
 
         public IEventProcessor DisableReceiveEvent()
@@ -205,7 +211,7 @@ namespace Framework.EventProcessor.Initial
 
             _services.AddSingleton(producerConfig);
 
-            var kafkaProducer = KafkaProducerFactory<string, object>.Create(producerConfig);
+            var kafkaProducer = KafkaProducerFactory<string, object>.Create(producerConfig, _logger);
 
             var producer = MessageProducerFactory.Create(kafkaProducer, producerConfig);
 

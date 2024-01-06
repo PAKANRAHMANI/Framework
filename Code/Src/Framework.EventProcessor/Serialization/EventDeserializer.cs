@@ -1,4 +1,5 @@
 ﻿using Framework.Core.Events;
+using Framework.Core.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
@@ -14,9 +15,17 @@ namespace Framework.EventProcessor.Serialization
                 ContractResolver = new PrivateSetterContractResolver(),
             };
         }
-        public static IEvent Deserialize(Type type, string body)
+        public static IEvent Deserialize(Type type, string body, ILogger logger)
         {
-            return JsonConvert.DeserializeObject(body, type, Settings) as IEvent;
+            try
+            {
+                return JsonConvert.DeserializeObject(body, type, Settings) as IEvent;
+            }
+            catch (Exception e)
+            {
+                logger.WriteException(e);
+                return null;
+            }
         }
     }
 }

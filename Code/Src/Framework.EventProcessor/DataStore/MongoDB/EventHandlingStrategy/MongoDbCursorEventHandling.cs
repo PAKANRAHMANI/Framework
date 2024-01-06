@@ -1,5 +1,5 @@
-﻿using Framework.EventProcessor.Configurations;
-using Microsoft.Extensions.Logging;
+﻿using Framework.Core.Logging;
+using Framework.EventProcessor.Configurations;
 using MongoDB.Driver;
 
 namespace Framework.EventProcessor.DataStore.MongoDB.EventHandlingStrategy;
@@ -8,23 +8,39 @@ public class MongoDbCursorEventHandling : IMongoDbEventHandling
 {
     private readonly IMongoDatabase _database;
     private readonly MongoStoreConfig _mongoStoreConfig;
+    private readonly ILogger _logger;
 
-    public MongoDbCursorEventHandling(IMongoDatabase database, MongoStoreConfig mongoStoreConfig)
+    public MongoDbCursorEventHandling(IMongoDatabase database, MongoStoreConfig mongoStoreConfig,ILogger logger)
     {
         _database = database;
         _mongoStoreConfig = mongoStoreConfig;
+        _logger = logger;
     }
     public List<EventItem> GetEvents(string collectionName)
     {
-        var position = GetCursorPosition();
+        try
+        {
+            var position = GetCursorPosition();
 
-        return _database
-            .GetCollection<EventItem>(collectionName)
-            .AsQueryable()
-            .Where(eventItem => eventItem.Id > position)
-            .OrderBy(item => item.Id)
-            .ToList();
+            _logger.Write("Read Cursor Position From Cursor Collection", LogLevel.Information);
 
+            var events= _database
+                .GetCollection<EventItem>(collectionName)
+                .AsQueryable()
+                .Where(eventItem => eventItem.Id > position)
+                .OrderBy(item => item.Id)
+                .ToList();
+
+            _logger.Write($"Read Events From {collectionName} Collection",LogLevel.Information);
+
+            return events;
+        }
+        catch (Exception e)
+        {
+            _logger.WriteException(e);
+        }
+
+        return null;
     }
 
     public void UpdateEvents(string collectionName, List<EventItem> eventIds = null)
@@ -54,8 +70,7 @@ public class MongoDbCursorEventHandling : IMongoDbEventHandling
         }
         catch (Exception exception)
         {
-            Console.WriteLine(exception.Message);
-            throw;
+            _logger.WriteException(exception);
         }
     }
 
