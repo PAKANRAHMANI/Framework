@@ -14,91 +14,102 @@ namespace Framework.AspNetCore.MiddleWares;
 
 public class ExceptionHandlerMiddleware
 {
-	private readonly RequestDelegate _next;
-	private readonly ExceptionLogConfiguration _exceptionLogConfiguration;
-	private readonly ILogger _logger;
+    private readonly RequestDelegate _next;
+    private readonly ExceptionLogConfiguration _exceptionLogConfiguration;
+    private readonly ILogger _logger;
 
-	public ExceptionHandlerMiddleware(RequestDelegate next, ExceptionLogConfiguration exceptionLogConfiguration, ILogger logger)
-	{
-		_next = next;
-		_exceptionLogConfiguration = exceptionLogConfiguration;
-		_logger = logger;
-	}
+    public ExceptionHandlerMiddleware(RequestDelegate next, ExceptionLogConfiguration exceptionLogConfiguration, ILogger logger)
+    {
+        _next = next;
+        _exceptionLogConfiguration = exceptionLogConfiguration;
+        _logger = logger;
+    }
 
-	public async Task InvokeAsync(HttpContext context)
-	{
-		try
-		{
-			await _next.Invoke(context);
-		}
-		catch (Exception exception)
-		{
-			await HandleException(context, exception);
-			_logger.WriteException(exception);
-		}
-	}
+    public async Task InvokeAsync(HttpContext context)
+    {
+        try
+        {
+            await _next.Invoke(context);
+        }
+        catch (Exception exception)
+        {
+            await HandleException(context, exception);
 
-	private async Task HandleException(HttpContext context, Exception exception)
-	{
-		if (exception is BusinessException businessException)
-			await HandleBusinessException(context, businessException);
-		else
-			await UnhandledException(context, exception);
-	}
+            _logger.WriteException(exception);
 
-	private async Task HandleBusinessException(HttpContext context, BusinessException businessException)
-	{
-		var errors = new List<ExceptionDetails>
-		{
-			ExceptionDetails.Create(businessException.ExceptionMessage, businessException.ErrorCode, businessException.GetType().ToString())
-		};
+            if (IsUnhandledExceptionsCapturedBySentry())
+                CaptureOnSentry(exception);
+        }
+    }
 
-		await WriteExceptionToResponse(context, errors);
-	}
+    private async Task HandleException(HttpContext context, Exception exception)
+    {
+        switch (exception)
+        {
+            case BusinessException businessException:
+                await HandleBusinessException(context, businessException);
+                break;
+            case InfrastructureException infrastructureException:
+                await HandleInfrastructureException(context, infrastructureException);
+                break;
+            default:
+                await UnhandledException(context, exception);
+                break;
+        }
+    }
+    private async Task HandleInfrastructureException(HttpContext context, InfrastructureException businessException)
+    {
+        var errors = new List<ExceptionDetails>
+        {
+            ExceptionDetails.Create(businessException.ExceptionMessage, businessException.ErrorCode, businessException.GetType().ToString())
+        };
 
-	private async Task WriteExceptionToResponse(HttpContext context, List<ExceptionDetails> errors)
-	{
-		//TODO: remove and use (int)error.Code
-		context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-		//context.Response.StatusCode = (int)error.Code;
-		context.Response.ContentType = "application/json";
+        await WriteExceptionToResponse(context, errors);
+    }
+    private async Task HandleBusinessException(HttpContext context, BusinessException businessException)
+    {
+        var errors = new List<ExceptionDetails>
+        {
+            ExceptionDetails.Create(businessException.ExceptionMessage, businessException.ErrorCode, businessException.GetType().ToString())
+        };
 
-		var jsonSerializerSettings = new JsonSerializerSettings
-		{
-			ContractResolver = new CamelCasePropertyNamesContractResolver()
-		};
+        await WriteExceptionToResponse(context, errors);
+    }
 
-		var errorModel = new
-		{
-			errors = errors
-		};
+    private async Task WriteExceptionToResponse(HttpContext context, List<ExceptionDetails> errors)
+    {
+        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
-		await context.Response.WriteAsync(JsonConvert.SerializeObject(errorModel, jsonSerializerSettings));
-	}
+        context.Response.ContentType = "application/json";
 
-	private async Task UnhandledException(HttpContext httpContext, Exception exception)
-	{
-		if (IsUnhandledExceptionsCapturedBySentry())
-			CaptureOnSentry(exception);
+        var jsonSerializerSettings = new JsonSerializerSettings
+        {
+            ContractResolver = new CamelCasePropertyNamesContractResolver()
+        };
 
-		var errors = new List<ExceptionDetails>
-		{
-			ExceptionDetails.Create(exception.Message, -1000, exception.GetType().ToString())
-		};
+        await context.Response.WriteAsync(JsonConvert.SerializeObject(errors, jsonSerializerSettings));
+    }
 
-		await WriteExceptionToResponse(httpContext, errors);
-	}
+    private async Task UnhandledException(HttpContext httpContext, Exception exception)
+    {
+        var errors = new List<ExceptionDetails>
+        {
+            ExceptionDetails.Create(Exceptions.There_Was_A_Problem_With_The_Request, -1000, exception.GetType().ToString())
+        };
 
-	private bool IsUnhandledExceptionsCapturedBySentry()
-	{
-		return _exceptionLogConfiguration.CaptureBySentry;
-	}
+        await WriteExceptionToResponse(httpContext, errors);
+    }
 
-	private void CaptureOnSentry(Exception exception)
-	{
-		using (SentrySdk.Init(_exceptionLogConfiguration.SentryConfiguration.Dsn))
-		{
-			SentrySdk.CaptureException(exception);
-		}
-	}
+    private bool IsUnhandledExceptionsCapturedBySentry()
+    {
+        return _exceptionLogConfiguration.CaptureBySentry;
+    }
+
+    private void CaptureOnSentry(Exception exception)
+    {
+        using (SentrySdk.Init(_exceptionLogConfiguration.SentryConfiguration.Dsn))
+        {
+            SentrySdk.CaptureException(exception);
+        }
+    }
 }
