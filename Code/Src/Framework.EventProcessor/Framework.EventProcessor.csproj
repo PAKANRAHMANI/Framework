@@ -25,9 +25,7 @@
 		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" />
 	</ItemGroup>
 	<ItemGroup>
-	  <ProjectReference Include="..\Framework.Core\Framework.Core.csproj">
-		  <PrivateAssets>all</PrivateAssets>
-	  </ProjectReference>
+	  <ProjectReference Include="..\Framework.Core\Framework.Core.csproj" PrivateAssets="contentfiles;build" ReferenceOutputAssembly="True" IsImplicitlyDefined="False" />
 	</ItemGroup>
 
 </Project>

@@ -2,7 +2,7 @@
 
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
-		<Version>5.0.0</Version>
+		<Version>5.0.1</Version>
 		<Nullable>disable</Nullable>
 	</PropertyGroup>
 
@@ -12,15 +12,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Framework.Config\Framework.Config.csproj">
-			<PrivateAssets>all</PrivateAssets>
-		</ProjectReference>
-		<ProjectReference Include="..\Framework.Core\Framework.Core.csproj">
-			<PrivateAssets>all</PrivateAssets>
-		</ProjectReference>
-		<ProjectReference Include="..\Framework.Domain\Framework.Domain.csproj" >
-			<PrivateAssets>all</PrivateAssets>
-		</ProjectReference>
+		<ProjectReference Include="..\Framework.Config\Framework.Config.csproj" PrivateAssets="contentfiles;build" ReferenceOutputAssembly="True" IsImplicitlyDefined="False" />
+		
+		<ProjectReference Include="..\Framework.Core\Framework.Core.csproj" PrivateAssets="contentfiles;build" ReferenceOutputAssembly="True" IsImplicitlyDefined="False" />
+		
+		<ProjectReference Include="..\Framework.Domain\Framework.Domain.csproj" PrivateAssets="contentfiles;build" ReferenceOutputAssembly="True" IsImplicitlyDefined="False" />
+		
 	</ItemGroup>
 
 </Project>

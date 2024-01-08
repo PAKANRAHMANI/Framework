@@ -4,7 +4,7 @@
 		<TargetFramework>net6.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>disable</Nullable>
-		<Version>1.0.4</Version>
+		<Version>1.0.5</Version>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -13,15 +13,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Framework.Caching.Extensions.Abstractions\Framework.Caching.Extensions.Abstractions.csproj" >
-			<PrivateAssets>all</PrivateAssets>
-		</ProjectReference>
-		<ProjectReference Include="..\Framework.Caching.Extensions.Configuration\Framework.Caching.Extensions.Configuration.csproj">
-			<PrivateAssets>all</PrivateAssets>
-		</ProjectReference>
-		<ProjectReference Include="..\Framework.Caching\Framework.Caching.csproj">
-			<PrivateAssets>all</PrivateAssets>
-		</ProjectReference>
+		<ProjectReference Include="..\Framework.Caching.Extensions.Abstractions\Framework.Caching.Extensions.Abstractions.csproj" PrivateAssets="contentfiles;build" ReferenceOutputAssembly="True" IsImplicitlyDefined="False" />
+		
+		<ProjectReference Include="..\Framework.Caching.Extensions.Configuration\Framework.Caching.Extensions.Configuration.csproj" PrivateAssets="contentfiles;build" ReferenceOutputAssembly="True" IsImplicitlyDefined="False" />
+		
+		<ProjectReference Include="..\Framework.Caching\Framework.Caching.csproj" PrivateAssets="contentfiles;build" ReferenceOutputAssembly="True" IsImplicitlyDefined="False" />
+		
 	</ItemGroup>
 
 </Project>
