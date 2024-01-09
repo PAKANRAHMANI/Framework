@@ -2,7 +2,7 @@
 
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
-		<Version>5.0.1</Version>
+		<Version>5.0.2</Version>
 		<Nullable>disable</Nullable>
 	</PropertyGroup>
 
@@ -11,6 +11,7 @@
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.Core" />
 		<PackageReference Include="Newtonsoft.Json" />
 		<PackageReference Include="Sentry.AspNetCore" />
+		<PackageReference Include="Serilog" />
 	</ItemGroup>
 
 	<ItemGroup>
