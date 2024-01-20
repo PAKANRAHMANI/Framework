@@ -16,7 +16,7 @@ namespace Framework.Domain.Events
             return new DistributedEventStructure()
             {
                 Body = JsonConvert.SerializeObject(domainEvent),
-                EventId = domainEvent.EventId,
+                EventId = domainEvent.EventId.ToString(),
                 EventType = domainEvent.GetType().ToString(),
                 PublishDateTime = domainEvent.PublishDateTime,
                 IsUsed = domainEvent.IsUsed,
