@@ -87,7 +87,12 @@ public class ExceptionHandlerMiddleware
             ContractResolver = new CamelCasePropertyNamesContractResolver()
         };
 
-        await context.Response.WriteAsync(JsonConvert.SerializeObject(errors, jsonSerializerSettings));
+        var errorModel = new ErrorModel
+        {
+            Errors = errors
+        };
+
+        await context.Response.WriteAsync(JsonConvert.SerializeObject(errorModel, jsonSerializerSettings));
     }
 
     private async Task UnhandledException(HttpContext httpContext, Exception exception)
