@@ -53,7 +53,7 @@
 		<PackageReference Update="Newtonsoft.Json" Version="13.0.1" />
 		<PackageReference Update="Sentry" Version="3.34.0" />
 		<PackageReference Update="Sentry.AspNetCore" Version="3.34.0" />
-		<PackageReference Update="Winton.Extensions.Configuration.Consul" Version="3.1.2" />
+		<PackageReference Update="Winton.Extensions.Configuration.Consul" Version="3.4.0" />
 		<PackageReference Update="Humanizer.Core" Version="2.14.1" />
 		<PackageReference Update="EasyNetQ" Version="6.3.1" />
 		<PackageReference Update="StackExchange.Redis" Version="2.6.45" />

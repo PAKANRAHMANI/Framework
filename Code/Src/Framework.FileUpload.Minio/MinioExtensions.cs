@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Minio;
-using Minio.DataModel.Result;
-using Minio.Handlers;
+
 
 namespace Framework.FileUpload.Minio
 {
