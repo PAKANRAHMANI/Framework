@@ -12,7 +12,7 @@ public class MinioObjectOperation : IMinioObjectOperation
         _minioClient = minioClient;
     }
 
-    public async Task SaveObject(string bucketName, string objectName, string contentType, byte[] file, CancellationToken cancellationToken)
+    public async Task SaveObjectAsync(string bucketName, string objectName, string contentType, byte[] file, CancellationToken cancellationToken)
     {
         try
         {
@@ -39,7 +39,7 @@ public class MinioObjectOperation : IMinioObjectOperation
         }
     }
 
-    public async Task<byte[]> GetObject(string bucketName, string objectName, string fileName, CancellationToken cancellationToken)
+    public async Task<byte[]> GetObjectAsync(string bucketName, string objectName, CancellationToken cancellationToken)
     {
         try
         {
