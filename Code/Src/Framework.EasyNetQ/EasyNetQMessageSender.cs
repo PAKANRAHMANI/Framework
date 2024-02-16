@@ -66,7 +66,7 @@ namespace Framework.EasyNetQ
 
             var config = Configure(exchangeName, exchangeType,null);
 
-            await _bus.Advanced.PublishAsync(config.Exchange, string.Empty, false, messageProperties: config.MessageProperties, Encoding.UTF8.GetBytes(jsonBody));
+            await _bus.Advanced.PublishAsync(config.Exchange, string.Empty, false,  config.MessageProperties, Encoding.UTF8.GetBytes(jsonBody));
         }
 
         public void Send(IMessage message, string queueName, string exchangeType)

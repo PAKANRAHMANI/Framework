@@ -8,8 +8,6 @@
 
 	<ItemGroup>
 		<PackageReference Include="IdentityModel"  />
-		<PackageReference Include="Microsoft.AspNetCore.Http.Abstractions"  />
-		<PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory"  />
 		<PackageReference Include="Microsoft.Extensions.Http"  />
 		<PackageReference Include="IdentityModel.AspNetCore.OAuth2Introspection"  />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer"  />

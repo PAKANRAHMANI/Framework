@@ -26,6 +26,5 @@ namespace Framework.Config
         void RegisterScoped(Type implementationType, object config);
         void RegisterSingleton(Type implementationType, object config);
         void RegisterKafka();
-        void RegisterMassTransit(MassTransitConfiguration config, params Type[] consumers); 
     }
 }
