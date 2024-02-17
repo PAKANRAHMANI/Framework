@@ -9,6 +9,7 @@ using Sentry;
 using System.Net;
 using System.Collections.Generic;
 using Newtonsoft.Json.Serialization;
+using Framework.Core;
 
 namespace Framework.AspNetCore.MiddleWares;
 
@@ -18,7 +19,8 @@ public class ExceptionHandlerMiddleware
     private readonly ExceptionLogConfiguration _exceptionLogConfiguration;
     private readonly ILogger _logger;
 
-    public ExceptionHandlerMiddleware(RequestDelegate next, ExceptionLogConfiguration exceptionLogConfiguration, ILogger logger)
+    public ExceptionHandlerMiddleware(RequestDelegate next, ExceptionLogConfiguration exceptionLogConfiguration,
+        ILogger logger)
     {
         _next = next;
         _exceptionLogConfiguration = exceptionLogConfiguration;
@@ -57,20 +59,24 @@ public class ExceptionHandlerMiddleware
                 break;
         }
     }
+
     private async Task HandleInfrastructureException(HttpContext context, InfrastructureException businessException)
     {
         var errors = new List<ExceptionDetails>
         {
-            ExceptionDetails.Create(businessException.ExceptionMessage, businessException.ErrorCode, businessException.GetType().ToString())
+            ExceptionDetails.Create(businessException.ExceptionMessage, businessException.ErrorCode,
+                businessException.GetType().ToString())
         };
 
         await WriteExceptionToResponse(context, errors);
     }
+
     private async Task HandleBusinessException(HttpContext context, BusinessException businessException)
     {
         var errors = new List<ExceptionDetails>
         {
-            ExceptionDetails.Create(businessException.ExceptionMessage, businessException.ErrorCode, businessException.GetType().ToString())
+            ExceptionDetails.Create(businessException.ExceptionMessage, businessException.ErrorCode,
+                businessException.GetType().ToString())
         };
 
         await WriteExceptionToResponse(context, errors);
@@ -99,7 +105,8 @@ public class ExceptionHandlerMiddleware
     {
         var errors = new List<ExceptionDetails>
         {
-            ExceptionDetails.Create(Exceptions.There_Was_A_Problem_With_The_Request, -1000, exception.GetType().ToString())
+            ExceptionDetails.Create(Exceptions.There_Was_A_Problem_With_The_Request, -1000,
+                exception.GetType().ToString())
         };
 
         await WriteExceptionToResponse(httpContext, errors);
@@ -112,7 +119,11 @@ public class ExceptionHandlerMiddleware
 
     private void CaptureOnSentry(Exception exception)
     {
-        using (SentrySdk.Init(_exceptionLogConfiguration.SentryConfiguration.Dsn))
+        using (SentrySdk.Init(option =>
+               {
+                   option.Environment = EnvironmentHelper.GetEnvironment();
+                   option.Dsn = _exceptionLogConfiguration.SentryConfiguration.Dsn;
+               }))
         {
             SentrySdk.CaptureException(exception);
         }
