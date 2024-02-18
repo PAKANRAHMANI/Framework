@@ -31,7 +31,12 @@ public class WorkerTokenManagement : ITokenManagement
 
             var tokenResponse = await _client.RequestClientCredentialsTokenAsync(tokenRequest);
 
-            if (tokenResponse.IsError == false) return tokenResponse;
+            if (tokenResponse.IsError == false)
+            {
+                WriteMessage("token has been got successfully", "GetCredentialsToken");
+
+                return tokenResponse;
+            }
 
             WriteMessage($"can't get CredentialsToken(, message is:{tokenResponse.Error}, description:{tokenResponse.ErrorDescription}", "GetCredentialsToken");
 
