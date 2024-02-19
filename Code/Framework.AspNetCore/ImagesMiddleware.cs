@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using Framework.AspNetCore.Models;
 using Microsoft.Extensions.Options;
-using Framework.Utility.Models;
 
-namespace Framework.Utility.Middlewares
+namespace Framework.AspNetCore
 {
     public class ImagesMiddleware
     {

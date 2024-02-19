@@ -2,13 +2,11 @@
 
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
-		<Version>8.0.1</Version>
+		<Version>8.0.2</Version>
 		<Nullable>disable</Nullable>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="IdentityModel"  />
-		<PackageReference Include="Microsoft.Extensions.Http"  />
 		<PackageReference Include="IdentityModel.AspNetCore.OAuth2Introspection"  />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer"  />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.Certificate"  />

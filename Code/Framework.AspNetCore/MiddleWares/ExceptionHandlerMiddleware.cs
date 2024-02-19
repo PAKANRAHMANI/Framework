@@ -1,15 +1,9 @@
-﻿using System;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Newtonsoft.Json;
-using Framework.Core.Exceptions;
-using Framework.AspNetCore.Configurations;
-using Framework.Core.Logging;
-using Sentry;
-using System.Net;
-using System.Collections.Generic;
-using Newtonsoft.Json.Serialization;
+﻿using Framework.AspNetCore.Configurations;
 using Framework.Core;
+using Framework.Core.Exceptions;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using System.Net;
 
 namespace Framework.AspNetCore.MiddleWares;
 
@@ -17,10 +11,9 @@ public class ExceptionHandlerMiddleware
 {
     private readonly RequestDelegate _next;
     private readonly ExceptionLogConfiguration _exceptionLogConfiguration;
-    private readonly ILogger _logger;
+    private readonly Core.Logging.ILogger _logger;
 
-    public ExceptionHandlerMiddleware(RequestDelegate next, ExceptionLogConfiguration exceptionLogConfiguration,
-        ILogger logger)
+    public ExceptionHandlerMiddleware(RequestDelegate next, ExceptionLogConfiguration exceptionLogConfiguration, Core.Logging.ILogger logger)
     {
         _next = next;
         _exceptionLogConfiguration = exceptionLogConfiguration;

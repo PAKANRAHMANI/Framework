@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-using Framework.Core;
-using Microsoft.AspNetCore.Http;
+﻿using Framework.Core;
 using Serilog.Context;
 
 namespace Framework.AspNetCore.MiddleWares;

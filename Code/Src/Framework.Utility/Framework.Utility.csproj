@@ -2,14 +2,13 @@
 
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
-		<Version>8.0.1</Version>
+		<Version>8.0.2</Version>
 		<Nullable>disable</Nullable>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Newtonsoft.Json"  />
-		<PackageReference Include="System.Drawing.Common"  />
-		<PackageReference Include="Microsoft.AspNetCore.Http"  />
+		<PackageReference Include="Newtonsoft.Json" />
+		
 	</ItemGroup>
 
 </Project>

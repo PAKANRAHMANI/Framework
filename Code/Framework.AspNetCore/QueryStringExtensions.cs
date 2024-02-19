@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.AspNetCore.Http;
-
-namespace Framework.Utility
+﻿namespace Framework.AspNetCore
 {
     public static class QueryStringExtensions
     {

@@ -1,11 +1,9 @@
 ﻿using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
-using System.IO;
-using System.Linq;
-using Framework.Utility.Models;
+using Framework.AspNetCore.Models;
 
-namespace Framework.Utility
+namespace Framework.AspNetCore
 {
     public static class ThumbnailHelper
     {
