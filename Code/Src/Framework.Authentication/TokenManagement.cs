@@ -27,6 +27,8 @@ namespace Framework.Authentication
         {
             try
             {
+                WriteMessage("going to exchange userToken from idp", "ExchangeToken");
+
                 _tokenManagementConfiguration.Scope = scope;
 
                 var userToken = await GetUserToken();
@@ -35,7 +37,12 @@ namespace Framework.Authentication
 
                 var tokenResponse = await ExchangeForDelegation(userToken, actorToken);
 
-                if (tokenResponse.IsError == false) return tokenResponse;
+                if (tokenResponse.IsError == false)
+                {
+                    WriteMessage("token has been exchanged", "ExchangeToken");
+
+                    return tokenResponse;
+                }
 
                 WriteMessage($"can't exchange, message is:{tokenResponse.Error}, description:{tokenResponse.ErrorDescription}", "ExchangeToken");
 
@@ -51,13 +58,20 @@ namespace Framework.Authentication
         {
             try
             {
+                WriteMessage("going to exchange userToken from idp", "ExchangeToken");
+
                 var userToken = await GetUserToken();
 
                 var actorToken = await GetCredentialsToken();
 
                 var tokenResponse = await ExchangeForDelegation(userToken, actorToken);
 
-                if (tokenResponse.IsError == false) return tokenResponse;
+                if (tokenResponse.IsError == false)
+                {
+                    WriteMessage("token has been exchanged successfully", "ExchangeToken");
+
+                    return tokenResponse;
+                }
 
                 WriteMessage($"can't exchange, message is:{tokenResponse.Error}, description:{tokenResponse.ErrorDescription}", "ExchangeToken");
 
@@ -82,7 +96,12 @@ namespace Framework.Authentication
 
                 var tokenResponse = await _client.RequestClientCredentialsTokenAsync(tokenRequest);
 
-                if (tokenResponse.IsError == false) return tokenResponse;
+                if (tokenResponse.IsError == false)
+                {
+                    WriteMessage("token has been got successfully", "GetCredentialsToken");
+
+                    return tokenResponse;
+                }
 
                 WriteMessage($"can't get CredentialsToken(, message is:{tokenResponse.Error}, description:{tokenResponse.ErrorDescription}", "GetCredentialsToken");
 
