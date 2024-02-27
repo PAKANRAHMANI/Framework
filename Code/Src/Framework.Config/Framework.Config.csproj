@@ -20,7 +20,6 @@
 		<ProjectReference Include="..\Framework.Domain\Framework.Domain.csproj" PrivateAssets="contentfiles;build" ReferenceOutputAssembly="True" IsImplicitlyDefined="False" />
 
 		<ProjectReference Include="..\Framework.Query\Framework.Query.csproj" PrivateAssets="contentfiles;build" ReferenceOutputAssembly="True" IsImplicitlyDefined="False" />
-
 	</ItemGroup>
 
 </Project>

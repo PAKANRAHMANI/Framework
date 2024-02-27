@@ -18,7 +18,6 @@
 		<ProjectReference Include="..\Framework.Config\Framework.Config.csproj" />
 
 		<ProjectReference Include="..\Framework.Messages\Framework.Messages.csproj" />
-
 	</ItemGroup>
 
 </Project>

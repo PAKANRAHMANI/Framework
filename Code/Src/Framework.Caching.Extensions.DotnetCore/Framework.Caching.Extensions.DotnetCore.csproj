@@ -8,7 +8,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Framework.Caching.Extensions.Abstractions\Framework.Caching.Extensions.Abstractions.csproj" PrivateAssets="contentfiles;build" ReferenceOutputAssembly="True" IsImplicitlyDefined="False" /> 
+		<ProjectReference Include="..\Framework.Caching.Extensions.Abstractions\Framework.Caching.Extensions.Abstractions.csproj" PrivateAssets="contentfiles;build" ReferenceOutputAssembly="True" IsImplicitlyDefined="False" />
 
 		<ProjectReference Include="..\Framework.Caching.Extensions.Configuration\Framework.Caching.Extensions.Configuration.csproj" PrivateAssets="contentfiles;build" ReferenceOutputAssembly="True" IsImplicitlyDefined="False" />
 

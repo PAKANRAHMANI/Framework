@@ -2,7 +2,7 @@
 
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
-		<Version>8.0.1</Version>
+		<Version>8.0.2</Version>
 		<Nullable>disable</Nullable>
 	</PropertyGroup>
 
@@ -18,13 +18,12 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\Framework.Core\Framework.Core.csproj" PrivateAssets="contentfiles;build" ReferenceOutputAssembly="True" IsImplicitlyDefined="False" />
-		
+
 		<ProjectReference Include="..\Framework.DataAccess.EF\Framework.DataAccess.EF.csproj" PrivateAssets="contentfiles;build" ReferenceOutputAssembly="True" IsImplicitlyDefined="False" />
-		
+
 		<ProjectReference Include="..\Framework.Domain\Framework.Domain.csproj" PrivateAssets="contentfiles;build" ReferenceOutputAssembly="True" IsImplicitlyDefined="False" />
-		
+
 		<ProjectReference Include="..\Framework.DataAccess.NH\Framework.DataAccess.NH.csproj" PrivateAssets="contentfiles;build" ReferenceOutputAssembly="True" IsImplicitlyDefined="False" />
-		
 	</ItemGroup>
 
 </Project>
