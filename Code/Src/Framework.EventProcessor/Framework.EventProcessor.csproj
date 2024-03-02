@@ -5,12 +5,11 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>disable</Nullable>
 		<OutputType>Library</OutputType>
-		<Version>8.0.2</Version>
+		<Version>8.0.3</Version>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Confluent.Kafka" />
-		<PackageReference Include="MassTransit.AspNetCore" />
 		<PackageReference Include="MassTransit.RabbitMQ" />
 		<PackageReference Include="Microsoft.Data.SqlClient" />
 		<PackageReference Include="Microsoft.Extensions.Hosting" />

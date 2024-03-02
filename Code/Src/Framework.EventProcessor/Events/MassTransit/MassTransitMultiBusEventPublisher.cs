@@ -1,20 +1,17 @@
 ﻿using Framework.Core.Events;
-using Framework.EventProcessor.Initial;
-using MassTransit;
-using MassTransit.ExtensionsDependencyInjectionIntegration;
 
 namespace Framework.EventProcessor.Events.MassTransit;
 
 public class MassTransitMultiBusEventPublisher : IEventSecondPublisher
 {
-    private readonly IPublishEndpoint _publishEndpoint;
+    private readonly ISecondBus _secondBus;
 
-    public MassTransitMultiBusEventPublisher(Bind<ISecondBus, IPublishEndpoint> publishEndpoint)
+    public MassTransitMultiBusEventPublisher(ISecondBus secondBus)
     {
-        _publishEndpoint = publishEndpoint.Value;
+        _secondBus = secondBus;
     }
     public async Task Publish<T>(T @event) where T : IEvent
     {
-        await _publishEndpoint.Publish(@event);
+        await _secondBus.Publish(@event);
     }
 }

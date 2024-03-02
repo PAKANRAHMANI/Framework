@@ -12,7 +12,6 @@ using Framework.EventProcessor.Operations;
 using Framework.EventProcessor.Services;
 using Framework.EventProcessor.Transformation;
 using MassTransit;
-using MassTransit.MultiBus;
 using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Driver;
 using System.Reflection;
