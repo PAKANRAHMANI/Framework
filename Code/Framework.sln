@@ -104,6 +104,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Framework.FileUpload.Minio"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Framework.AspNetCore", "Src\Framework.AspNetCore\Framework.AspNetCore.csproj", "{CD2356B5-A117-4649-A610-8F7411197209}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Framework.HealthCheck", "Src\Framework.HealthCheck\Framework.HealthCheck.csproj", "{2453FD47-15C9-48DB-A0AC-5847BBCBF941}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -284,6 +286,10 @@ Global
 		{CD2356B5-A117-4649-A610-8F7411197209}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CD2356B5-A117-4649-A610-8F7411197209}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CD2356B5-A117-4649-A610-8F7411197209}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2453FD47-15C9-48DB-A0AC-5847BBCBF941}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2453FD47-15C9-48DB-A0AC-5847BBCBF941}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2453FD47-15C9-48DB-A0AC-5847BBCBF941}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2453FD47-15C9-48DB-A0AC-5847BBCBF941}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -334,6 +340,7 @@ Global
 		{1814313E-1DF5-412C-8A19-EF1F1F3D7668} = {D54D07CB-8231-46E9-9C59-140FE9FF9188}
 		{CF81E655-0B29-45E3-BDAD-20B5BC4B22DC} = {25A183FD-7661-4697-96E4-895E57A64352}
 		{CD2356B5-A117-4649-A610-8F7411197209} = {25A183FD-7661-4697-96E4-895E57A64352}
+		{2453FD47-15C9-48DB-A0AC-5847BBCBF941} = {25A183FD-7661-4697-96E4-895E57A64352}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {FD22E860-CCCE-47C1-B1BE-51511F2D9BF8}
