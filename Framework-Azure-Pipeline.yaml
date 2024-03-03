@@ -39,6 +39,23 @@ steps:
        arguments: '--configuration $(BuildConfiguration)'
 ##################################################################################################
    - powershell: |
+      [xml]$project = Get-Content -Path ./Code/Src/Framework.HealthCheck/Framework.HealthCheck.csproj
+      $version = $project.Project.PropertyGroup.Version
+      echo "version: "
+      echo $version
+      echo "##vso[task.setvariable variable=version]$version"
+ 
+     displayName: 'Get Version of Framework.HealthCheck'
+##################################################################################################
+   - task: DotNetCoreCLI@2
+     displayName: 'Pack Framework.HealthCheck'
+     inputs:
+       command: custom
+       projects: '**/Framework.HealthCheck.csproj'
+       custom: pack
+       arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
+##################################################################################################
+   - powershell: |
       [xml]$project = Get-Content -Path ./Code/Src/Framework.FileUpload.Minio/Framework.FileUpload.Minio.csproj
       $version = $project.Project.PropertyGroup.Version
       echo "version: "
