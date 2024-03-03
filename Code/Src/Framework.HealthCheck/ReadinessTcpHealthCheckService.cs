@@ -4,7 +4,7 @@ using System.Net.Sockets;
 
 namespace Framework.HealthCheck
 {
-    internal class ReadinessTcpHealthCheckService
+    public class ReadinessTcpHealthCheckService
     {
         private readonly ILogger _logger;
         private readonly TcpListener _listener;

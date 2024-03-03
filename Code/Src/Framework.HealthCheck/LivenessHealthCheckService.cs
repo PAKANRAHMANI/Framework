@@ -14,7 +14,7 @@ namespace Framework.HealthCheck
         private readonly TcpListener _livenessListener;
         private readonly ReadinessTcpHealthCheckService _readinessTcpHealthCheckService;
 
-        internal LivenessHealthCheckService(
+        public LivenessHealthCheckService(
             HealthCheckService healthCheckService,
             ILogger logger,
             HealthCheckConfiguration healthCheckConfig,
