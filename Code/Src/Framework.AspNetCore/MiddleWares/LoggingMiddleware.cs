@@ -17,7 +17,7 @@ public class LoggingMiddleware
     {
         var userId = _currentUser.GetUserIdFromNameIdentifier<string>();
 
-        LogContext.PushProperty("UserIP", context.Connection.RemoteIpAddress?.ToString());
+        LogContext.PushProperty("UserIP", context.Request.Headers["X-Forwarded-For"]);
 
         LogContext.PushProperty("UserId", userId);
 
