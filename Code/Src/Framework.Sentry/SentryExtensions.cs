@@ -14,6 +14,8 @@ public static class SentryExtensions
         options.Invoke(sentrySettings);
 
         services.AddSingleton(_ => sentrySettings);
+        
+        services.AddSingleton<ISentryService, SentryService>();
 
         return services;
     }
