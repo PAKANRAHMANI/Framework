@@ -114,7 +114,7 @@ public class ExceptionHandlerMiddleware
     {
         using (SentrySdk.Init(option =>
                {
-                   option.Environment = EnvironmentHelper.GetEnvironment();
+                   option.Environment = _exceptionLogConfiguration.SentryConfiguration.Environment;
                    option.Dsn = _exceptionLogConfiguration.SentryConfiguration.Dsn;
                }))
         {
