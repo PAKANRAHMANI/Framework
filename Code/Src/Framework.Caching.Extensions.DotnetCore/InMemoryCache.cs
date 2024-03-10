@@ -4,7 +4,7 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace Framework.Caching.Extensions.DotnetCore;
 
-public class InMemoryCache : IInMemoryCache
+public class InMemoryCache : IInMemoryCache, ICacheControl
 {
 	private readonly IMemoryCache _memoryCache;
 	private readonly InMemoryCacheConfiguration _cacheConfiguration;
