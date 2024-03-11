@@ -1,26 +1,23 @@
 ﻿using Framework.AspNetCore.Configurations;
 
-namespace Framework.AspNetCore.MiddleWares
+namespace Framework.AspNetCore.MiddleWares;
+
+public static class FrameworkMiddlewareExtensions
 {
-    public static class FrameworkMiddlewareExtensions
+    public static IApplicationBuilder UseFrameworkExceptionMiddleware(this IApplicationBuilder builder, Action<ExceptionLogConfiguration> exceptionConfig)
     {
-        public static IApplicationBuilder UseFrameworkExceptionMiddleware(this IApplicationBuilder builder, IServiceCollection services, Action<ExceptionLogConfiguration> exceptionConfig)
+        if (builder == null)
         {
-            if (builder == null)
-            {
-                throw new ArgumentNullException(nameof(builder));
-            }
-            if (exceptionConfig == null)
-            {
-                throw new ArgumentNullException(nameof(exceptionConfig));
-            }
-            var exceptionLogConfiguration = new ExceptionLogConfiguration();
-
-            exceptionConfig.Invoke(exceptionLogConfiguration);
-
-            services.AddSingleton(exceptionLogConfiguration);
-
-            return builder.UseMiddleware<ExceptionHandlerMiddleware>();
+            throw new ArgumentNullException(nameof(builder));
         }
+        if (exceptionConfig == null)
+        {
+            throw new ArgumentNullException(nameof(exceptionConfig));
+        }
+        var exceptionLogConfiguration = ExceptionLogConfiguration.GetInstance();
+
+        exceptionConfig.Invoke(exceptionLogConfiguration);
+
+        return builder.UseMiddleware<ExceptionHandlerMiddleware>(exceptionLogConfiguration);
     }
 }
