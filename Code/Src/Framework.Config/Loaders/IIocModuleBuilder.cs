@@ -1,7 +1,9 @@
-﻿namespace Framework.Config.Loaders
+﻿using System;
+
+namespace Framework.Config.Loaders
 {
     public interface IIocModuleBuilder
     {
-        IModuleBuilder WithIocModule(IFrameworkIocModule module);
+        IModuleBuilder WithIocModule(IFrameworkIocModule module, Action<FrameworkConfiguration> frameworkConfiguration = null);
     }
 }

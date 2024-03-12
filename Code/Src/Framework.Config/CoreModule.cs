@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Framework.Application;
+﻿using Framework.Application;
 using Framework.Application.Contracts;
 using Framework.Core.Clock;
 using Framework.Core.Events;
@@ -14,6 +9,13 @@ namespace Framework.Config
 {
     public class CoreModule : IFrameworkModule
     {
+        private readonly FrameworkConfiguration _frameworkConfiguration;
+
+        public CoreModule(FrameworkConfiguration frameworkConfiguration)
+        {
+            _frameworkConfiguration = frameworkConfiguration;
+        }
+
         public void Register(IDependencyRegister dependencyRegister)
         {
             dependencyRegister.RegisterScoped<IQueryBus, QueryBus>();
@@ -26,8 +28,12 @@ namespace Framework.Config
             dependencyRegister.RegisterScoped<IAggregateRootConfigurator, AggregateRootConfigurator>();
             dependencyRegister.RegisterDecorator(typeof(IRequestHandler<,>), typeof(TransactionalRequestHandlerDecorator<,>));
             dependencyRegister.RegisterDecorator(typeof(ICommandHandler<>), typeof(TransactionalCommandHandlerDecorator<>));
-            dependencyRegister.RegisterDecorator(typeof(IRequestHandler<,>), typeof(LoggingRequestHandlerDecorator<,>));
-            dependencyRegister.RegisterDecorator(typeof(ICommandHandler<>), typeof(LoggingCommandHandlerDecorator<>));
+
+            if (_frameworkConfiguration.EnableLogInRequest)
+                dependencyRegister.RegisterDecorator(typeof(IRequestHandler<,>), typeof(LoggingRequestHandlerDecorator<,>));
+
+            if (_frameworkConfiguration.EnableLogInCommand)
+                dependencyRegister.RegisterDecorator(typeof(ICommandHandler<>), typeof(LoggingCommandHandlerDecorator<>));
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace Framework.Config.Loaders
+﻿using System;
+
+namespace Framework.Config.Loaders
 {
     public class FrameworkModuleBuilder : IIocModuleBuilder, IModuleBuilder
     {
@@ -19,10 +21,19 @@
             return this;
         }
 
-        public IModuleBuilder WithIocModule(IFrameworkIocModule module)
+        public IModuleBuilder WithIocModule(IFrameworkIocModule module, Action<FrameworkConfiguration> frameworkConfiguration = null)
         {
+            var configuration = new FrameworkConfiguration();
+
+            if (frameworkConfiguration is not null)
+                frameworkConfiguration.Invoke(configuration);
+
             FrameworkModuleRegistry.Install(module);
-            FrameworkModuleRegistry.Install<CoreModule>();
+
+            var coreModule = new CoreModule(configuration);
+
+            FrameworkModuleRegistry.Install(coreModule);
+
             return this;
         }
     }
