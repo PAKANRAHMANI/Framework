@@ -5,17 +5,17 @@ namespace Framework.Kafka
 {
     public class KafkaModule : IFrameworkModule
     {
-        private readonly KafkaConfiguration _configuration;
+        private readonly KafkaConfigurations _configurations;
 
-        public KafkaModule(Action<KafkaConfiguration> config)
+        public KafkaModule(Action<KafkaConfigurations> config)
         {
-            _configuration = new KafkaConfiguration();
+            _configurations = new KafkaConfigurations();
 
-            config?.Invoke(_configuration);
+            config?.Invoke(_configurations);
         }
         public void Register(IDependencyRegister dependencyRegister)
         {
-            dependencyRegister.RegisterScoped(typeof(KafkaConfiguration), _configuration);
+            dependencyRegister.RegisterScoped(typeof(KafkaConfigurations), _configurations);
 
             dependencyRegister.RegisterKafka();
 
