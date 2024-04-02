@@ -25,6 +25,7 @@ namespace Framework.Config
         void RegisterDecorator(Type service, Type decorator);
         void RegisterScoped(Type implementationType, object config);
         void RegisterSingleton(Type implementationType, object config);
-        void RegisterKafka();
+        void RegisterKafkaProducer();
+        void RegisterKafkaConsumer();
     }
 }

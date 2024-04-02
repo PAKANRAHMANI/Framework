@@ -1,4 +1,5 @@
 ﻿using Confluent.Kafka;
+using Framework.Kafka.Configurations;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -8,22 +9,22 @@ namespace Framework.Kafka
 {
     public class KafkaConsumer<TKey, TMessage> : IKafkaConsumer<TKey, TMessage>
     {
-        private readonly KafkaConfigurations _configurations;
+        private readonly ConsumerConfiguration _configurations;
         private readonly IConsumer<TKey, TMessage> _consumer;
-        public KafkaConsumer(KafkaConfigurations configurations)
+        public KafkaConsumer(ConsumerConfiguration configurations)
         {
             _configurations = configurations;
             var config = new ConsumerConfig
             {
-                GroupId = configurations.ConsumerConfiguration.GroupId,
-                BootstrapServers = configurations.ConsumerConfiguration.BootstrapServers,
-                EnableAutoOffsetStore = configurations.ConsumerConfiguration.EnableAutoOffsetStore,
-                AutoOffsetReset = configurations.ConsumerConfiguration.AutoOffsetReset,
-                EnableAutoCommit = configurations.ConsumerConfiguration.EnableAutoCommit,
-                SaslUsername = configurations.ConsumerConfiguration.SaslUserName,
-                SaslPassword = configurations.ConsumerConfiguration.SaslPassword,
-                SecurityProtocol = configurations.ConsumerConfiguration.SecurityProtocol,
-                SaslMechanism = configurations.ConsumerConfiguration.SaslMechanism
+                GroupId = configurations.GroupId,
+                BootstrapServers = configurations.BootstrapServers,
+                EnableAutoOffsetStore = configurations.EnableAutoOffsetStore,
+                AutoOffsetReset = configurations.AutoOffsetReset,
+                EnableAutoCommit = configurations.EnableAutoCommit,
+                SaslUsername = configurations.SaslUserName,
+                SaslPassword = configurations.SaslPassword,
+                SecurityProtocol = configurations.SecurityProtocol,
+                SaslMechanism = configurations.SaslMechanism
             };
 
             _consumer = new ConsumerBuilder<TKey, TMessage>(config).Build();
@@ -31,7 +32,7 @@ namespace Framework.Kafka
 
         public void Consume(Action<ConsumeResult<TKey, TMessage>> action, CancellationToken cancellationToken)
         {
-            _consumer.Subscribe(_configurations.ConsumerConfiguration.TopicName);
+            _consumer.Subscribe(_configurations.TopicName);
 
             while (true & !cancellationToken.IsCancellationRequested)
             {
@@ -44,7 +45,7 @@ namespace Framework.Kafka
         {
             await Task.Run(() =>
             {
-                _consumer.Subscribe(_configurations.ConsumerConfiguration.TopicName);
+                _consumer.Subscribe(_configurations.TopicName);
 
                 while (true & !cancellationToken.IsCancellationRequested)
                 {
@@ -56,7 +57,7 @@ namespace Framework.Kafka
 
         public void Consume(Action<ConsumeResult<TKey, TMessage>> action, int partitionNumber, CancellationToken cancellationToken)
         {
-            _consumer.Assign(new TopicPartition(_configurations.ConsumerConfiguration.TopicName, new Partition(partitionNumber)));
+            _consumer.Assign(new TopicPartition(_configurations.TopicName, new Partition(partitionNumber)));
 
             while (true & !cancellationToken.IsCancellationRequested)
             {
@@ -68,7 +69,7 @@ namespace Framework.Kafka
         {
             await Task.Run(() =>
             {
-                _consumer.Assign(new TopicPartition(_configurations.ConsumerConfiguration.TopicName, new Partition(partitionNumber)));
+                _consumer.Assign(new TopicPartition(_configurations.TopicName, new Partition(partitionNumber)));
 
                 while (true & !cancellationToken.IsCancellationRequested)
                 {
@@ -125,7 +126,7 @@ namespace Framework.Kafka
 
         public void Consume(Action<ConsumeResult<TKey, TMessage>> action, int partitionNumber, long offset, CancellationToken cancellationToken)
         {
-            var partitionOffset = new TopicPartitionOffset(_configurations.ConsumerConfiguration.TopicName, new Partition(partitionNumber), new Offset(offset));
+            var partitionOffset = new TopicPartitionOffset(_configurations.TopicName, new Partition(partitionNumber), new Offset(offset));
 
             _consumer.Assign(partitionOffset);
 
@@ -141,7 +142,7 @@ namespace Framework.Kafka
         {
             await Task.Run(() =>
             {
-                var partitionOffset = new TopicPartitionOffset(_configurations.ConsumerConfiguration.TopicName, new Partition(partitionNumber), new Offset(offset));
+                var partitionOffset = new TopicPartitionOffset(_configurations.TopicName, new Partition(partitionNumber), new Offset(offset));
 
                 _consumer.Assign(partitionOffset);
 
