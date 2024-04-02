@@ -138,17 +138,21 @@ namespace Framework.Config.Autofac
                 .InstancePerLifetimeScope();
         }
 
-        public void RegisterKafka()
+        public void RegisterKafkaConsumer()
+        {
+
+            _container
+                .RegisterGeneric(typeof(KafkaConsumer<,>))
+                .As(typeof(IKafkaConsumer<,>))
+                .SingleInstance();
+        }   
+        public void RegisterKafkaProducer()
         {
             _container
                 .RegisterGeneric(typeof(KafkaProducer<,>))
                 .As(typeof(IKafkaProducer<,>))
                 .SingleInstance();
 
-            _container
-                .RegisterGeneric(typeof(KafkaConsumer<,>))
-                .As(typeof(IKafkaConsumer<,>))
-                .SingleInstance();
         }
         
     }

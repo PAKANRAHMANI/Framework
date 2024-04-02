@@ -6,22 +6,27 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Framework.Kafka.Configurations;
 
 namespace Framework.Kafka
 {
     public class KafkaProducer<TKey, TMessage> : IKafkaProducer<TKey, TMessage>, IDisposable
     {
-        private readonly KafkaConfiguration _configuration;
+        private readonly ProducerConfiguration _configurations;
         private readonly IProducer<TKey, TMessage> _producer;
         public event EventHandler<ErrorEventArgs> Error;
-        public KafkaProducer(KafkaConfiguration configuration)
+        public KafkaProducer(ProducerConfiguration configurations)
         {
-            _configuration = configuration;
+            _configurations = configurations;
             var config = new ProducerConfig()
             {
-                BootstrapServers = configuration.ProducerBootstrapServers,
-                MessageTimeoutMs = configuration.MessageTimeoutMs,
-                Acks = Acks.All
+                BootstrapServers = configurations.BootstrapServers,
+                MessageTimeoutMs = configurations.MessageTimeoutMs,
+                Acks = Acks.All,
+                SaslUsername = configurations.SaslUserName,
+                SaslPassword = configurations.SaslPassword,
+                SecurityProtocol = configurations.SecurityProtocol,
+                SaslMechanism = configurations.SaslMechanism
             };
 
             var producerBuilder = new ProducerBuilder<string, byte[]>(config);
@@ -44,7 +49,7 @@ namespace Framework.Kafka
 
         public async Task<DeliveryResult<TKey, TMessage>> ProduceAsync(TKey key, TMessage message, CancellationToken cancellationToken = default)
         {
-            return await _producer.ProduceAsync(_configuration.ProducerTopicName, new Message<TKey, TMessage>
+            return await _producer.ProduceAsync(_configurations.TopicName, new Message<TKey, TMessage>
             {
                 Value = message,
                 Key = key
@@ -60,7 +65,7 @@ namespace Framework.Kafka
                 kafkaHeaders.Add(new Header(header.Key, Encoding.UTF8.GetBytes(header.Value)));
             }
 
-            return await _producer.ProduceAsync(_configuration.ProducerTopicName, new Message<TKey, TMessage>
+            return await _producer.ProduceAsync(_configurations.TopicName, new Message<TKey, TMessage>
             {
                 Value = message,
                 Key = key,
@@ -70,7 +75,7 @@ namespace Framework.Kafka
 
         public async Task<DeliveryResult<TKey, TMessage>> ProduceAsync(TKey key, TMessage message, int partitionNumber, CancellationToken cancellationToken = default)
         {
-            return await _producer.ProduceAsync(new TopicPartition(_configuration.ProducerTopicName, new Partition(partitionNumber)), new Message<TKey, TMessage>
+            return await _producer.ProduceAsync(new TopicPartition(_configurations.TopicName, new Partition(partitionNumber)), new Message<TKey, TMessage>
             {
                 Value = message,
                 Key = key
@@ -79,7 +84,7 @@ namespace Framework.Kafka
 
         public void Produce(TKey key, TMessage message, Action<DeliveryResult<TKey, TMessage>> action)
         {
-            _producer.Produce(_configuration.ProducerTopicName, new Message<TKey, TMessage>
+            _producer.Produce(_configurations.TopicName, new Message<TKey, TMessage>
             {
                 Value = message,
                 Key = key
@@ -87,7 +92,7 @@ namespace Framework.Kafka
         }
         public void Produce(TKey key, TMessage message,int partitionNumber, Action<DeliveryResult<TKey, TMessage>> action)
         {
-            _producer.Produce(new TopicPartition(_configuration.ProducerTopicName,new Partition(partitionNumber)), new Message<TKey, TMessage>
+            _producer.Produce(new TopicPartition(_configurations.TopicName,new Partition(partitionNumber)), new Message<TKey, TMessage>
             {
                 Value = message,
                 Key = key
