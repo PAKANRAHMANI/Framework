@@ -24,7 +24,13 @@ namespace Framework.Kafka
                 SaslUsername = configurations.SaslUserName,
                 SaslPassword = configurations.SaslPassword,
                 SecurityProtocol = configurations.SecurityProtocol,
-                SaslMechanism = configurations.SaslMechanism
+                SaslMechanism = configurations.SaslMechanism,
+                IsolationLevel = configurations.IsolationLevel,
+                AutoCommitIntervalMs = configurations.AutoCommitIntervalMs,
+                HeartbeatIntervalMs = configurations.HeartbeatIntervalMs,
+                FetchErrorBackoffMs = configurations.FetchErrorBackoffMs,
+                FetchWaitMaxMs = configurations.FetchWaitMaxMs,
+                SessionTimeoutMs = configurations.SessionTimeoutMs
             };
 
             _consumer = new ConsumerBuilder<TKey, TMessage>(config).Build();
