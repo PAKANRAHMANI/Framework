@@ -17,7 +17,6 @@ public class KafkaProducerModule : IFrameworkModule
     public void Register(IDependencyRegister dependencyRegister)
     {
         dependencyRegister.RegisterScoped(typeof(ProducerConfiguration), _configurations);
-
         dependencyRegister.RegisterKafkaProducer();
 
     }

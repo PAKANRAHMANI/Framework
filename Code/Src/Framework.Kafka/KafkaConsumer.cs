@@ -41,7 +41,7 @@ namespace Framework.Kafka
         }
 
 
-        public async Task ConsumeAsync(Action<ConsumeResult<TKey, TMessage>> action, CancellationToken cancellationToken)
+        public async Task ConsumeAsync(Func<ConsumeResult<TKey, TMessage>, Task> action, CancellationToken cancellationToken)
         {
             await Task.Run(() =>
             {
@@ -172,19 +172,19 @@ namespace Framework.Kafka
         public async Task ConsumeAsync(Action<ConsumeResult<TKey, TMessage>> action, string topic, int partitionNumber, Timestamp timestamp, TimeSpan timeout, CancellationToken cancellationToken)
         {
             await Task.Run(() =>
-           {
-               var topicPartitionTimeStamp = new TopicPartitionTimestamp(topic, new Partition(partitionNumber), timestamp);
+            {
+                var topicPartitionTimeStamp = new TopicPartitionTimestamp(topic, new Partition(partitionNumber), timestamp);
 
-               var topicPartitionOffsets = _consumer.OffsetsForTimes(new List<TopicPartitionTimestamp>() { topicPartitionTimeStamp }, timeout);
+                var topicPartitionOffsets = _consumer.OffsetsForTimes(new List<TopicPartitionTimestamp>() { topicPartitionTimeStamp }, timeout);
 
-               _consumer.Assign(topicPartitionOffsets);
+                _consumer.Assign(topicPartitionOffsets);
 
-               while (true & !cancellationToken.IsCancellationRequested)
-               {
+                while (true & !cancellationToken.IsCancellationRequested)
+                {
 
-                   ConsumeFromKafka(action, cancellationToken);
-               }
-           }, cancellationToken);
+                    ConsumeFromKafka(action, cancellationToken);
+                }
+            }, cancellationToken);
         }
 
         public void Commit(params TopicPartitionOffset[] topicPartitionOffsets)
@@ -207,7 +207,21 @@ namespace Framework.Kafka
             }
             catch (Exception)
             {
-                _consumer.Close();
+                //_consumer.Close();
+            }
+        }
+
+        private async Task ConsumeFromKafka(Func<ConsumeResult<TKey, TMessage>, Task> func, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var consumeResult = _consumer.Consume(cancellationToken);
+
+                await func(consumeResult);
+            }
+            catch (Exception)
+            {
+                //_consumer.Close();
             }
         }
     }

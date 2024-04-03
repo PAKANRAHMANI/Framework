@@ -9,7 +9,7 @@ namespace Framework.Kafka
     public interface IKafkaConsumer<TKey, TMessage>
     {
         void Consume(Action<ConsumeResult<TKey, TMessage>> action, CancellationToken cancellationToken);
-        Task ConsumeAsync(Action<ConsumeResult<TKey, TMessage>> action, CancellationToken cancellationToken);
+        Task ConsumeAsync(Func<ConsumeResult<TKey, TMessage>, Task> action, CancellationToken cancellationToken);
         void Consume(Action<ConsumeResult<TKey, TMessage>> action, int partitionNumber, CancellationToken cancellationToken);
         Task ConsumeAsync(Action<ConsumeResult<TKey, TMessage>> action, int partitionNumber, CancellationToken cancellationToken);
         void Consume(Action<ConsumeResult<TKey, TMessage>> action, string topicName, int partitionNumber, CancellationToken cancellationToken);

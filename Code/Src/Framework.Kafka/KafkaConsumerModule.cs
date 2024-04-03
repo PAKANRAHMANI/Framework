@@ -19,7 +19,7 @@ namespace Framework.Kafka
             dependencyRegister.RegisterScoped(typeof(ConsumerConfiguration), _configurations);
 
             dependencyRegister.RegisterKafkaConsumer();
-
+           
             dependencyRegister.RegisterSingleton<IOffsetManager,OffsetManager>();
         }
     }
