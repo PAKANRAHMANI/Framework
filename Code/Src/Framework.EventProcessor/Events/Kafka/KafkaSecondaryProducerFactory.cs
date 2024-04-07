@@ -7,14 +7,19 @@ namespace Framework.EventProcessor.Events.Kafka;
 
 public static class KafkaSecondaryProducerFactory<TKey, TMessage> where TMessage : class
 {
-    public static IProducer<TKey, TMessage> Create(SecondaryProducerConfiguration configuration,ILogger logger)
+    public static IProducer<TKey, TMessage> Create(SecondaryProducerConfiguration configuration, ILogger logger)
     {
         var config = new ProducerConfig()
         {
             BootstrapServers = configuration.BootstrapServer,
             MessageTimeoutMs = configuration.MessageTimeoutMs,
             Acks = configuration.Acks,
-            EnableIdempotence = configuration.EnableIdempotence
+            EnableIdempotence = configuration.EnableIdempotence,
+            SaslUsername = configuration.SaslUserName,
+            SaslPassword = configuration.SaslPassword,
+            SaslMechanism = configuration.SaslMechanism,
+            SecurityProtocol = configuration.SecurityProtocol,
+            CompressionType = CompressionType.Snappy,
         };
 
         return new ProducerBuilder<TKey, TMessage>(config)

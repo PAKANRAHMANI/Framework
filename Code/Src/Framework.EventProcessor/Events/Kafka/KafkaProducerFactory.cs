@@ -15,7 +15,11 @@ namespace Framework.EventProcessor.Events.Kafka
                 MessageTimeoutMs = configuration.MessageTimeoutMs,
                 Acks = configuration.Acks,
                 EnableIdempotence = configuration.EnableIdempotence,
-                CompressionType = CompressionType.Snappy
+                CompressionType = CompressionType.Snappy,
+                SaslUsername = configuration.SaslUserName,
+                SaslPassword = configuration.SaslPassword,
+                SaslMechanism = configuration.SaslMechanism,
+                SecurityProtocol = configuration.SecurityProtocol
             };
 
             return new ProducerBuilder<TKey, TMessage>(config)

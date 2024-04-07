@@ -12,5 +12,9 @@ namespace Framework.EventProcessor.Configurations
         public string TopicName { get; set; }
         public byte PartitionNumber { get; set; }
         public string TopicKey { get; set; }
+        public string SaslUserName { get; set; }
+        public string SaslPassword { get; set; }
+        public SaslMechanism? SaslMechanism { get; set; }
+        public SecurityProtocol? SecurityProtocol { get; set; }
     }
 }
