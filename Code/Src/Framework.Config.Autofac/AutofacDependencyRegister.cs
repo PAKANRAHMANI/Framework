@@ -154,6 +154,13 @@ namespace Framework.Config.Autofac
                 .SingleInstance();
 
         }
-        
+
+        public void RegisterTransient<TService>(Func<TService> factory, Action<TService> release = null)
+        {
+            var registration = _container.Register(a => factory.Invoke()).InstancePerDependency();
+
+            if (release != null)
+                registration.OnRelease(release);
+        }
     }
 }
