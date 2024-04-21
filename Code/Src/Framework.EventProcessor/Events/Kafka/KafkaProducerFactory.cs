@@ -24,8 +24,8 @@ namespace Framework.EventProcessor.Events.Kafka
 
             return new ProducerBuilder<TKey, TMessage>(config)
                 .SetValueSerializer(new KafkaJsonSerializer<TMessage>(logger))
-                .SetLogHandler((producer, logMessage) => logger.Write($"{producer.Name} : {logMessage.Message} - Kafka Log Level Is : {logMessage.Level}", LogLevel.Information))
-                .SetErrorHandler((producer, error) => logger.WriteException(new KafkaException(error)))
+                .SetLogHandler((_, logMessage) => logger.Write($"{logMessage.Name} : {logMessage.Message} - Kafka Log Level Is : {logMessage.Level}", LogLevel.Information))
+                .SetErrorHandler((_, error) => logger.WriteException(new KafkaException(error)))
                 .Build();
         }
     }
