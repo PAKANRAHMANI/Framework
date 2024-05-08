@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Reflection;
+using System.Threading.Tasks;
+using System.Transactions;
 using Framework.DataAccess.EF;
 using Framework.Testing.Core.Fakes;
 using Microsoft.EntityFrameworkCore;
@@ -9,11 +11,13 @@ namespace Framework.Testing.Core.Persist
     public abstract class EfPersistTestDbContext<TDbContext> : FrameworkDbContext, IDisposable where TDbContext : FrameworkDbContext
     {
         private readonly Assembly _mappingAssembly;
-        public readonly EfUnitOfWork EfUnitOfWork;
-        public TDbContext DbContext;
-        public FakeConfigurator Configurator { get; private set; }
+        protected readonly TransactionScope TransactionScope;
+        protected TDbContext DbContext;
+        protected FakeConfigurator Configurator { get; private set; }
         protected EfPersistTestDbContext(string connectionString, Assembly mappingAssembly)
         {
+            this.TransactionScope = new TransactionScope(TransactionScopeOption.Required, TransactionScopeAsyncFlowOption.Enabled);
+
             this._mappingAssembly = mappingAssembly;
 
             this.Configurator = new FakeConfigurator();
@@ -22,8 +26,12 @@ namespace Framework.Testing.Core.Persist
 
             this.DbContext = (TDbContext)Activator.CreateInstance(typeof(TDbContext), option.Options);
 
-            this.EfUnitOfWork = new EfUnitOfWork(this.DbContext);
+        }
 
+
+        public async Task SaveChangesAsync()
+        {
+            await DbContext.SaveChangesAsync();
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -34,6 +42,7 @@ namespace Framework.Testing.Core.Persist
         public void Dispose()
         {
             this.DbContext?.Dispose();
+            this.TransactionScope.Dispose();
         }
     }
 }
