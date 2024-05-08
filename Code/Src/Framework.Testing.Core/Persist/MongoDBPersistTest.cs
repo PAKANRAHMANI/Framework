@@ -1,6 +1,10 @@
 ﻿using MongoDB.Driver;
 using System;
+using System.Linq;
 using Humanizer;
+using Framework.Testing.Core.Persist.MongoDb;
+using System.Reflection;
+using Framework.DataAccess.Mongo;
 
 namespace Framework.Testing.Core.Persist
 {
@@ -14,8 +18,10 @@ namespace Framework.Testing.Core.Persist
         protected IMongoCollection<T> DbCollection { get; }
 
 
-        protected MongoDbPersistTest(Action<MongoDbPersistConfiguration> configuration)
+        protected MongoDbPersistTest(Action<MongoDbPersistConfiguration> configuration, Assembly mappingAssembly)
         {
+            ApplyMapping(mappingAssembly);
+
             this._config = new MongoDbPersistConfiguration();
 
             configuration?.Invoke(this._config);
@@ -35,6 +41,16 @@ namespace Framework.Testing.Core.Persist
                 this.Session.StartTransaction();
             }
         }
+
+        private static void ApplyMapping(Assembly mappingAssembly)
+        {
+            var mapperTypes = mappingAssembly.GetTypes().Where(a => typeof(IBsonMapping).IsAssignableFrom(a)).ToList();
+            foreach (var instanceOfMapper in mapperTypes.Select(mapper => (IBsonMapping)Activator.CreateInstance(mapper)))
+            {
+                instanceOfMapper?.Register();
+            }
+        }
+
         protected abstract object DocumentId { get; set; }
         public void Dispose()
         {

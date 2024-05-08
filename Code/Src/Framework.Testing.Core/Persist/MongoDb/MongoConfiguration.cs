@@ -1,4 +1,4 @@
-﻿namespace Framework.Testing.Core.Persist
+﻿namespace Framework.Testing.Core.Persist.MongoDb
 {
     public class MongoConfiguration
     {

@@ -1,8 +1,9 @@
 ﻿using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
 using System.IO;
+using System.Reflection;
 
-namespace Framework.Testing.Core.Persist
+namespace Framework.Testing.Core.Persist.MongoDb
 {
     public class MongoDbFactory<TDocument> : MongoDbPersistTest<TDocument>
     {
@@ -10,20 +11,20 @@ namespace Framework.Testing.Core.Persist
         public IClientSessionHandle ClientSession => Session;
 
         public IMongoCollection<TDocument> MongoCollection => DbCollection;
-        public MongoDbFactory() : base(a =>
+        public MongoDbFactory(Assembly mappingAssembly) : base(a =>
         {
             a.ConnectionString = Config.ConnectionString;
             a.DbName = Config.DbName;
             a.IsPluralCollectionName = Config.IsPluralCollectionName;
             a.IsUsingTransaction = Config.IsUsingTransaction;
-        })
+        }, mappingAssembly)
         {
 
         }
         protected override object DocumentId { get; set; }
         public void SetDocumentId(object documentId)
         {
-            this.DocumentId = documentId;
+            DocumentId = documentId;
         }
         private static MongoConfiguration GetConfig()
         {

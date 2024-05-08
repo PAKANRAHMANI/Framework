@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Framework.Testing.Core.Persist
+namespace Framework.Testing.Core.Persist.MongoDb
 {
     public class MongoDbPersistConfiguration
     {
