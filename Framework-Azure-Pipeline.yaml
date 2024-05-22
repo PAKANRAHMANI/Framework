@@ -1,6 +1,6 @@
 ##################################################################################################
 trigger:
- - dotNet6
+ - dotNet8
 ##################################################################################################
 resources:
 - repo: self
@@ -37,6 +37,23 @@ steps:
        command: test
        projects: '**/*.Tests.Integration.csproj'
        arguments: '--configuration $(BuildConfiguration)'
+##################################################################################################
+   - powershell: |
+      [xml]$project = Get-Content -Path ./Code/Src/Framework.DataAccess.ClickHouse.CH/Framework.DataAccess.CH.csproj
+      $version = $project.Project.PropertyGroup.Version
+      echo "version: "
+      echo $version
+      echo "##vso[task.setvariable variable=version]$version"
+ 
+     displayName: 'Get Version of Framework.DataAccess.CH'
+##################################################################################################
+   - task: DotNetCoreCLI@2
+     displayName: 'Pack Framework.DataAccess.CH'
+     inputs:
+       command: custom
+       projects: '**/Framework.DataAccess.CH.csproj'
+       custom: pack
+       arguments: '/p:Configuration=Release /p:Version=$(version) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)'
 ##################################################################################################
    - powershell: |
       [xml]$project = Get-Content -Path ./Code/Src/Framework.HealthCheck/Framework.HealthCheck.csproj
