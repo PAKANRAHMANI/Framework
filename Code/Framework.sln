@@ -108,7 +108,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Framework.HealthCheck", "Sr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Framework.Sentry", "Src\Framework.Sentry\Framework.Sentry.csproj", "{9125A645-906E-438B-A85F-E826EE0F1562}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Framework.DataAccess.CH", "Src\Framework.DataAccess.ClickHouse.Ado\Framework.DataAccess.CH.csproj", "{13F78E25-1453-42C3-87C9-479F2708E3BE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Framework.DataAccess.CH", "Src\Framework.DataAccess.ClickHouse.CH\Framework.DataAccess.CH.csproj", "{0153776A-5FE2-40D3-8639-35D6DB4BFFF1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -298,10 +298,10 @@ Global
 		{9125A645-906E-438B-A85F-E826EE0F1562}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9125A645-906E-438B-A85F-E826EE0F1562}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9125A645-906E-438B-A85F-E826EE0F1562}.Release|Any CPU.Build.0 = Release|Any CPU
-		{13F78E25-1453-42C3-87C9-479F2708E3BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{13F78E25-1453-42C3-87C9-479F2708E3BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{13F78E25-1453-42C3-87C9-479F2708E3BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{13F78E25-1453-42C3-87C9-479F2708E3BE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0153776A-5FE2-40D3-8639-35D6DB4BFFF1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0153776A-5FE2-40D3-8639-35D6DB4BFFF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0153776A-5FE2-40D3-8639-35D6DB4BFFF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0153776A-5FE2-40D3-8639-35D6DB4BFFF1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -354,7 +354,7 @@ Global
 		{CD2356B5-A117-4649-A610-8F7411197209} = {25A183FD-7661-4697-96E4-895E57A64352}
 		{2453FD47-15C9-48DB-A0AC-5847BBCBF941} = {25A183FD-7661-4697-96E4-895E57A64352}
 		{9125A645-906E-438B-A85F-E826EE0F1562} = {25A183FD-7661-4697-96E4-895E57A64352}
-		{13F78E25-1453-42C3-87C9-479F2708E3BE} = {D54D07CB-8231-46E9-9C59-140FE9FF9188}
+		{0153776A-5FE2-40D3-8639-35D6DB4BFFF1} = {D54D07CB-8231-46E9-9C59-140FE9FF9188}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {FD22E860-CCCE-47C1-B1BE-51511F2D9BF8}
