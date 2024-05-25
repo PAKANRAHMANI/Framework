@@ -45,4 +45,9 @@ public class DistributedCache : IDistributedCache
 
 		return obj;
 	}
+
+	public void Remove(string key)
+	{
+		_database.KeyDelete(key);
+	}
 }
