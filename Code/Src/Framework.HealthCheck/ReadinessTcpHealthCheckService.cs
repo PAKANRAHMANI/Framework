@@ -6,11 +6,13 @@ namespace Framework.HealthCheck
 {
     public class ReadinessTcpHealthCheckService
     {
+        private readonly HealthCheckConfiguration _healthCheckConfig;
         private readonly ILogger _logger;
         private readonly TcpListener _listener;
         private bool _isStart = false;
         public ReadinessTcpHealthCheckService(HealthCheckConfiguration healthCheckConfig, ILogger logger)
         {
+            _healthCheckConfig = healthCheckConfig;
             _logger = logger;
             _listener = new TcpListener(IPAddress.Any, healthCheckConfig.ReadinessPort);
         }
@@ -21,17 +23,20 @@ namespace Framework.HealthCheck
                 if (_isStart)
                     return;
 
-                _logger.Write("going to listen to readyNes port", LogLevel.Information);
+                if (_healthCheckConfig.LogIsActive)
+                    _logger.Write("going to listen to readyNes port", LogLevel.Information);
 
                 _listener.Start();
 
                 _isStart = true;
 
-                _logger.Write("readyNes listener is Listening", LogLevel.Information);
+                if (_healthCheckConfig.LogIsActive)
+                    _logger.Write("readyNes listener is Listening", LogLevel.Information);
             }
             catch (Exception ex)
             {
-                _logger.WriteException(ex);
+                if (_healthCheckConfig.LogIsActive)
+                    _logger.WriteException(ex);
 
                 _listener.Stop();
             }

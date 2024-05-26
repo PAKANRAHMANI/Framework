@@ -11,4 +11,5 @@ public class HealthCheckConfiguration
     public int ReadinessPort { get; set; }
     public int LivenessPort { get; set; }
     public int LivenessDelay { get; set; }
+    public bool LogIsActive { get; set; } = true;
 }

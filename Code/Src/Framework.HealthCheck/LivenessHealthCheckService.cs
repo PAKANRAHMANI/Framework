@@ -48,7 +48,8 @@ namespace Framework.HealthCheck
                 }
                 catch (Exception ex)
                 {
-                    _logger.WriteException(ex);
+                    if (_healthCheckConfig.LogIsActive)
+                        _logger.WriteException(ex);
 
                     StopTcp();
                 }
@@ -64,25 +65,31 @@ namespace Framework.HealthCheck
                 if (result.Status != HealthStatus.Healthy)
                 {
                     foreach (var healthReportEntry in result.Entries)
-                        _logger.Write($"{healthReportEntry.Key} is {healthReportEntry.Value.Status}", LogLevel.Information);
+                    {
+                        if (_healthCheckConfig.LogIsActive)
+                            _logger.Write($"{healthReportEntry.Key} is {healthReportEntry.Value.Status}", LogLevel.Information);
+                    }
 
                     _livenessListener.Stop();
 
-                    _logger.Write( "Service is unhealthy. Listener has been stopped", LogLevel.Information);
+                    if (_healthCheckConfig.LogIsActive)
+                        _logger.Write("Service is unhealthy. Listener has been stopped", LogLevel.Information);
 
                     return;
                 }
 
                 _livenessListener.Start();
 
-                _logger.Write("LiveNess listener is Listening", LogLevel.Information);
+                if (_healthCheckConfig.LogIsActive)
+                    _logger.Write("LiveNess listener is Listening", LogLevel.Information);
 
                 _readinessTcpHealthCheckService.Start();
 
             }
             catch (Exception ex)
             {
-                _logger.WriteException(ex);
+                if (_healthCheckConfig.LogIsActive)
+                    _logger.WriteException(ex);
             }
         }
         public override void Dispose()
