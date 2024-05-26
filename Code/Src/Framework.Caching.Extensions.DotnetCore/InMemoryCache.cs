@@ -28,4 +28,9 @@ public class InMemoryCache : IInMemoryCache, ICacheControl
 	{
 		return _memoryCache.TryGetValue(key, out T value) ? value : null;
 	}
+
+	public void Remove(string key)
+	{
+		_memoryCache.Remove(key);
+	}
 }
