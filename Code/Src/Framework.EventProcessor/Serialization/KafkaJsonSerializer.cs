@@ -5,14 +5,8 @@ using Newtonsoft.Json;
 
 namespace Framework.EventProcessor.Serialization
 {
-    public class KafkaJsonSerializer<TMessage> : ISerializer<TMessage> where TMessage : class
+    public sealed class KafkaJsonSerializer<TMessage>(ILogger logger) : ISerializer<TMessage> where TMessage : class
     {
-        private readonly ILogger _logger;
-
-        public KafkaJsonSerializer(ILogger logger)
-        {
-            _logger = logger;
-        }
         public byte[] Serialize(TMessage data, SerializationContext context)
         {
             try
@@ -23,7 +17,7 @@ namespace Framework.EventProcessor.Serialization
             }
             catch (Exception ex)
             {
-                _logger.WriteException(ex);
+                logger.WriteException(ex);
                 return null;
             }
         }

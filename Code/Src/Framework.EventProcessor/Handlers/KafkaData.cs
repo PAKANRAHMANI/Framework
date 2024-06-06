@@ -2,7 +2,7 @@
 
 namespace Framework.EventProcessor.Handlers;
 
-public class KafkaData
+public sealed class KafkaData
 {
     public bool UseOfSpecificPartition { get; set; }
     public IEvent Event { get; set; }

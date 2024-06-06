@@ -3,9 +3,9 @@ using System.Transactions;
 
 namespace Framework.EventProcessor.DataStore.Sql
 {
-    public static class SqlQueries
+    internal static class SqlQueries
     {
-        public static long GetCursorPosition(string connectionString, string tableName)
+        internal static long GetCursorPosition(string connectionString, string tableName)
         {
             using (var connection = new SqlConnection(connectionString))
             {
@@ -18,7 +18,7 @@ namespace Framework.EventProcessor.DataStore.Sql
                 return Convert.ToInt64(command.ExecuteScalar());
             }
         }
-        public static void MoveCursorPosition(string connectionString, long position, string tableName)
+        internal static void MoveCursorPosition(string connectionString, long position, string tableName)
         {
             var transactionOptions = new TransactionOptions
             {
@@ -45,7 +45,7 @@ namespace Framework.EventProcessor.DataStore.Sql
             }
         }
 
-        public static List<EventItem> GetEventsFromPosition(string connectionString, long position, string tableName)
+        internal static List<EventItem> GetEventsFromPosition(string connectionString, long position, string tableName)
         {
             var items = new List<EventItem>();
             using (var connection = new SqlConnection(connectionString))

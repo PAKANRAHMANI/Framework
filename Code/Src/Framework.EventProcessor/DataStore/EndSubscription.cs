@@ -1,16 +1,10 @@
 ﻿namespace Framework.EventProcessor.DataStore
 {
-    public class EndSubscription : ISubscription
+    internal sealed class EndSubscription(Action stop) : ISubscription
     {
-        private readonly Action _stop;
-        public EndSubscription(Action stop)
-        {
-            _stop = stop;
-        }
-
         public void UnSubscribe()
         {
-            _stop.Invoke();
+            stop.Invoke();
         }
         public void Dispose()
         {

@@ -2,7 +2,7 @@
 
 namespace Framework.EventProcessor.Transformation
 {
-    public interface IEventTransformerLookUp
+    internal interface IEventTransformerLookUp
     {
         IEventTransformer LookUpTransformer(IEvent @event);
     }

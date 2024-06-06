@@ -1,6 +1,6 @@
 ﻿namespace Framework.EventProcessor.Configurations
 {
-    public class MongoStoreConfig
+    public sealed record MongoStoreConfig
     {
         public string CursorCollectionName { get; set; }
         public string EventsCollectionName { get; set; }

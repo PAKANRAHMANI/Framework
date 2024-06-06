@@ -4,14 +4,8 @@ using Framework.Core.Logging;
 
 namespace Framework.EventProcessor.Transformation
 {
-    public class EventTransformerLookUp : IEventTransformerLookUp
+    internal class EventTransformerLookUp(ILogger logger) : IEventTransformerLookUp
     {
-        private readonly ILogger _logger;
-
-        public EventTransformerLookUp(ILogger logger)
-        {
-            _logger = logger;
-        }
         private readonly Dictionary<string, Type> _transformers = new();
         public void AddTypesFromAssembly(Assembly assembly)
         {
@@ -44,7 +38,7 @@ namespace Framework.EventProcessor.Transformation
             }
             catch (Exception e)
             {
-                _logger.WriteException(e);
+                logger.WriteException(e);
                 return null;
             }
         }

@@ -1,6 +1,6 @@
 ﻿namespace Framework.EventProcessor.Configurations;
 
-public class MassTransitConfig
+public sealed record MassTransitConfig
 {
     public string RabbitMqConnectionString { get; set; }
 }

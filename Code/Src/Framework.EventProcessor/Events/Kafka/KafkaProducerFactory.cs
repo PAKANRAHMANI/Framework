@@ -5,9 +5,9 @@ using Framework.EventProcessor.Serialization;
 
 namespace Framework.EventProcessor.Events.Kafka
 {
-    public static class KafkaProducerFactory<TKey, TMessage> where TMessage : class
+    internal static class KafkaProducerFactory<TKey, TMessage> where TMessage : class
     {
-        public static IProducer<TKey, TMessage> Create(ProducerConfiguration configuration, ILogger logger)
+        internal static IProducer<TKey, TMessage> Create(ProducerConfiguration configuration, ILogger logger)
         {
             var config = new ProducerConfig()
             {

@@ -3,27 +3,21 @@ using Serilog.Events;
 
 namespace Framework.EventProcessor.Initial
 {
-    internal class SerilogAdapter : ILogger
+    internal sealed class SerilogAdapter(Serilog.ILogger logger) : ILogger
     {
-        private readonly Serilog.ILogger _logger;
-
-        public SerilogAdapter(Serilog.ILogger logger)
-        {
-            _logger = logger;
-        }
         public void Write(string message, LogLevel level)
         {
-            _logger.Write((LogEventLevel)level, message);
+            logger.Write((LogEventLevel)level, message);
         }
 
         public void Write(string template, LogLevel level, params object[] parameters)
         {
-            _logger.Write((LogEventLevel)level, template, parameters);
+            logger.Write((LogEventLevel)level, template, parameters);
         }
 
         public void WriteException(Exception exception)
         {
-            _logger.Error(exception, "error");
+            logger.Error(exception, "error");
         }
     }
 }

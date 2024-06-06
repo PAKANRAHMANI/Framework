@@ -2,7 +2,7 @@
 
 namespace Framework.EventProcessor.Configurations
 {
-    public class ProducerConfiguration
+    public sealed record ProducerConfiguration
     {
         public string BootstrapServer { get; set; }
         public int MessageTimeoutMs { get; set; }

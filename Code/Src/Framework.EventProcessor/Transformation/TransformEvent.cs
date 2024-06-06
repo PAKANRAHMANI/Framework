@@ -2,7 +2,7 @@
 
 namespace Framework.EventProcessor.Transformation
 {
-    public static class TransformEvent
+    internal static class TransformEvent
     {
         public static IEvent Transform(IEventTransformerLookUp transformerLookUp, IEvent @event)
         {

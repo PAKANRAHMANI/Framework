@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace Framework.EventProcessor.Events
 {
-    public class EventTypeResolver : IEventTypeResolver
+    public sealed class EventTypeResolver : IEventTypeResolver
     {
         private readonly Dictionary<string, Type> _eventTypeNames = new();
         private readonly Dictionary<string, Type> _eventTypesFullNames = new();

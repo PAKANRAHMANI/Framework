@@ -5,14 +5,8 @@ using Framework.Core.Logging;
 
 namespace Framework.EventProcessor.Serialization;
 
-public class KafkaJsonDeserializer<TMessage> : IDeserializer<TMessage> where TMessage : class
+public sealed class KafkaJsonDeserializer<TMessage>(ILogger logger) : IDeserializer<TMessage> where TMessage : class
 {
-    private readonly ILogger _logger;
-
-    public KafkaJsonDeserializer(ILogger logger)
-    {
-        _logger = logger;
-    }
     public TMessage Deserialize(ReadOnlySpan<byte> data, bool isNull, SerializationContext context)
     {
         try
@@ -23,7 +17,7 @@ public class KafkaJsonDeserializer<TMessage> : IDeserializer<TMessage> where TMe
         }
         catch (Exception ex)
         {
-            _logger.WriteException(ex);
+            logger.WriteException(ex);
             return null;
         }
     }

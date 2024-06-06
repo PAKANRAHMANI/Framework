@@ -1,6 +1,6 @@
 ﻿namespace Framework.EventProcessor.DataStore;
 
-public interface ISubscription : IDisposable
+internal interface ISubscription : IDisposable
 {
     void UnSubscribe();
 }

@@ -2,7 +2,7 @@
 
 namespace Framework.EventProcessor.DataStore;
 
-public class LegacyEventItem
+internal sealed class LegacyEventItem
 {
     public ObjectId Id { get; set; }
     public Guid EventId { get; set; }

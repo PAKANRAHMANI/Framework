@@ -2,7 +2,7 @@
 
 namespace Framework.EventProcessor.Handlers;
 
-public abstract class TemplateHandler : BaseHandler<KafkaData>
+internal abstract class TemplateHandler : BaseHandler<KafkaData>
 {
     public override object Handle(KafkaData data)
     {

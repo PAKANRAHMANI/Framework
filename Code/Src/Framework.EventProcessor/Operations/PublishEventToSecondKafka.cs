@@ -8,23 +8,15 @@ using Framework.EventProcessor.Events.Kafka;
 using Framework.EventProcessor.Handlers;
 
 namespace Framework.EventProcessor.Operations;
-public class PublishEventToSecondKafka : IOperation<IEvent>
+internal sealed class PublishEventToSecondKafka(SecondaryProducerConfiguration producerConfig, ILogger logger) : IOperation<IEvent>
 {
-    private readonly IProducer<string, object> _secondaryProducer;
-    private readonly SecondaryProducerConfiguration _producerConfig;
-    private readonly ILogger _logger;
+    private readonly IProducer<string, object> _secondaryProducer = KafkaSecondaryProducerFactory<string, object>.Create(producerConfig, logger);
 
-    public PublishEventToSecondKafka(SecondaryProducerConfiguration producerConfig,ILogger logger)
-    {
-        _producerConfig = producerConfig;
-        _logger = logger;
-        _secondaryProducer = KafkaSecondaryProducerFactory<string, object>.Create(producerConfig, logger);
-    }
     public async Task<IEvent> Apply(IEvent input)
     {
         try
         {
-            var kafkaData =  KafkaData.Create(input, _producerConfig.UseOfSpecificPartition,_producerConfig.TopicName,_producerConfig.PartitionNumber,_producerConfig.TopicKey);
+            var kafkaData =  KafkaData.Create(input, producerConfig.UseOfSpecificPartition,producerConfig.TopicName,producerConfig.PartitionNumber,producerConfig.TopicKey);
 
             var handlers =
                 new ChainBuilder<KafkaData>()
@@ -39,7 +31,7 @@ public class PublishEventToSecondKafka : IOperation<IEvent>
         }
         catch (Exception exception)
         {
-            _logger.WriteException(exception);
+            logger.WriteException(exception);
             return await Task.FromResult(input);
         }
     }

@@ -4,40 +4,30 @@ using MongoDB.Driver;
 
 namespace Framework.EventProcessor.DataStore.MongoDB.EventHandlingStrategy;
 
-public class MongoDbCursorEventHandling : IMongoDbEventHandling
+internal sealed class MongoDbCursorEventHandling(IMongoDatabase database, MongoStoreConfig mongoStoreConfig, ILogger logger) : IMongoDbEventHandling
 {
-    private readonly IMongoDatabase _database;
-    private readonly MongoStoreConfig _mongoStoreConfig;
-    private readonly ILogger _logger;
-
-    public MongoDbCursorEventHandling(IMongoDatabase database, MongoStoreConfig mongoStoreConfig,ILogger logger)
-    {
-        _database = database;
-        _mongoStoreConfig = mongoStoreConfig;
-        _logger = logger;
-    }
     public List<EventItem> GetEvents(string collectionName)
     {
         try
         {
             var position = GetCursorPosition();
 
-            _logger.Write("Read Cursor Position From Cursor Collection", LogLevel.Information);
+            logger.Write("Read Cursor Position From Cursor Collection", LogLevel.Information);
 
-            var events= _database
+            var events= database
                 .GetCollection<EventItem>(collectionName)
                 .AsQueryable()
                 .Where(eventItem => eventItem.Id > position)
                 .OrderBy(item => item.Id)
                 .ToList();
 
-            _logger.Write($"Read Events From {collectionName} Collection",LogLevel.Information);
+            logger.Write($"Read Events From {collectionName} Collection",LogLevel.Information);
 
             return events;
         }
         catch (Exception e)
         {
-            _logger.WriteException(e);
+            logger.WriteException(e);
         }
 
         return null;
@@ -47,7 +37,7 @@ public class MongoDbCursorEventHandling : IMongoDbEventHandling
     {
         try
         {
-            var cursorCollection = _database.GetCollection<Cursor>(collectionName);
+            var cursorCollection = database.GetCollection<Cursor>(collectionName);
 
             var cursor = cursorCollection.AsQueryable().FirstOrDefault();
 
@@ -70,13 +60,13 @@ public class MongoDbCursorEventHandling : IMongoDbEventHandling
         }
         catch (Exception exception)
         {
-            _logger.WriteException(exception);
+            logger.WriteException(exception);
         }
     }
 
     private long GetCursorPosition()
     {
-        var cursor = _database.GetCollection<Cursor>(_mongoStoreConfig.CursorCollectionName).AsQueryable().FirstOrDefault();
+        var cursor = database.GetCollection<Cursor>(mongoStoreConfig.CursorCollectionName).AsQueryable().FirstOrDefault();
 
         return cursor?.Position ?? 0;
     }

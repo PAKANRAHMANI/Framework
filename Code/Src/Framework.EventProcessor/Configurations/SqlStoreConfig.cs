@@ -1,6 +1,6 @@
 ﻿namespace Framework.EventProcessor.Configurations
 {
-    public class SqlStoreConfig
+    public sealed record SqlStoreConfig
     {
         public string CursorTable { get; set; }
         public string EventTable { get; set; }

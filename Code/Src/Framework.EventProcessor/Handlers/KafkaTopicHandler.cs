@@ -3,14 +3,8 @@ using Framework.Core.Events;
 
 namespace Framework.EventProcessor.Handlers;
 
-public class KafkaTopicHandler : TemplateHandler
+internal sealed class KafkaTopicHandler(IProducer<string, object> secondaryProducer) : TemplateHandler
 {
-    private readonly IProducer<string, object> _secondaryProducer;
-
-    public KafkaTopicHandler(IProducer<string, object> secondaryProducer)
-    {
-        _secondaryProducer = secondaryProducer;
-    }
     protected override bool CanHandle(KafkaData data)
     {
         return data.UseOfSpecificPartition == false;
@@ -18,7 +12,7 @@ public class KafkaTopicHandler : TemplateHandler
 
     protected override async Task MessageSend(KafkaData data)
     {
-        await _secondaryProducer.ProduceAsync(data.TopicName, new Message<string, object>
+        await secondaryProducer.ProduceAsync(data.TopicName, new Message<string, object>
         {
             Value = data.Event,
             Key = data.TopicKey

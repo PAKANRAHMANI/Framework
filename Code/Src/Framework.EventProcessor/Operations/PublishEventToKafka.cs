@@ -6,40 +6,30 @@ using Framework.EventProcessor.Events.Kafka;
 
 namespace Framework.EventProcessor.Operations;
 
-public class PublishEventToKafka : IOperation<IEvent>
+internal sealed class PublishEventToKafka(
+    MessageProducer producer,
+    ProducerConfiguration producerConfiguration,
+    IReadOnlyDictionary<Type, KafkaTopicKey> kafkaKeys,
+    ILogger logger) : IOperation<IEvent>
 {
-    private readonly MessageProducer _producer;
-    private readonly ProducerConfiguration _producerConfiguration;
-    private readonly Dictionary<Type, KafkaTopicKey> _kafkaKeys;
-    private readonly ILogger _logger;
-
-    public PublishEventToKafka(MessageProducer producer, ProducerConfiguration producerConfiguration, Dictionary<Type, KafkaTopicKey> kafkaKeys,ILogger logger)
-    {
-        _producer = producer;
-        _producerConfiguration = producerConfiguration;
-        _kafkaKeys = kafkaKeys;
-        _logger = logger;
-    }
     public async Task<IEvent> Apply(IEvent input)
     {
         try
         {
             var eventType = input.GetType();
 
-            if (_kafkaKeys.ContainsKey(eventType))
+            if (kafkaKeys.TryGetValue(eventType, out var kafkaTopicKey))
             {
-                var kafkaKey = _kafkaKeys[input.GetType()];
-
-                await _producer.ProduceAsync(kafkaKey, input);
+                await producer.ProduceAsync(kafkaTopicKey, input);
             }
             else
-                await _producer.ProduceAsync(new KafkaTopicKey { Key = _producerConfiguration.TopicKey, Topic = _producerConfiguration.TopicName }, input);
+                await producer.ProduceAsync(new KafkaTopicKey { Key = producerConfiguration.TopicKey, Topic = producerConfiguration.TopicName }, input);
 
             return input;
         }
         catch (Exception e)
         {
-            _logger.WriteException(e);
+            logger.WriteException(e);
             return input;
         }
     }

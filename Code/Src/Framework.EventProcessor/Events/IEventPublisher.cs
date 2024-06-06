@@ -3,7 +3,7 @@
 
 namespace Framework.EventProcessor.Events
 {
-    public interface IEventPublisher
+    internal interface IEventPublisher
     {
         Task Publish<T>(T @event) where T : IEvent;
     }

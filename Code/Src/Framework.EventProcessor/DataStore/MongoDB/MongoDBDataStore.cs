@@ -8,7 +8,7 @@ using Timer = System.Timers.Timer;
 
 namespace Framework.EventProcessor.DataStore.MongoDB
 {
-    public class MongoDbDataStore : IDataStoreObservable
+    internal sealed class MongoDbDataStore : IDataStoreObservable
     {
         private readonly MongoStoreConfig _mongoStoreConfig;
         private readonly ILogger _logger;

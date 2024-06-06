@@ -6,17 +6,13 @@ using Microsoft.Extensions.Hosting;
 
 namespace Framework.EventProcessor.Services;
 
-public class EventWorker : BackgroundService
+internal sealed class EventWorker : BackgroundService
 {
     private readonly ILogger _logger;
     private readonly IDataStoreObservable _dataStore;
     private ISubscription _subscription;
 
-    public EventWorker(
-        ILogger logger,
-        IDataStoreObservable dataStore,
-        IDataStoreChangeTrackerObserver changeTrackerObserver
-    )
+    public EventWorker(ILogger logger, IDataStoreObservable dataStore, IDataStoreChangeTrackerObserver changeTrackerObserver)
     {
         _logger = logger;
         _dataStore = dataStore;

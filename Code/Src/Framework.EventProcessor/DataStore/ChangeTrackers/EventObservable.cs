@@ -3,7 +3,7 @@ using Framework.EventProcessor.Initial;
 
 namespace Framework.EventProcessor.DataStore.ChangeTrackers;
 
-public class EventObservable : IObservable<IEvent>
+internal class EventObservable : IObservable<IEvent>
 {
     private readonly List<Receiver> _receivers;
     private readonly List<IObserver<IEvent>> _observers;

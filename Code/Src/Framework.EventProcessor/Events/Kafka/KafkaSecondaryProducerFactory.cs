@@ -5,9 +5,9 @@ using Framework.Core.Logging;
 
 namespace Framework.EventProcessor.Events.Kafka;
 
-public static class KafkaSecondaryProducerFactory<TKey, TMessage> where TMessage : class
+internal static class KafkaSecondaryProducerFactory<TKey, TMessage> where TMessage : class
 {
-    public static IProducer<TKey, TMessage> Create(SecondaryProducerConfiguration configuration, ILogger logger)
+    internal static IProducer<TKey, TMessage> Create(SecondaryProducerConfiguration configuration, ILogger logger)
     {
         var config = new ProducerConfig()
         {

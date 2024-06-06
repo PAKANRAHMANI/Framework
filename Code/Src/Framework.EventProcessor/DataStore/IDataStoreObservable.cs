@@ -2,7 +2,7 @@
 
 namespace Framework.EventProcessor.DataStore;
 
-public interface IDataStoreObservable
+internal interface IDataStoreObservable
 {
     void SetSubscriber(IDataStoreChangeTrackerObserver dataStoreChangeTracker);
     ISubscription SubscribeForChanges();

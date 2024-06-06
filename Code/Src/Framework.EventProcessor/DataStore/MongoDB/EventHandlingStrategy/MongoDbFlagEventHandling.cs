@@ -3,20 +3,11 @@ using MongoDB.Driver;
 
 namespace Framework.EventProcessor.DataStore.MongoDB.EventHandlingStrategy;
 
-public class MongoDbFlagEventHandling : IMongoDbEventHandling
+internal sealed class MongoDbFlagEventHandling(IMongoDatabase database, ILogger logger) : IMongoDbEventHandling
 {
-    private readonly IMongoDatabase _database;
-    private readonly ILogger _logger;
-
-    public MongoDbFlagEventHandling(IMongoDatabase database,ILogger logger)
-    {
-        _database = database;
-        _logger = logger;
-    }
-
     public List<EventItem> GetEvents(string collectionName)
     {
-        var events = _database
+        var events = database
             .GetCollection<LegacyEventItem>(collectionName)
             .AsQueryable()
             .Where(eventItem => eventItem.IsUsed == false)
@@ -33,7 +24,7 @@ public class MongoDbFlagEventHandling : IMongoDbEventHandling
             if (eventIds is null)
                 return;
 
-            var eventCollection = _database.GetCollection<LegacyEventItem>(collectionName);
+            var eventCollection = database.GetCollection<LegacyEventItem>(collectionName);
 
             var filter = Builders<LegacyEventItem>.Filter.In(item => item.EventId, eventIds.Select(eventItem => Guid.Parse(eventItem.EventId)));
 
@@ -43,7 +34,7 @@ public class MongoDbFlagEventHandling : IMongoDbEventHandling
         }
         catch (Exception exception)
         {
-            _logger.WriteException(exception);
+            logger.WriteException(exception);
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using Framework.Core.Events;
-using Framework.EventProcessor.Configurations;
+﻿using Framework.EventProcessor.Configurations;
 using Framework.EventProcessor.DataStore;
 using Framework.EventProcessor.DataStore.ChangeTrackers;
 using Framework.EventProcessor.DataStore.MongoDB;
@@ -20,7 +19,7 @@ using IEventPublisher = Framework.EventProcessor.Events.IEventPublisher;
 
 namespace Framework.EventProcessor.Initial
 {
-    public class EventProcessorBuilder :
+    public sealed class EventProcessorBuilder :
         IDataStoreBuilder,
         IEventLookup,
         IEventProcessorFilter,
@@ -36,7 +35,7 @@ namespace Framework.EventProcessor.Initial
         private Dictionary<Type, KafkaTopicKey> _kafkaKeys = new();
         private int _operationPriority = 0;
         private List<Receiver> _observers = new();
-        private ILogger _logger;
+        private readonly ILogger _logger;
         private EventProcessorBuilder(IServiceCollection serviceCollection, Serilog.ILogger logger)
         {
             _services = serviceCollection;

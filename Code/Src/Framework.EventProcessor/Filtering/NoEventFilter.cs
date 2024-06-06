@@ -2,7 +2,7 @@
 
 namespace Framework.EventProcessor.Filtering
 {
-    public class NoEventFilter : IEventFilter
+    public sealed class NoEventFilter : IEventFilter
     {
         public bool ShouldPublish(IEvent @event)
         {

@@ -7,7 +7,7 @@ using Timer = System.Timers.Timer;
 
 namespace Framework.EventProcessor.DataStore.Sql;
 
-public class SqlDataStore : IDataStoreObservable
+internal sealed class SqlDataStore : IDataStoreObservable
 {
     private IDataStoreChangeTrackerObserver _dataStoreChangeTracker;
     private readonly ILogger _logger;

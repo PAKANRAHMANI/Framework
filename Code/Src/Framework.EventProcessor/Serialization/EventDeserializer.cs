@@ -5,7 +5,7 @@ using Newtonsoft.Json.Serialization;
 
 namespace Framework.EventProcessor.Serialization
 {
-    public static class EventDeserializer
+    internal static class EventDeserializer
     {
         private static readonly JsonSerializerSettings Settings;
         static EventDeserializer()

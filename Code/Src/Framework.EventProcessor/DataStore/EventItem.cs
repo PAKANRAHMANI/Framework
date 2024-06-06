@@ -1,5 +1,5 @@
 ﻿namespace Framework.EventProcessor.DataStore;
-public class EventItem
+internal sealed class EventItem
 {
     public long Id { get; set; }
     public string EventId { get; set; }
