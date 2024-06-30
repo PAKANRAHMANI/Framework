@@ -3,6 +3,7 @@ using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.PortableExecutable;
 using System.Threading.Tasks;
 
 namespace Framework.Redis;
@@ -103,7 +104,23 @@ public class RedisHashsetCache : IRedisHashsetCache
 		return stockHashEntries.ConvertFromRedis<T>();
 	}
 
-	public async Task<T> HashGetAllAsync<T>(string key)
+    public List<object> HashGetAll(string key)
+    {
+        if (_redisCacheConfiguration.UseFromInstanceNameInKey)
+            key = _redisCacheConfiguration.InstanceName + key;
+
+        if (!_database.KeyExists(key))
+            return default;
+
+        var cacheValue =
+            _database.HashGetAll(key)
+                .Select(a => JsonConvert.DeserializeObject<object>(a.Value))
+                .ToList();
+
+        return cacheValue;
+    }
+
+    public async Task<T> HashGetAllAsync<T>(string key)
 	{
 		if (_redisCacheConfiguration.UseFromInstanceNameInKey)
 			key = _redisCacheConfiguration.InstanceName + key;
