@@ -104,7 +104,7 @@ public class RedisHashsetCache : IRedisHashsetCache
 		return stockHashEntries.ConvertFromRedis<T>();
 	}
 
-    public List<object> HashGetAll(string key)
+    public List<T> HashGetList<T>(string key)
     {
         if (_redisCacheConfiguration.UseFromInstanceNameInKey)
             key = _redisCacheConfiguration.InstanceName + key;
@@ -114,7 +114,7 @@ public class RedisHashsetCache : IRedisHashsetCache
 
         var cacheValue =
             _database.HashGetAll(key)
-                .Select(a => JsonConvert.DeserializeObject<object>(a.Value))
+                .Select(a => JsonConvert.DeserializeObject<T>(a.Value))
                 .ToList();
 
         return cacheValue;
