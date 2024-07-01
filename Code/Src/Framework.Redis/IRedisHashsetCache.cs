@@ -14,6 +14,7 @@ public interface IRedisHashsetCache
 	void HashDelete(string hashKey, string key);
 	Task HashDeleteAsync(string hashKey, string key);
 	T HashGetAll<T>(string key);
+	List<T> HashGetList<T>(string key);
 	Task<T> HashGetAllAsync<T>(string key);
 	T HashGet<T>(string key, string fieldName);
 	Task<T> HashGetAsync<T>(string key, string fieldName);
