@@ -3,31 +3,46 @@ using Framework.EventProcessor.Initial;
 
 namespace Framework.EventProcessor.DataStore.ChangeTrackers;
 
-internal class EventObservable : IObservable<IEvent>
+internal class EventObservable : IReceiverObservable
 {
-    private readonly List<Receiver> _receivers;
-    private readonly List<IObserver<IEvent>> _observers;
+    private readonly List<IReceiverObserver> _primaryEventObservers= [];
+    private readonly List<IReceiverObserver> _transformedEventObservers= [];
 
 
-    internal EventObservable(List<Receiver> receivers)
+    internal EventObservable(IReadOnlyCollection<Receiver> receivers)
     {
-        _receivers = receivers;
-        _observers = receivers.Select(receiver => receiver.Observer).ToList();
+        foreach (var receiver in receivers.Where(receiver => receiver.ReceiveEventType == ReceiveEventType.PrimaryEvent).ToList())
+        {
+            SetSubscriber(receiver.ReceiveEventType, receiver.Observer);
+        }
+        foreach (var receiver in receivers.Where(receiver => receiver.ReceiveEventType == ReceiveEventType.Transformed).ToList())
+        {
+            SetSubscriber(receiver.ReceiveEventType, receiver.Observer);
+        }
     }
-    public IDisposable Subscribe(IObserver<IEvent> observer)
-    {
-        this._observers.Add(observer);
 
-        return new UnSubscriber<IEvent>(_observers, observer);
-    }
     protected void SendPrimaryEventToAllListeners(IEvent @event)
     {
-        foreach (var observer in _receivers.Where(receiver => receiver.ReceiveEventType == ReceiveEventType.PrimaryEvent).Select(receiver => receiver.Observer).ToList())
-            observer.OnNext(@event);
+        _primaryEventObservers.ForEach(observer => observer.Receive(@event));
     }
     protected void SendTransformedEventToAllListeners(IEvent @event)
     {
-        foreach (var observer in _receivers.Where(receiver => receiver.ReceiveEventType == ReceiveEventType.Transformed).Select(receiver => receiver.Observer).ToList())
-            observer.OnNext(@event);
+        _transformedEventObservers.ForEach(observer => observer.Receive(@event));
+    }
+
+    public void SetSubscriber(ReceiveEventType receiveEventType, IReceiverObserver observer)
+    {
+        if (receiveEventType == ReceiveEventType.PrimaryEvent)
+            this._primaryEventObservers.Add(observer);
+        else
+            this._transformedEventObservers.Add(observer);
+    }
+
+    public void UnSubscriber(ReceiveEventType receiveEventType, IReceiverObserver observer)
+    {
+        if (receiveEventType == ReceiveEventType.PrimaryEvent)
+            this._primaryEventObservers.Remove(observer);
+        else
+            this._transformedEventObservers.Remove(observer);
     }
 }
