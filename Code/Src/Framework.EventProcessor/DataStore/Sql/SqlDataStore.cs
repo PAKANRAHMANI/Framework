@@ -13,6 +13,7 @@ internal sealed class SqlDataStore : IDataStoreObservable
     private readonly ILogger _logger;
     private readonly SqlStoreConfig _sqlStoreConfig;
     private readonly Timer _timer;
+    private static readonly object LockObject = new();
     public SqlDataStore(IOptions<SqlStoreConfig> sqlStoreConfig, ILogger logger)
     {
         _logger = logger;
@@ -33,30 +34,36 @@ internal sealed class SqlDataStore : IDataStoreObservable
 
     private void TimerOnElapsed(object sender, ElapsedEventArgs e)
     {
-        try
+        lock (LockObject)
         {
-            _timer.Stop();
-
-            var cursorPosition = SqlQueries.GetCursorPosition(_sqlStoreConfig.ConnectionString, _sqlStoreConfig.CursorTable);
-
-            var events = SqlQueries.GetEventsFromPosition(_sqlStoreConfig.ConnectionString, cursorPosition, _sqlStoreConfig.EventTable);
-
-            if (events is not null && events.Any())
+            try
             {
-                _logger.Write($"{events.Count} Events found in Tables", LogLevel.Information);
+                _timer.Stop();
 
-                this._dataStoreChangeTracker.ChangeDetected(events).Wait();
+                var cursorPosition =
+                    SqlQueries.GetCursorPosition(_sqlStoreConfig.ConnectionString, _sqlStoreConfig.CursorTable);
 
-                SqlQueries.MoveCursorPosition(_sqlStoreConfig.ConnectionString, events.Last().Id, _sqlStoreConfig.CursorTable);
+                var events = SqlQueries.GetEventsFromPosition(_sqlStoreConfig.ConnectionString, cursorPosition,
+                    _sqlStoreConfig.EventTable);
 
-                _logger.Write($"Cursor moved to position {events.Last().Id}", LogLevel.Information);
+                if (events is not null && events.Any())
+                {
+                    _logger.Write($"{events.Count} Events found in Tables", LogLevel.Information);
+
+                    this._dataStoreChangeTracker.ChangeDetected(events).Wait();
+
+                    SqlQueries.MoveCursorPosition(_sqlStoreConfig.ConnectionString, events.Last().Id,
+                        _sqlStoreConfig.CursorTable);
+
+                    _logger.Write($"Cursor moved to position {events.Last().Id}", LogLevel.Information);
+                }
+
+                _timer.Start();
             }
-
-            _timer.Start();
-        }
-        catch (Exception exception)
-        {
-            _logger.WriteException(exception);
+            catch (Exception exception)
+            {
+                _logger.WriteException(exception);
+            }
         }
     }
 }

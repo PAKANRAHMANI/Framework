@@ -178,6 +178,11 @@ namespace Framework.EventProcessor.Initial
         {
             _observers = receivers.ToList();
 
+            foreach (var receiver in _observers)
+            {
+                _services.AddSingleton(receiver);
+            }
+            
             _services.AddSingleton(_observers);
 
             return this;
