@@ -25,11 +25,11 @@ internal sealed class EventWorker : BackgroundService
         {
             try
             {
-                _logger.Write($"Event host Service running at: {DateTimeOffset.Now}",LogLevel.Information); 
+                _logger.Write($"Event host Service running at: {DateTimeOffset.Now}",LogLevel.Debug); 
 
                 _subscription = _dataStore.SubscribeForChanges();
 
-                _logger.Write($"Subscribed to data store", LogLevel.Information);
+                _logger.Write($"Subscribed to data store", LogLevel.Debug);
             }
             catch (Exception exception)
             {

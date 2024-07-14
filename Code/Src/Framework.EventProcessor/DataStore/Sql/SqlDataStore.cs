@@ -48,14 +48,14 @@ internal sealed class SqlDataStore : IDataStoreObservable
 
                 if (events is not null && events.Any())
                 {
-                    _logger.Write($"{events.Count} Events found in Tables", LogLevel.Information);
+                    _logger.Write($"{events.Count} Events found in Tables", LogLevel.Debug);
 
                     this._dataStoreChangeTracker.ChangeDetected(events).Wait();
 
                     SqlQueries.MoveCursorPosition(_sqlStoreConfig.ConnectionString, events.Last().Id,
                         _sqlStoreConfig.CursorTable);
 
-                    _logger.Write($"Cursor moved to position {events.Last().Id}", LogLevel.Information);
+                    _logger.Write($"Cursor moved to position {events.Last().Id}", LogLevel.Debug);
                 }
 
                 _timer.Start();

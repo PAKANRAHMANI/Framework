@@ -12,7 +12,7 @@ internal sealed class MongoDbCursorEventHandling(IMongoDatabase database, MongoS
         {
             var position = GetCursorPosition();
 
-            logger.Write("Read Cursor Position From Cursor Collection", LogLevel.Information);
+            logger.Write("Read Cursor Position From Cursor Collection", LogLevel.Debug);
 
             var events= database
                 .GetCollection<EventItem>(collectionName)
@@ -21,7 +21,7 @@ internal sealed class MongoDbCursorEventHandling(IMongoDatabase database, MongoS
                 .OrderBy(item => item.Id)
                 .ToList();
 
-            logger.Write($"Read Events From {collectionName} Collection",LogLevel.Information);
+            logger.Write($"Read Events From {collectionName} Collection",LogLevel.Debug);
 
             return events;
         }

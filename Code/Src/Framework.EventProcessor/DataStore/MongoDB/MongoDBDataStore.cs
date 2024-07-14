@@ -38,7 +38,7 @@ namespace Framework.EventProcessor.DataStore.MongoDB
 
                     if (events is not null && events.Any())
                     {
-                        _logger.Write($"{events.Count} Events found in Tables", LogLevel.Information);
+                        _logger.Write($"{events.Count} Events found in Tables", LogLevel.Debug);
 
                         var sentEvents = this._dataStoreChangeTracker.ChangeDetected(events).ConfigureAwait(false)
                             .GetAwaiter();
@@ -50,7 +50,7 @@ namespace Framework.EventProcessor.DataStore.MongoDB
 
                             _mongoDbEvent.UpdateEvents(collectionName, events);
 
-                            _logger.Write($"Cursor moved to position {events.Last().Id}", LogLevel.Information);
+                            _logger.Write($"Cursor moved to position {events.Last().Id}", LogLevel.Debug);
                         });
                     }
 
