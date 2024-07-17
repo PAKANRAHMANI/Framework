@@ -20,7 +20,7 @@ public class RedisModule : IFrameworkModule
 
 		dependencyRegister.RegisterSingleton<IRedisDataBaseResolver, RedisDataBaseResolver>();
 
-		dependencyRegister.RegisterSingletonServiceWithInterceptor<IRedisCache, RedisCache>(typeof(ExceptionRedisInterceptor));
+		dependencyRegister.RegisterSingletonServiceWithInterceptor<IRedisCache, RedisCache>(typeof(ExceptionRedisInterceptor),new ExceptionRedisInterceptor());
 
 		dependencyRegister.RegisterSingleton<IRedisHashsetCache, RedisHashsetCache>();
 	}
