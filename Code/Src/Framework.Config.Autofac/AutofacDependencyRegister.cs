@@ -100,7 +100,8 @@ namespace Framework.Config.Autofac
 
         public void RegisterSingletonServiceWithInterceptor<TService, TImplementation>(Type implementationType) where TImplementation : TService
         {
-            _container.RegisterType<TImplementation>().As<TService>().SingleInstance().InterceptedBy(implementationType);
+            _container.Register(_ => implementationType);
+            _container.RegisterType<TImplementation>().As<TService>().SingleInstance().EnableInterfaceInterceptors();
         }
 
         public void RegisterDecorator(Type service, Type decorator)
