@@ -23,6 +23,7 @@ namespace Framework.Config
         void RegisterTransient<TService, TImplementation>() where TImplementation : TService;
         void RegisterTransient<TService>(Func<TService> factory, Action<TService> release = null);
         void RegisterDecorator<TService, TDecorator>() where TDecorator : TService;
+        void RegisterSingletonServiceWithInterceptor<TService, TImplementation>(Type implementationType) where TImplementation : TService;
         void RegisterDecorator(Type service, Type decorator);
         void RegisterScoped(Type implementationType, object config);
         void RegisterSingleton(Type implementationType, object config);

@@ -7,8 +7,8 @@ namespace Framework.Redis;
 
 public interface IRedisCache
 {
-	void Set(string key, object data, int expirationTimeInMinutes);
-	Task SetAsync(string key, object data, int expirationTimeInMinutes);
+	void Set(string key, object data, int? expirationTimeInMinutes);
+	Task SetAsync(string key, object data, int? expirationTimeInMinutes);
 	T Get<T>(string key);
 	Task<T> GetAsync<T>(string key);
 	IEnumerable<T> GetValues<T>(string key);

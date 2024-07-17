@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Framework.Core.Exceptions;
 using Newtonsoft.Json;
 using StackExchange.Redis;
 
@@ -19,27 +20,23 @@ public class RedisCache : IRedisCache
 		this._database = redisHelper.GetDatabase(_redisCacheConfiguration.Connection, _redisCacheConfiguration.DbNumber);
 	}
 
-	public void Set(string key, object data, int expirationTimeInMinutes)
+	public void Set(string key, object data, int? expirationTimeInMinutes)
 	{
 		if (_redisCacheConfiguration.UseFromInstanceNameInKey)
 			key = _redisCacheConfiguration.InstanceName + key;
 		var value = JsonConvert.SerializeObject(data);
 
-		var expiresIn = TimeSpan.FromMinutes(expirationTimeInMinutes);
-
-		_database.StringSet(key, value, expiresIn);
+		_database.StringSet(key, value, expirationTimeInMinutes != null ? TimeSpan.FromMinutes(expirationTimeInMinutes.Value) : null);
 	}
 
-	public async Task SetAsync(string key, object data, int expirationTimeInMinutes)
+	public async Task SetAsync(string key, object data, int? expirationTimeInMinutes)
 	{
 		if (_redisCacheConfiguration.UseFromInstanceNameInKey)
 			key = _redisCacheConfiguration.InstanceName + key;
 
 		var value = JsonConvert.SerializeObject(data);
 
-		var expiresIn = TimeSpan.FromMinutes(expirationTimeInMinutes);
-
-		await _database.StringSetAsync(key, value, expiresIn);
+		await _database.StringSetAsync(key, value, expirationTimeInMinutes != null ? TimeSpan.FromMinutes(expirationTimeInMinutes.Value) : null);
 	}
 
 	public T Get<T>(string key)

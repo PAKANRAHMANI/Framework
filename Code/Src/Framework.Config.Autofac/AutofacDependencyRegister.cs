@@ -98,6 +98,11 @@ namespace Framework.Config.Autofac
             _container.RegisterDecorator<TDecorator, TService>();
         }
 
+        public void RegisterSingletonServiceWithInterceptor<TService, TImplementation>(Type implementationType) where TImplementation : TService
+        {
+            _container.RegisterType<TImplementation>().As<TService>().SingleInstance().InterceptedBy(implementationType);
+        }
+
         public void RegisterDecorator(Type service, Type decorator)
         {
             _container.RegisterGenericDecorator(decorator, service);
@@ -145,7 +150,7 @@ namespace Framework.Config.Autofac
                 .RegisterGeneric(typeof(KafkaConsumer<,>))
                 .As(typeof(IKafkaConsumer<,>))
                 .SingleInstance();
-        }   
+        }
         public void RegisterKafkaProducer()
         {
             _container
