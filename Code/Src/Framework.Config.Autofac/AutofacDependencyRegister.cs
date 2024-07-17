@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reflection;
 using Autofac;
 using Autofac.Extras.DynamicProxy;
+using Confluent.Kafka;
 using Framework.Application.Contracts;
 using Framework.Core;
 using Framework.Domain;
@@ -100,7 +101,8 @@ namespace Framework.Config.Autofac
 
         public void RegisterSingletonServiceWithInterceptor<TService, TImplementation>(Type interceptorType, object interceptor) where TImplementation : TService
         {
-            _container.RegisterInstance(interceptor);
+            _container.Register(p => interceptor).As(interceptorType).SingleInstance();
+
             _container.RegisterType<TImplementation>().As<TService>().SingleInstance().EnableInterfaceInterceptors().InterceptedBy(interceptorType);
         }
 
