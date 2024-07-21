@@ -9,7 +9,7 @@ namespace Framework.EventProcessor.Operations;
 internal sealed class PublishEventToKafka(
     MessageProducer producer,
     ProducerConfiguration producerConfiguration,
-    IReadOnlyDictionary<Type, KafkaTopicKey> kafkaKeys,
+    Dictionary<Type, KafkaTopicKey> kafkaKeys,
     ILogger logger) : IOperation<IEvent>
 {
     public async Task<IEvent> Apply(IEvent input)
