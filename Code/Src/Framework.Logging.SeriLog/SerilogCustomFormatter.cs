@@ -47,6 +47,6 @@ public class SerilogCustomFormatter : ITextFormatter
 
         // MessageTemplate and Message are omitted here
 
-        output.Write("}}");
+        output.Write("}}\n");
     }
 }
