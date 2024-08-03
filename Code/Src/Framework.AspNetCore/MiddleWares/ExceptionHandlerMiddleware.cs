@@ -44,9 +44,9 @@ public class ExceptionHandlerMiddleware
             case BusinessException businessException:
                 await HandleBusinessException(context, businessException);
                 break;
-            case InfrastructureException infrastructureException:
-                await HandleInfrastructureException(context, infrastructureException);
-                break;
+            //case InfrastructureException infrastructureException:
+            //    await HandleInfrastructureException(context, infrastructureException);
+            //    break;
             default:
                 await UnhandledException(context, exception);
                 break;
@@ -99,7 +99,7 @@ public class ExceptionHandlerMiddleware
         var errors = new List<ExceptionDetails>
         {
             ExceptionDetails.Create(Exceptions.There_Was_A_Problem_With_The_Request, -1000,
-                exception.GetType().ToString())
+                string.Empty)
         };
 
         await WriteExceptionToResponse(httpContext, errors);
