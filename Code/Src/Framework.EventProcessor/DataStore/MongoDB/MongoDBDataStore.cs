@@ -4,6 +4,7 @@ using MongoDB.Driver;
 using System.Timers;
 using Framework.Core.Logging;
 using Framework.EventProcessor.DataStore.MongoDB.EventHandlingStrategy;
+using Microsoft.Extensions.DependencyInjection;
 using Timer = System.Timers.Timer;
 
 namespace Framework.EventProcessor.DataStore.MongoDB
@@ -11,15 +12,19 @@ namespace Framework.EventProcessor.DataStore.MongoDB
     internal sealed class MongoDbDataStore : IDataStoreObservable
     {
         private readonly MongoStoreConfig _mongoStoreConfig;
+        private readonly IUpdateCursorPosition _updateCursorPosition;
         private readonly ILogger _logger;
         private readonly Timer _timer;
         private IDataStoreChangeTrackerObserver _dataStoreChangeTracker;
         private readonly IMongoDbEventHandling _mongoDbEvent;
         private static readonly object LockObject = new();
-        public MongoDbDataStore(MongoStoreConfig mongoStoreConfig, IMongoDatabase database, ILogger logger)
+        public MongoDbDataStore(MongoStoreConfig mongoStoreConfig, IMongoDatabase database, 
+            ILogger logger,
+            [FromKeyedServices(Constants.MoveMongoCursorPosition)] IUpdateCursorPosition updateCursorPosition)
         {
             _mongoStoreConfig = mongoStoreConfig;
             _logger = logger;
+            _updateCursorPosition = updateCursorPosition;
             _mongoDbEvent = MongoEventFactory.Create(mongoStoreConfig, database, logger);
             _timer = new Timer(_mongoStoreConfig.PullingInterval);
             _timer.Elapsed += TimerOnElapsed;
@@ -27,12 +32,12 @@ namespace Framework.EventProcessor.DataStore.MongoDB
 
         private void TimerOnElapsed(object sender, ElapsedEventArgs e)
         {
+            _timer.Stop();
 
             lock (LockObject)
             {
                 try
                 {
-                    _timer.Stop();
 
                     var events = _mongoDbEvent.GetEvents(_mongoStoreConfig.EventsCollectionName);
 
@@ -40,25 +45,21 @@ namespace Framework.EventProcessor.DataStore.MongoDB
                     {
                         _logger.Write($"{events.Count} Events found in Tables", LogLevel.Debug);
 
-                        var sentEvents = this._dataStoreChangeTracker.ChangeDetected(events).ConfigureAwait(false)
-                            .GetAwaiter();
-                        sentEvents.OnCompleted(() =>
+                        Task.Run(async () =>
                         {
-                            var collectionName = _mongoStoreConfig.IsUsedCursor
-                                ? _mongoStoreConfig.CursorCollectionName
-                                : _mongoStoreConfig.EventsCollectionName;
+                            await this._dataStoreChangeTracker.ChangeDetected(events, _updateCursorPosition);
 
-                            _mongoDbEvent.UpdateEvents(collectionName, events);
-
-                            _logger.Write($"Cursor moved to position {events.Last().Id}", LogLevel.Debug);
-                        });
+                        }).Wait();
                     }
 
-                    _timer.Start();
                 }
                 catch (Exception exception)
                 {
                     _logger.WriteException(exception);
+                }
+                finally
+                {
+                    _timer.Start();
                 }
             }
         }

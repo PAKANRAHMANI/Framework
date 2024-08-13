@@ -48,6 +48,8 @@ namespace Framework.EventProcessor.Initial
 
         public IEventLookup ReadFromSqlServer(Action<SqlStoreConfig> config)
         {
+            _services.AddKeyedSingleton<IUpdateCursorPosition, SqlUpdateCursorPosition>(Constants.MoveSqlCursorPosition);
+
             _services.AddSingleton<IDataStoreObservable, SqlDataStore>();
 
             _services.Configure<SqlStoreConfig>(config);
@@ -58,6 +60,8 @@ namespace Framework.EventProcessor.Initial
         public IEventLookup ReadFromMongoDb(Action<MongoStoreConfig> config)
         {
             _services.AddSingleton<IDataStoreObservable, MongoDbDataStore>();
+
+            _services.AddKeyedSingleton<IUpdateCursorPosition, MongoUpdateCursorPosition>(Constants.MoveMongoCursorPosition);
 
             var mongoStoreConfig = new MongoStoreConfig();
 
@@ -182,7 +186,7 @@ namespace Framework.EventProcessor.Initial
             {
                 _services.AddSingleton(receiver);
             }
-            
+
             _services.AddSingleton(_observers);
 
             return this;

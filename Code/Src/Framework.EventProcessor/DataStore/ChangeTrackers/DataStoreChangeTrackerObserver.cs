@@ -16,12 +16,12 @@ internal sealed class DataStoreChangeTrackerObserver(
     IEventFilter eventFilter,
     IServiceProvider services,
     Dictionary<int, Type> operations,
-    ILogger logger,
+ILogger logger,
     List<Receiver> observers) : EventObservable(observers), IDataStoreChangeTrackerObserver
 {
     private readonly IFilter<IEvent> _operation = services.GetFirstOperation(operations);
 
-    public async Task ChangeDetected(List<EventItem> events)
+    public async Task ChangeDetected(List<EventItem> events, IUpdateCursorPosition updateCursorPosition)
     {
         foreach (var eventItem in events)
         {
@@ -61,6 +61,8 @@ internal sealed class DataStoreChangeTrackerObserver(
                     await _operation.Apply(eventToPublish);
 
                     logger.Write($"Event '{eventItem.EventType}-{eventItem.EventId}' Published on bus.", LogLevel.Debug);
+
+                    updateCursorPosition.MoveCursorPosition(eventItem);
                 }
                 else
                 {
