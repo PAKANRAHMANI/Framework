@@ -14,14 +14,14 @@ internal sealed class MongoDbCursorEventHandling(IMongoDatabase database, MongoS
 
             logger.Write("Read Cursor Position From Cursor Collection", LogLevel.Debug);
 
-            var events= database
+            var events = database
                 .GetCollection<EventItem>(collectionName)
                 .AsQueryable()
                 .Where(eventItem => eventItem.Id > position)
                 .OrderBy(item => item.Id)
                 .ToList();
 
-            logger.Write($"Read Events From {collectionName} Collection",LogLevel.Debug);
+            logger.Write($"Read Events From {collectionName} Collection", LogLevel.Debug);
 
             return events;
         }
@@ -33,7 +33,7 @@ internal sealed class MongoDbCursorEventHandling(IMongoDatabase database, MongoS
         return null;
     }
 
-    public void UpdateEvents(string collectionName, List<EventItem> eventIds = null)
+    public void UpdateEvents(string collectionName, EventItem eventItem)
     {
         try
         {
@@ -41,18 +41,10 @@ internal sealed class MongoDbCursorEventHandling(IMongoDatabase database, MongoS
 
             var cursor = cursorCollection.AsQueryable().FirstOrDefault();
 
-            if (eventIds is null)
-                return;
-
             if (cursor is null)
                 return;
 
-            var @event = eventIds.LastOrDefault();
-
-            if (@event is not null)
-            {
-                cursor.Position = @event.Id;
-            }
+            cursor.Position = eventItem.Id;
 
             var filter = Builders<Cursor>.Filter.Eq(s => s.Id, cursor?.Id);
 

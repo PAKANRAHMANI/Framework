@@ -17,16 +17,13 @@ internal sealed class MongoDbFlagEventHandling(IMongoDatabase database, ILogger 
         return EventItemMapper.Map(events);
     }
 
-    public void UpdateEvents(string collectionName, List<EventItem> eventIds = null)
+    public void UpdateEvents(string collectionName, EventItem eventItem)
     {
         try
         {
-            if (eventIds is null)
-                return;
-
             var eventCollection = database.GetCollection<LegacyEventItem>(collectionName);
 
-            var filter = Builders<LegacyEventItem>.Filter.In(item => item.EventId, eventIds.Select(eventItem => Guid.Parse(eventItem.EventId)));
+            var filter = Builders<LegacyEventItem>.Filter.Eq(item => item.EventId, Guid.Parse(eventItem.EventId));
 
             var update = Builders<LegacyEventItem>.Update.Set(x => x.IsUsed, true);
 
