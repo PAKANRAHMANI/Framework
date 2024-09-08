@@ -4,7 +4,7 @@
 		<TargetFramework>net8.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>disable</Nullable>
-		<Version>8.0.27</Version>
+		<Version>8.0.28</Version>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -13,6 +13,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\Framework.Core\Framework.Core.csproj" PrivateAssets="contentfiles;build" ReferenceOutputAssembly="True" IsImplicitlyDefined="False" />
+		<ProjectReference Include="..\Framework.Kafka\Framework.Kafka.csproj" />
 
 		<ProjectReference Include="..\Framework.MassTransit.Message\Framework.MassTransit.Message.csproj" PrivateAssets="contentfiles;build" ReferenceOutputAssembly="True" IsImplicitlyDefined="False" />
 

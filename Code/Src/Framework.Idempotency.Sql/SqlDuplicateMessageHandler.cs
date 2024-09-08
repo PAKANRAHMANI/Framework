@@ -1,22 +1,17 @@
-﻿using System.Data;
-using Microsoft.Data.SqlClient;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Data.SqlClient;
+using System.Data;
+using Framework.Core.Logging;
 
 namespace Framework.Idempotency.Sql
 {
-    public class SqlDuplicateMessageHandler : IDuplicateMessageHandler
+    public class SqlDuplicateMessageHandler(SqlConfiguration sqlConfiguration, ILogger logger)
+        : IDuplicateMessageHandler
     {
-        private readonly SqlConfiguration _sqlConfiguration;
-
-        public SqlDuplicateMessageHandler(SqlConfiguration sqlConfiguration)
+        public async Task<bool> HasMessageBeenProcessedBefore(string eventId)
         {
-            _sqlConfiguration = sqlConfiguration;
-        }
-        public async Task<bool> HasMessageBeenProcessedBefore(Guid eventId)
-        {
-            using (var connection = new SqlConnection(_sqlConfiguration.ConnectionString))
+            using (var connection = new SqlConnection(sqlConfiguration.ConnectionString))
             {
-                var commandText = $"SELECT count(*) FROM [{_sqlConfiguration.TableName}] WHERE [{_sqlConfiguration.FieldName}] = '{eventId}'";
+                var commandText = $"SELECT count(*) FROM [{sqlConfiguration.TableName}] WHERE [{sqlConfiguration.FieldName}] = '{eventId}'";
 
                 var command = new SqlCommand(commandText, connection);
 
@@ -31,18 +26,27 @@ namespace Framework.Idempotency.Sql
             }
         }
 
-        public async Task MarkMessageAsProcessed(Guid eventId, DateTime receivedDate)
+        public async Task MarkMessageAsProcessed(string eventId)
         {
-            using (var connection = new SqlConnection(_sqlConfiguration.ConnectionString))
+            try
             {
-                var command = $"INSERT INTO [{_sqlConfiguration.TableName}] ([{_sqlConfiguration.FieldName}],[{_sqlConfiguration.ReceivedDate}]) VALUES (@{_sqlConfiguration.FieldName},@{_sqlConfiguration.ReceivedDate})";
+                using (var connection = new SqlConnection(sqlConfiguration.ConnectionString))
+                {
+                    var command =
+                        $"INSERT INTO [{sqlConfiguration.TableName}] ([{sqlConfiguration.FieldName}],[{sqlConfiguration.ReceivedDate}]) VALUES (@{sqlConfiguration.FieldName},@{sqlConfiguration.ReceivedDate})";
 
-                var sqlCommand = new SqlCommand(command, connection);
+                    var sqlCommand = new SqlCommand(command, connection);
 
-                sqlCommand.Parameters.Add($"@{_sqlConfiguration.FieldName}", SqlDbType.NVarChar).Value = eventId;
-                sqlCommand.Parameters.Add($"@{_sqlConfiguration.ReceivedDate}", SqlDbType.DateTime2).Value = receivedDate;
+                    sqlCommand.Parameters.Add($"@{sqlConfiguration.FieldName}", SqlDbType.NVarChar).Value = eventId;
+                    sqlCommand.Parameters.Add($"@{sqlConfiguration.ReceivedDate}", SqlDbType.DateTime2).Value =
+                        DateTime.UtcNow;
 
-                await sqlCommand.ExecuteNonQueryAsync();
+                    await sqlCommand.ExecuteNonQueryAsync();
+                }
+            }
+            catch (Exception e)
+            {
+                logger.WriteException(e);
             }
         }
     }

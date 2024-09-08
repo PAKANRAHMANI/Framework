@@ -2,7 +2,7 @@
 {
     public interface IDuplicateMessageHandler
     {
-        Task<bool> HasMessageBeenProcessedBefore(Guid eventId);
-        Task MarkMessageAsProcessed(Guid eventId, DateTime receivedDate);
+        Task<bool> HasMessageBeenProcessedBefore(string eventId);
+        Task MarkMessageAsProcessed(string eventId);
     }
 }

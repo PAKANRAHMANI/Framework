@@ -25,11 +25,11 @@ public abstract class MassTransitIdempotentConsumer<T> : IConsumer<T> where T : 
 
             if (message != null)
             {
-                if (!await _duplicateHandler.HasMessageBeenProcessedBefore(message.EventId))
+                if (!await _duplicateHandler.HasMessageBeenProcessedBefore(message.EventId.ToString()))
                 {
                     await ConsumeMessage(message);
 
-                    await _duplicateHandler.MarkMessageAsProcessed(message.EventId, DateTime.UtcNow);
+                    await _duplicateHandler.MarkMessageAsProcessed(message.EventId.ToString());
                 }
             }
         }
