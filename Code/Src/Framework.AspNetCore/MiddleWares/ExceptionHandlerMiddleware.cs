@@ -44,21 +44,21 @@ public class ExceptionHandlerMiddleware
             case BusinessException businessException:
                 await HandleBusinessException(context, businessException);
                 break;
-            //case InfrastructureException infrastructureException:
-            //    await HandleInfrastructureException(context, infrastructureException);
-            //    break;
+            case InfrastructureException infrastructureException:
+                await HandleInfrastructureException(context, infrastructureException);
+                break;
             default:
                 await UnhandledException(context, exception);
                 break;
         }
     }
 
-    private async Task HandleInfrastructureException(HttpContext context, InfrastructureException businessException)
+    private async Task HandleInfrastructureException(HttpContext context, InfrastructureException infrastructureException)
     {
         var errors = new List<ExceptionDetails>
         {
-            ExceptionDetails.Create(businessException.ExceptionMessage, businessException.ErrorCode,
-                businessException.GetType().ToString())
+            ExceptionDetails.Create(infrastructureException.ExceptionMessage, infrastructureException.ErrorCode,
+                string.Empty)
         };
 
         await WriteExceptionToResponse(context, errors);

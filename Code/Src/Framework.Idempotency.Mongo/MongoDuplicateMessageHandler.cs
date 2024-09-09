@@ -1,39 +1,54 @@
 ﻿using Framework.Core.Logging;
-using Framework.Idempotency.Mongo.Models;
-using Humanizer;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace Framework.Idempotency.Mongo
 {
-    public class MongoDuplicateMessageHandler(IMongoDatabase database, ILogger logger)
+    public class MongoDuplicateMessageHandler(IMongoDatabase database, MongoConfiguration mongoConfiguration, ILogger logger)
         : IDuplicateMessageHandler
     {
-        private readonly IMongoCollection<ProcessedMessage> _processedMessagesCollection = database.GetCollection<ProcessedMessage>(nameof(ProcessedMessage).Pluralize());
-
         public async Task<bool> HasMessageBeenProcessedBefore(string eventId)
         {
-            var filter = Builders<ProcessedMessage>.Filter.Eq(pm => pm.EventId, eventId);
+            try
+            {
+                var messageInboxCollection = database.GetCollection<BsonDocument>(mongoConfiguration.CollectionName);
 
-            return await _processedMessagesCollection.CountDocumentsAsync(filter) > 0;
+                var filter = Builders<BsonDocument>.Filter.Eq(mongoConfiguration.FieldName, eventId);
+
+                return await messageInboxCollection.CountDocumentsAsync(filter) > 0;
+            }
+            catch (Exception ex)
+            {
+                logger.WriteException(ex);
+
+                return false;
+            }
         }
 
         public async Task MarkMessageAsProcessed(string eventId)
         {
-            try
+            using (var session = await database.Client.StartSessionAsync())
             {
-                var processedMessage = new ProcessedMessage
+                try
                 {
-                    EventId = eventId,
-                    Id = ObjectId.GenerateNewId(),
-                    ReceivedDate = DateTime.UtcNow
-                };
+                    var messageInboxCollection = database.GetCollection<BsonDocument>(mongoConfiguration.CollectionName);
 
-                await _processedMessagesCollection.InsertOneAsync(processedMessage);
-            }
-            catch (Exception e)
-            {
-                logger.WriteException(e);
+                    await messageInboxCollection.InsertOneAsync(new BsonDocument
+                    {
+                        { "_id" , ObjectId.GenerateNewId()},
+                        {mongoConfiguration.FieldName,eventId},
+                        {mongoConfiguration.ReceivedDate,DateTime.UtcNow}
+                    });
+                }
+                catch (Exception ex)
+                {
+                    await session.AbortTransactionAsync();
+
+                    logger.WriteException(ex);
+
+                    throw;
+                }
+                await session.CommitTransactionAsync();
             }
         }
 
