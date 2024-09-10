@@ -1,5 +1,4 @@
-﻿using System.Text;
-using Confluent.Kafka;
+﻿using Confluent.Kafka;
 using Framework.Core.Logging;
 using Framework.Kafka;
 using Microsoft.Extensions.Hosting;
@@ -24,7 +23,7 @@ public abstract class KafkaIdempotentConsumer(
         }
         catch (Exception exp)
         {
-            HandleException(exp);
+            logger.WriteException(exp);
         }
     }
 
@@ -62,21 +61,43 @@ public abstract class KafkaIdempotentConsumer(
 
     private async Task<bool> IsMessageProcessedAsync(string eventId)
     {
-        return await duplicateMessageHandler.HasMessageBeenProcessedBefore(eventId);
+        try
+        {
+            return await duplicateMessageHandler.HasMessageBeenProcessedBefore(eventId);
+        }
+        catch (Exception e)
+        {
+            logger.WriteException(e);
+
+            return false;
+        }
     }
 
     private async Task MarkMessageAsProcessedAsync(string eventId)
     {
-        await duplicateMessageHandler.MarkMessageAsProcessed(eventId);
+        try
+        {
+            await duplicateMessageHandler.MarkMessageAsProcessed(eventId);
+        }
+        catch (Exception e)
+        {
+            logger.WriteException(e);
+
+            await Task.CompletedTask;
+        }
     }
 
-    private static string TryGetEventIdFromHeaders(Headers headers)
+    private string TryGetEventIdFromHeaders(Headers headers)
     {
-        return headers.TryGetLastBytes("eventid", out var eventIdBytes) ? new Guid(eventIdBytes).ToString() : null;
-    }
+        try
+        {
+            return headers.TryGetLastBytes("eventid", out var eventIdBytes) ? new Guid(eventIdBytes).ToString() : null;
+        }
+        catch (Exception e)
+        {
+            logger.WriteException(e);
 
-    private void HandleException(Exception exp)
-    {
-        logger.WriteException(exp);
+            return null;
+        }
     }
 }

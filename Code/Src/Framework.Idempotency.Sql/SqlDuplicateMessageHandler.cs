@@ -15,6 +15,9 @@ namespace Framework.Idempotency.Sql
 
                 var command = new SqlCommand(commandText, connection);
 
+                if (connection.State == ConnectionState.Closed)
+                    connection.Open();
+
                 var queryResult = await command.ExecuteScalarAsync();
 
                 if (queryResult == null) return false;
@@ -40,6 +43,9 @@ namespace Framework.Idempotency.Sql
                     sqlCommand.Parameters.Add($"@{sqlConfiguration.FieldName}", SqlDbType.NVarChar).Value = eventId;
                     sqlCommand.Parameters.Add($"@{sqlConfiguration.ReceivedDate}", SqlDbType.DateTime2).Value =
                         DateTime.UtcNow;
+
+                    if (connection.State == ConnectionState.Closed)
+                        connection.Open();
 
                     await sqlCommand.ExecuteNonQueryAsync();
                 }
