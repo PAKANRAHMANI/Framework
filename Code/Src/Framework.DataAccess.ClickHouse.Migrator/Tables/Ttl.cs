@@ -1,4 +1,4 @@
-﻿namespace Framework.DataAccess.ClickHouse.Engines;
+﻿namespace Framework.DataAccess.ClickHouse.Migrator.Tables;
 
 public class Ttl
 {

@@ -1,8 +1,9 @@
-﻿using ClickHouse.Net;
+﻿using Framework.DataAccess.ClickHouse.Migrator.KafkaEngine;
+using Framework.DataAccess.ClickHouse.Migrator.Tables;
 
-namespace Framework.DataAccess.ClickHouse.Engines;
+namespace Framework.DataAccess.ClickHouse.Migrator;
 
-public abstract class KafkaEngineDistributed(IClickHouseDatabase database)
+public abstract class KafkaMergeTreeTemplate()
 {
     public void Create(KafkaEngineSetting setting)
     {
@@ -15,5 +16,5 @@ public abstract class KafkaEngineDistributed(IClickHouseDatabase database)
 
     }
     //get table columns 
-    protected abstract ClickHouseMergeTreeTable GetColumns();
+    protected abstract MergeTreeTable GetColumns();
 }

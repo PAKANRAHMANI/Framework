@@ -1,6 +1,6 @@
-﻿namespace Framework.DataAccess.ClickHouse.Columns;
+﻿namespace Framework.DataAccess.ClickHouse.Migrator.Columns;
 
-public static class ClickHouseDataTypes
+public static class ColumnDataTypes
 {
     // Integer Types
     public static readonly string UInt8 = "UInt8";
