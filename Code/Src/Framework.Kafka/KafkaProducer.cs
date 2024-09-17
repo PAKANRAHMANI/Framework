@@ -1,12 +1,11 @@
-﻿using System;
+﻿using Confluent.Kafka;
+using Framework.Kafka.Configurations;
+using System;
 using System.Collections.Generic;
-using Confluent.Kafka;
+using System.IO;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.IO;
-using System.Linq;
-using System.Text;
-using Framework.Kafka.Configurations;
 
 namespace Framework.Kafka
 {
@@ -43,7 +42,8 @@ namespace Framework.Kafka
             return await _producer.ProduceAsync(new TopicPartition(topicName, new Partition(partitionNumber)), new Message<TKey, TMessage>
             {
                 Value = message,
-                Key = key
+                Key = key,
+                Headers = GetHeaders()
             }, cancellationToken);
         }
 
@@ -52,7 +52,8 @@ namespace Framework.Kafka
             return await _producer.ProduceAsync(_configurations.TopicName, new Message<TKey, TMessage>
             {
                 Value = message,
-                Key = key
+                Key = key,
+                Headers = GetHeaders()
             }, cancellationToken);
         }
 
@@ -64,6 +65,8 @@ namespace Framework.Kafka
             {
                 kafkaHeaders.Add(new Header(header.Key, Encoding.UTF8.GetBytes(header.Value)));
             }
+
+            kafkaHeaders.Add(GetHeader());
 
             return await _producer.ProduceAsync(_configurations.TopicName, new Message<TKey, TMessage>
             {
@@ -78,7 +81,8 @@ namespace Framework.Kafka
             return await _producer.ProduceAsync(new TopicPartition(_configurations.TopicName, new Partition(partitionNumber)), new Message<TKey, TMessage>
             {
                 Value = message,
-                Key = key
+                Key = key,
+                Headers = GetHeaders()
             }, cancellationToken);
         }
 
@@ -87,7 +91,8 @@ namespace Framework.Kafka
             _producer.Produce(_configurations.TopicName, new Message<TKey, TMessage>
             {
                 Value = message,
-                Key = key
+                Key = key,
+                Headers = GetHeaders()
             }, action);
         }
         public void Produce(TKey key, TMessage message,int partitionNumber, Action<DeliveryResult<TKey, TMessage>> action)
@@ -95,7 +100,8 @@ namespace Framework.Kafka
             _producer.Produce(new TopicPartition(_configurations.TopicName,new Partition(partitionNumber)), new Message<TKey, TMessage>
             {
                 Value = message,
-                Key = key
+                Key = key,
+                Headers = GetHeaders()
             }, action);
         }
 
@@ -105,7 +111,8 @@ namespace Framework.Kafka
             _producer.Produce(new TopicPartition(topicName, new Partition(partitionNumber)), new Message<TKey, TMessage>
             {
                 Value = message,
-                Key = key
+                Key = key,
+                Headers = GetHeaders()
             }, action);
         }
 
@@ -124,8 +131,20 @@ namespace Framework.Kafka
             _producer.Produce(topicName, new Message<TKey, TMessage>
             {
                 Value = message,
-                Key = key
+                Key = key,
+                Headers = GetHeaders()
             }, action);
+        }
+        private Headers GetHeaders()
+        {
+            return new Headers
+            {
+                GetHeader()
+            };
+        }       
+        private Header GetHeader()
+        {
+            return new Header("eventid", Guid.NewGuid().ToByteArray());
         }
     }
 }
