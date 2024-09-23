@@ -16,13 +16,13 @@ internal sealed class SqlDataStore : IDataStoreObservable
     private readonly SqlStoreConfig _sqlStoreConfig;
     private readonly Timer _timer;
     private static readonly object LockObject = new();
-    public SqlDataStore(IOptions<SqlStoreConfig> sqlStoreConfig,
+    public SqlDataStore(SqlStoreConfig sqlStoreConfig,
         ILogger logger,
         [FromKeyedServices(Constants.MoveSqlCursorPosition)] IUpdateCursorPosition updateCursorPosition)
     {
         _logger = logger;
         _updateCursorPosition = updateCursorPosition;
-        _sqlStoreConfig = sqlStoreConfig.Value;
+        _sqlStoreConfig = sqlStoreConfig;
         _timer = new Timer(_sqlStoreConfig.PullingInterval);
         _timer.Elapsed += TimerOnElapsed;
     }
