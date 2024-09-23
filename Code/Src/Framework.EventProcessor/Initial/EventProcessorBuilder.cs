@@ -52,7 +52,11 @@ namespace Framework.EventProcessor.Initial
 
             _services.AddSingleton<IDataStoreObservable, SqlDataStore>();
 
-            _services.Configure<SqlStoreConfig>(config);
+            var sqlStoreConfig = new SqlStoreConfig();
+
+            config.Invoke(sqlStoreConfig);
+
+            _services.AddSingleton<SqlStoreConfig>(sqlStoreConfig);
 
             return this;
         }
