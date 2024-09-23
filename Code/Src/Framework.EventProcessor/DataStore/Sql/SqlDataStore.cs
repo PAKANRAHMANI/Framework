@@ -57,7 +57,6 @@ internal sealed class SqlDataStore : IDataStoreObservable
 
                     this._dataStoreChangeTracker.ChangeDetected(events, _updateCursorPosition).Wait();
 
-                    _logger.Write($"Cursor moved to position {events.Last().Id}", LogLevel.Debug);
                 }
             }
             catch (Exception exception)
