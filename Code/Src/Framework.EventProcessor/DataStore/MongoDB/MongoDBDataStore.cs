@@ -44,12 +44,10 @@ namespace Framework.EventProcessor.DataStore.MongoDB
                     if (events is not null && events.Any())
                     {
                         _logger.Write($"{events.Count} Events found in Tables", LogLevel.Debug);
+                        
+                        this._dataStoreChangeTracker.ChangeDetected(events, _updateCursorPosition).Wait();
 
-                        Task.Run(async () =>
-                        {
-                            await this._dataStoreChangeTracker.ChangeDetected(events, _updateCursorPosition);
-
-                        }).Wait();
+                        _logger.Write($"Cursor moved to position {events.Last().Id}", LogLevel.Debug);
                     }
 
                 }
