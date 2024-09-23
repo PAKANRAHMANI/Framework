@@ -18,7 +18,7 @@ namespace Framework.EventProcessor.DataStore.MongoDB
         private IDataStoreChangeTrackerObserver _dataStoreChangeTracker;
         private readonly IMongoDbEventHandling _mongoDbEvent;
         private static readonly object LockObject = new();
-        public MongoDbDataStore(MongoStoreConfig mongoStoreConfig, IMongoDatabase database, 
+        public MongoDbDataStore(MongoStoreConfig mongoStoreConfig, IMongoDatabase database,
             ILogger logger,
             [FromKeyedServices(Constants.MoveMongoCursorPosition)] IUpdateCursorPosition updateCursorPosition)
         {
@@ -45,11 +45,8 @@ namespace Framework.EventProcessor.DataStore.MongoDB
                     {
                         _logger.Write($"{events.Count} Events found in Tables", LogLevel.Debug);
 
-                        Task.Run(async () =>
-                        {
-                            await this._dataStoreChangeTracker.ChangeDetected(events, _updateCursorPosition);
+                        this._dataStoreChangeTracker.ChangeDetected(events, _updateCursorPosition).Wait();
 
-                        }).Wait();
                     }
 
                 }

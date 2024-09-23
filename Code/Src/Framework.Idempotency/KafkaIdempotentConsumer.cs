@@ -18,7 +18,14 @@ public abstract class KafkaIdempotentConsumer(
         {
             while (!cancellationToken.IsCancellationRequested)
             {
-                await consumer.ConsumeAsync(ReceiveMessage, cancellationToken);
+                try
+                {
+                    await consumer.ConsumeAsync(ReceiveMessage, cancellationToken);
+                }
+                catch (Exception exp)
+                {
+                    logger.WriteException(exp);
+                }
             }
         }
         catch (Exception exp)
