@@ -10,9 +10,9 @@ public class SqlUpdateCursorPosition: IUpdateCursorPosition
     private readonly SqlStoreConfig _sqlStoreConfig;
     private readonly ILogger _logger;
 
-    public SqlUpdateCursorPosition(IOptions<SqlStoreConfig> sqlStoreConfig, ILogger logger)
+    public SqlUpdateCursorPosition(SqlStoreConfig sqlStoreConfig, ILogger logger)
     {
-        _sqlStoreConfig = sqlStoreConfig.Value;
+        _sqlStoreConfig = sqlStoreConfig;
         _logger = logger;
     }
     public void MoveCursorPosition(EventItem eventItem)
