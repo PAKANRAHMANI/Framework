@@ -16,7 +16,7 @@ public class MergeTreeTable(string databaseName, string tableName, string cluste
     public List<SecondaryIndex> SecondaryIndices { get; init; }
     public List<PartitionColumn> PartitionColumns { get; init; }
     public List<string> PrimaryKeyColumns { get; init; }
-    public List<Column> Columns { get; init; }
+    public List<Column> Columns { get; init; }= [];
     public List<Setting> Settings { get; init; }
 
     private bool ValidateTtlColumn()

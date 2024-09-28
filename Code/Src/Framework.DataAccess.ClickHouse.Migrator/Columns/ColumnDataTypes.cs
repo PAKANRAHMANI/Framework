@@ -26,6 +26,7 @@ public static class ColumnDataTypes
     // Date and Time Types
     public static readonly string Date = "Date";
     public static readonly string DateTime = "DateTime";
+    public static readonly string DateTime64 = "DateTime64(9,'Asia/Tehran')";
 
     // Array Type
     public static string Array(string type) => $"Array({type})";
@@ -72,6 +73,7 @@ public static class ColumnDataTypes
         yield return Bool;
         yield return Date;
         yield return DateTime;
+        yield return DateTime64;
         yield return Point;
         yield return Polygon;
         yield return LineString;

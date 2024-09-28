@@ -8,5 +8,5 @@ public enum MergeTreeEngineType
     ReplacingMergeTree,
     ReplicatedMergeTree,
     ReplicatedSummingMergeTree,
-    ReplicatedReplacingMergeTree,
+    ReplicatedReplacingMergeTree
 }

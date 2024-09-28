@@ -1,8 +1,11 @@
 ﻿using System.Text;
+using Framework.DataAccess.ClickHouse.Migrator.Executors;
+using Framework.DataAccess.ClickHouse.Migrator.MergeTreeEngine;
+using Framework.DataAccess.ClickHouse.Migrator.Tables;
 
-namespace Framework.DataAccess.ClickHouse.Migrator.Tables.Constructors;
+namespace Framework.DataAccess.ClickHouse.Migrator.Migrations;
 
-public class ReplicatedTableCreator(MergeTreeTable table) : ITableNodeCreator
+internal class MergeTreeTableMigration(MergeTreeTable table, ClickHouseConfiguration clickHouseConfiguration) : IMigration
 {
     public void CreateTable()
     {
@@ -13,6 +16,9 @@ public class ReplicatedTableCreator(MergeTreeTable table) : ITableNodeCreator
             columnsBuilder.Append($"`{column.Name}` {column.Type},");
         }
         var columns = columnsBuilder.ToString();
+
+        if (columns.EndsWith(","))
+            columns = columns.TrimEnd(',');
 
         var tableBuilder = new StringBuilder();
 
@@ -29,20 +35,25 @@ public class ReplicatedTableCreator(MergeTreeTable table) : ITableNodeCreator
                 if (index.IndexParameters is not null && index.IndexParameters.Any())
                 {
                     var parameters = string.Join(",", index.IndexParameters);
-                    tableBuilder.AppendLine($",INDEX {index.IndexName}_idx ({index.ColumnName}) TYPE {index.IndexType}({parameters}) GRANULARITY {index.Granularity},");
+                    tableBuilder.AppendLine($",INDEX {index.IndexName}_idx ({index.ColumnName}) TYPE {index.IndexType}({parameters}) GRANULARITY {index.Granularity}");
                 }
                 else
                 {
-                    tableBuilder.AppendLine($",INDEX {index.IndexName}_idx ({index.ColumnName}) TYPE {index.IndexType} GRANULARITY {index.Granularity},");
+                    tableBuilder.AppendLine($",INDEX {index.IndexName}_idx ({index.ColumnName}) TYPE {index.IndexType} GRANULARITY {index.Granularity}");
                 }
             }
         }
 
         tableBuilder.AppendLine(")");
 
-        if (table.IsReplicated)
+        if (table.IsReplicated && table.MergeTreeEngineType == MergeTreeEngineType.ReplicatedReplacingMergeTree)
         {
             tableBuilder.AppendLine($"ENGINE = {table.MergeTreeEngineType}('/clickhouse/tables/Characteristics/{{shard}}', '{{replica}}',{table.VersionColumn})");
+        }
+        else if (table.MergeTreeEngineType == MergeTreeEngineType.ReplacingMergeTree)
+        {
+            tableBuilder.AppendLine($"ENGINE = {table.MergeTreeEngineType}({table.VersionColumn})");
+
         }
         else
         {
@@ -68,7 +79,6 @@ public class ReplicatedTableCreator(MergeTreeTable table) : ITableNodeCreator
         {
             foreach (var column in table.PartitionColumns)
             {
-
                 if (column.IsColumnTypeDateTime)
                 {
                     var partitionBy = string.Format(column.PartitionDateFormat, column.ColumnName);
@@ -77,7 +87,6 @@ public class ReplicatedTableCreator(MergeTreeTable table) : ITableNodeCreator
                 else
                 {
                     partitionColumnsBuilder.Append($"{column},");
-
                 }
             }
             var partitionColumns = partitionColumnsBuilder.ToString();
@@ -85,13 +94,12 @@ public class ReplicatedTableCreator(MergeTreeTable table) : ITableNodeCreator
             if (partitionColumns.EndsWith(","))
                 partitionColumns = partitionColumns.TrimEnd(',');
 
-
             tableBuilder.AppendLine($"PARTITION BY ({partitionColumns})");
         }
 
-        if (table.UseTtl)
+        if (table.UseTtl && table.Columns.Any(a => a.Name.Equals(table.Ttl.ColumnName, StringComparison.OrdinalIgnoreCase)))
         {
-            tableBuilder.AppendLine($"TTL {table.Ttl.ColumnName} + INTERVAL {table.Ttl.Interval} {table.Ttl.IntervalType} DELETE");
+            tableBuilder.AppendLine($"TTL {table.Ttl.ColumnName} + INTERVAL {table.Ttl.Interval} {table.Ttl.IntervalType.GetValue()} DELETE");
         }
 
         var settingBuilder = new StringBuilder();
@@ -100,20 +108,27 @@ public class ReplicatedTableCreator(MergeTreeTable table) : ITableNodeCreator
 
         foreach (var setting in table.Settings)
         {
-            settingBuilder.AppendLine($"{setting},");
+            settingBuilder.AppendLine($"{setting.Name} = {setting.Value},");
         }
+
         var settings = settingBuilder.ToString();
 
-        if (settings.EndsWith(","))
-            settings = settings.TrimEnd(',');
+        if (settings.EndsWith(",\r\n"))
+            settings = settings.AsSpan(0, settings.Length - 3).ToString();
 
-        settingBuilder.AppendLine(settings);
-        
+        tableBuilder.AppendLine(settings);
+
         var command = tableBuilder.ToString();
+
+        ExecuteCommand.Execute(clickHouseConfiguration, command);
+
     }
 
     public void DropTable(string tableName, string clusterName)
     {
         var command = $"DROP TABLE IF EXISTS {tableName} ON CLUSTER {clusterName};";
+
+        ExecuteCommand.Execute(clickHouseConfiguration, command);
+
     }
 }
