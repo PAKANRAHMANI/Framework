@@ -18,6 +18,8 @@
 		<ProjectReference Include="..\Framework.MassTransit.Message\Framework.MassTransit.Message.csproj" PrivateAssets="contentfiles;build" ReferenceOutputAssembly="True" IsImplicitlyDefined="False" />
 
 		<ProjectReference Include="..\Framework.Messages\Framework.Messages.csproj" PrivateAssets="contentfiles;build" ReferenceOutputAssembly="True" IsImplicitlyDefined="False" />
+
+		<ProjectReference Include="..\Framework.Sentry\Framework.Sentry.csproj" />
 	</ItemGroup>
 
 </Project>

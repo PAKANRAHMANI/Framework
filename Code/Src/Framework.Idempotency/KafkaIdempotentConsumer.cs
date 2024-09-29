@@ -1,6 +1,7 @@
 ﻿using Confluent.Kafka;
 using Framework.Core.Logging;
 using Framework.Kafka;
+using Framework.Sentry;
 using Microsoft.Extensions.Hosting;
 
 namespace Framework.Idempotency;
@@ -8,6 +9,7 @@ namespace Framework.Idempotency;
 public abstract class KafkaIdempotentConsumer(
     IDuplicateMessageHandler duplicateMessageHandler,
     IKafkaConsumer<string, string> consumer,
+    ISentryService sentryService,
     ILogger logger)
     : BackgroundService
 {
@@ -18,49 +20,57 @@ public abstract class KafkaIdempotentConsumer(
         {
             while (!cancellationToken.IsCancellationRequested)
             {
-                try
-                {
-                    await consumer.ConsumeAsync(ReceiveMessage, cancellationToken);
-                }
-                catch (Exception exp)
-                {
-                    logger.WriteException(exp);
-                }
+
+                await consumer.ConsumeAsync(ReceiveMessage, cancellationToken);
+
             }
         }
         catch (Exception exp)
         {
             logger.WriteException(exp);
+
+            sentryService.CaptureException(exp);
         }
     }
 
     private async Task ReceiveMessage(ConsumeResult<string, string> consumeResult)
     {
-        if (consumeResult == null)
+        try
         {
-            logger.Write("Consumed Message is null", LogLevel.Warning);
-
-            return;
-        }
-
-        var eventId = TryGetEventIdFromHeaders(consumeResult.Message.Headers);
-
-        if (eventId != null)
-        {
-            if (await IsMessageProcessedAsync(eventId))
+            if (consumeResult == null)
             {
-                logger.Write($"Message with Id {eventId} has already been processed.", LogLevel.Warning);
+                logger.Write("Consumed Message is null", LogLevel.Warning);
 
                 return;
             }
 
-            await ProcessMessageAsync(consumeResult);
+            var eventId = TryGetEventIdFromHeaders(consumeResult.Message.Headers);
 
-            await MarkMessageAsProcessedAsync(eventId);
+            if (eventId != null)
+            {
+                if (await IsMessageProcessedAsync(eventId))
+                {
+                    logger.Write($"Message with Id {eventId} has already been processed.", LogLevel.Warning);
+
+                    return;
+                }
+
+                await ProcessMessageAsync(consumeResult);
+
+                await MarkMessageAsProcessedAsync(eventId);
+            }
+            else
+            {
+                await ProcessMessageAsync(consumeResult);
+            }
         }
-        else
+        catch (Exception e)
         {
-            await ProcessMessageAsync(consumeResult);
+            consumer.DoSeek(consumeResult);
+
+            logger.WriteException(e);
+
+            sentryService.CaptureException(e);
         }
     }
 
@@ -76,6 +86,8 @@ public abstract class KafkaIdempotentConsumer(
         {
             logger.WriteException(e);
 
+            sentryService.CaptureException(e);
+
             return false;
         }
     }
@@ -90,6 +102,8 @@ public abstract class KafkaIdempotentConsumer(
         {
             logger.WriteException(e);
 
+            sentryService.CaptureException(e);
+
             await Task.CompletedTask;
         }
     }
@@ -103,6 +117,8 @@ public abstract class KafkaIdempotentConsumer(
         catch (Exception e)
         {
             logger.WriteException(e);
+
+            sentryService.CaptureException(e);
 
             return null;
         }

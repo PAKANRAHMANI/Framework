@@ -22,5 +22,7 @@ namespace Framework.Kafka
         Task ConsumeAsync(Action<ConsumeResult<TKey, TMessage>> action, string topic, int partitionNumber, Timestamp timestamp, TimeSpan timeout, CancellationToken cancellationToken);
         void Commit(params TopicPartitionOffset[] topicPartitionOffsets);
         void Commit(ConsumeResult<TKey, TMessage> consumeResult);
+        void DoSeek(ConsumeResult<TKey, TMessage> consumeResult);
+
     }
 }
