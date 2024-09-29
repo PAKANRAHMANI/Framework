@@ -203,6 +203,14 @@ namespace Framework.Kafka
             _consumer.Commit(consumeResult);
         }
 
+        public void DoSeek(ConsumeResult<TKey, TMessage> consumeResult)
+        {
+            var newOffset = new TopicPartitionOffset(consumeResult.Topic, consumeResult.Partition,
+                consumeResult.Offset);
+
+            _consumer.Seek(newOffset);
+        }
+
         private void ConsumeFromKafka(Action<ConsumeResult<TKey, TMessage>> action, CancellationToken cancellationToken)
         {
             try

@@ -4,7 +4,7 @@
 		<TargetFramework>net8.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>disable</Nullable>
-		<Version>8.0.34</Version>
+		<Version>8.0.35</Version>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -18,6 +18,8 @@
 		<ProjectReference Include="..\Framework.MassTransit.Message\Framework.MassTransit.Message.csproj" PrivateAssets="contentfiles;build" ReferenceOutputAssembly="True" IsImplicitlyDefined="False" />
 
 		<ProjectReference Include="..\Framework.Messages\Framework.Messages.csproj" PrivateAssets="contentfiles;build" ReferenceOutputAssembly="True" IsImplicitlyDefined="False" />
+
+		<ProjectReference Include="..\Framework.Sentry\Framework.Sentry.csproj" />
 	</ItemGroup>
 
 </Project>

@@ -9,7 +9,15 @@ internal class KafkaTopicProducer(IProducer<string, object> producer, ProducerCo
         return await Producer.ProduceAsync(kafkaConfig.Topic, new Message<string, object>
         {
             Value = message,
-            Key = kafkaConfig.Key
+            Key = kafkaConfig.Key,
+            Headers = GetHeaders()
         }, cancellationToken);
+    }
+    private Headers GetHeaders()
+    {
+        return new Headers
+        {
+            new Header("eventid", Guid.NewGuid().ToByteArray())
+        };
     }
 }

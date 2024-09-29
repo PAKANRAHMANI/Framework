@@ -10,8 +10,16 @@ namespace Framework.EventProcessor.Events.Kafka
             return await Producer.ProduceAsync(new TopicPartition(kafkaConfig.Topic, new Partition(Configuration.PartitionNumber)), new Message<string, object>
             {
                 Value = message,
-                Key = kafkaConfig.Key
+                Key = kafkaConfig.Key,
+                Headers = GetHeaders()
             }, cancellationToken);
+        }
+        private Headers GetHeaders()
+        {
+            return new Headers
+            {
+                new Header("eventid", Guid.NewGuid().ToByteArray())
+            };
         }
     }
 
