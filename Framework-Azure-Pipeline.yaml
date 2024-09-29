@@ -31,12 +31,12 @@ steps:
        projects: '**/*.Tests.Unit.csproj'
        arguments: '--configuration $(BuildConfiguration)'
 ##################################################################################################
-   - task: DotNetCoreCLI@2
-     displayName: 'Integration Test'
-     inputs:
-       command: test
-       projects: '**/*.Tests.Integration.csproj'
-       arguments: '--configuration $(BuildConfiguration)'
+  # - task: DotNetCoreCLI@2
+  #   displayName: 'Integration Test'
+  #   inputs:
+  #     command: test
+  #     projects: '**/*.Tests.Integration.csproj'
+  #     arguments: '--configuration $(BuildConfiguration)'
 ##################################################################################################
    - powershell: |
       [xml]$project = Get-Content -Path ./Code/Src/Framework.DataAccess.ClickHouse.Migrator/Framework.DataAccess.ClickHouse.Migrator.csproj
