@@ -110,7 +110,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Framework.Sentry", "Src\Fra
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Framework.DataAccess.CH", "Src\Framework.DataAccess.ClickHouse.CH\Framework.DataAccess.CH.csproj", "{0153776A-5FE2-40D3-8639-35D6DB4BFFF1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Framework.Utility.Tests.Unit", "Test\Framework.Utility.Tests.Unit\Framework.Utility.Tests.Unit.csproj", "{432A288F-03EB-48E7-8170-D346FD454114}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Framework.Utility.Tests.Unit", "Test\Framework.Utility.Tests.Unit\Framework.Utility.Tests.Unit.csproj", "{432A288F-03EB-48E7-8170-D346FD454114}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Framework.DataAccess.ClickHouse.Migrator", "Src\Framework.DataAccess.ClickHouse.Migrator\Framework.DataAccess.ClickHouse.Migrator.csproj", "{1DD556A6-286E-45AD-84F1-90DFDF452B28}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Framework.DataAccess.ClickHouse.Migrator.Tests.Integration", "Test\Framework.DataAccess.ClickHouse.Migrator.Tests.Unit\Framework.DataAccess.ClickHouse.Migrator.Tests.Integration.csproj", "{AD50B032-E5F3-4C75-82E7-E3C426920006}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -308,6 +312,14 @@ Global
 		{432A288F-03EB-48E7-8170-D346FD454114}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{432A288F-03EB-48E7-8170-D346FD454114}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{432A288F-03EB-48E7-8170-D346FD454114}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1DD556A6-286E-45AD-84F1-90DFDF452B28}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1DD556A6-286E-45AD-84F1-90DFDF452B28}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1DD556A6-286E-45AD-84F1-90DFDF452B28}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1DD556A6-286E-45AD-84F1-90DFDF452B28}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD50B032-E5F3-4C75-82E7-E3C426920006}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD50B032-E5F3-4C75-82E7-E3C426920006}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD50B032-E5F3-4C75-82E7-E3C426920006}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD50B032-E5F3-4C75-82E7-E3C426920006}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -362,6 +374,8 @@ Global
 		{9125A645-906E-438B-A85F-E826EE0F1562} = {25A183FD-7661-4697-96E4-895E57A64352}
 		{0153776A-5FE2-40D3-8639-35D6DB4BFFF1} = {D54D07CB-8231-46E9-9C59-140FE9FF9188}
 		{432A288F-03EB-48E7-8170-D346FD454114} = {164B764B-2856-4EE7-8BC6-2E8EE4AD9320}
+		{1DD556A6-286E-45AD-84F1-90DFDF452B28} = {D54D07CB-8231-46E9-9C59-140FE9FF9188}
+		{AD50B032-E5F3-4C75-82E7-E3C426920006} = {164B764B-2856-4EE7-8BC6-2E8EE4AD9320}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {FD22E860-CCCE-47C1-B1BE-51511F2D9BF8}
