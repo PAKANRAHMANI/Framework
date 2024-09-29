@@ -1,15 +1,15 @@
 using FluentAssertions;
 
-namespace Framework.DataAccess.ClickHouse.Migrator.Tests.Unit
+namespace Framework.DataAccess.ClickHouse.Migrator.Tests.Integration
 {
     public class KafkaDistributedTemplateTests
     {
         [Fact]
-        public void create_replicated_replacing_tables_without_exception()
+        public void create_replicated_replacing_tables_correctly()
         {
             const string distributedHashColumn = "InstrumentId";
 
-            var createTables = () => new CharacteristicTable().Create(distributedHashColumn);
+            var createTables = () => new CharacteristicDistributedTable().Create(distributedHashColumn);
 
             createTables.Should().NotThrow();
         }

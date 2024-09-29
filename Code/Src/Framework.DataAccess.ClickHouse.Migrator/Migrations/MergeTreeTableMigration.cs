@@ -35,11 +35,11 @@ internal class MergeTreeTableMigration(MergeTreeTable table, ClickHouseConfigura
                 if (index.IndexParameters is not null && index.IndexParameters.Any())
                 {
                     var parameters = string.Join(",", index.IndexParameters);
-                    tableBuilder.AppendLine($",INDEX {index.IndexName}_idx ({index.ColumnName}) TYPE {index.IndexType}({parameters}) GRANULARITY {index.Granularity}");
+                    tableBuilder.AppendLine($",INDEX {index.IndexName}_idx ({index.ColumnName}) TYPE {index.IndexType.GetValue()}({parameters}) GRANULARITY {index.Granularity}");
                 }
                 else
                 {
-                    tableBuilder.AppendLine($",INDEX {index.IndexName}_idx ({index.ColumnName}) TYPE {index.IndexType} GRANULARITY {index.Granularity}");
+                    tableBuilder.AppendLine($",INDEX {index.IndexName}_idx ({index.ColumnName}) TYPE {index.IndexType.GetValue()} GRANULARITY {index.Granularity}");
                 }
             }
         }

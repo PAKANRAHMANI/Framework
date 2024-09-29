@@ -1,7 +1,8 @@
 using Framework.DataAccess.ClickHouse.Migrator.MergeTreeEngine;
+using Framework.DataAccess.ClickHouse.Migrator.Partitions;
 using Framework.DataAccess.ClickHouse.Migrator.Tables;
 
-namespace Framework.DataAccess.ClickHouse.Migrator.Tests.Unit;
+namespace Framework.DataAccess.ClickHouse.Migrator.Tests.Integration;
 
 public static class ClickHouseTestData
 {
@@ -18,6 +19,7 @@ public static class ClickHouseTestData
     public static int _10 = 10;
     public static string ChsCip = "chscip";
     public static string Characteristics = "Characteristics";
+    public static string Symbol = "Symbol";
     public static string CreationDateTime = "CreationDateTime";
     public static Ttl Day = new()
     {
@@ -33,10 +35,23 @@ public static class ClickHouseTestData
         IndexType = SecondaryIndexType.MinMax,
         Granularity = 1
     };
-
+    public static SecondaryIndex BloomFilter = new()
+    {
+        ColumnName = "CreationDateTime",
+        IndexName = "CreationDateTime",
+        IndexType = SecondaryIndexType.BloomFilter,
+        Granularity = 1
+    };
     public static Setting IndexGranularity = new()
     {
         Name = MergeTreeSetting.IndexGranularityName,
         Value = "8192"
+    };
+    public static PartitionColumn CreationDateTimePartitionColumn = new()
+    {
+        IsColumnTypeDateTime = true,
+        PartitionDateFormat = PartitionDateFormats.ToYYYYMMDD,
+        ColumnName = "CreationDateTime"
+
     };
 }

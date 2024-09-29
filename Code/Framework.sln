@@ -114,7 +114,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Framework.Utility.Tests.Uni
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Framework.DataAccess.ClickHouse.Migrator", "Src\Framework.DataAccess.ClickHouse.Migrator\Framework.DataAccess.ClickHouse.Migrator.csproj", "{1DD556A6-286E-45AD-84F1-90DFDF452B28}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Framework.DataAccess.ClickHouse.Migrator.Tests.Unit", "Test\Framework.DataAccess.ClickHouse.Migrator.Tests.Unit\Framework.DataAccess.ClickHouse.Migrator.Tests.Unit.csproj", "{AD50B032-E5F3-4C75-82E7-E3C426920006}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Framework.DataAccess.ClickHouse.Migrator.Tests.Integration", "Test\Framework.DataAccess.ClickHouse.Migrator.Tests.Unit\Framework.DataAccess.ClickHouse.Migrator.Tests.Integration.csproj", "{AD50B032-E5F3-4C75-82E7-E3C426920006}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

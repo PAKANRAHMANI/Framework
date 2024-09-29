@@ -4,9 +4,9 @@ using Framework.DataAccess.ClickHouse.Migrator.KafkaEngine;
 using Framework.DataAccess.ClickHouse.Migrator.MergeTreeEngine;
 using Framework.DataAccess.ClickHouse.Migrator.Tables;
 
-namespace Framework.DataAccess.ClickHouse.Migrator.Tests.Unit;
+namespace Framework.DataAccess.ClickHouse.Migrator.Tests.Integration;
 
-public class CharacteristicTable : KafkaDistributedTemplate
+public class CharacteristicDistributedTable : KafkaDistributedTemplate
 {
     public string InstrumentId { get; set; }
     public bool IsOption { get; set; }
@@ -37,32 +37,32 @@ public class CharacteristicTable : KafkaDistributedTemplate
     protected override List<Column> GetColumns()
     {
         var kafkaTableColumns = new ColumnBuilder()
-            .WithName(nameof(CharacteristicTable.InstrumentId)).WithType(ColumnDataTypes.String)
-            .WithName(nameof(CharacteristicTable.IsOption)).WithType(ColumnDataTypes.Bool)
-            .WithName(nameof(CharacteristicTable.CompanyCode)).WithType(ColumnDataTypes.String)
-            .WithName(nameof(CharacteristicTable.InstrumentType)).WithType(ColumnDataTypes.String)
-            .WithName(nameof(CharacteristicTable.MarketPlace)).WithType(ColumnDataTypes.String)
-            .WithName(nameof(CharacteristicTable.BoardName)).WithType(ColumnDataTypes.String)
-            .WithName(nameof(CharacteristicTable.LowestAllowedVolume)).WithType(ColumnDataTypes.Float64)
-            .WithName(nameof(CharacteristicTable.HighestAllowedVolume)).WithType(ColumnDataTypes.Float64)
-            .WithName(nameof(CharacteristicTable.TickQuantity)).WithType(ColumnDataTypes.Int64)
-            .WithName(nameof(CharacteristicTable.GroupCode)).WithType(ColumnDataTypes.String)
-            .WithName(nameof(CharacteristicTable.YesterdayClosingPrice)).WithType(ColumnDataTypes.Float64)
-            .WithName(nameof(CharacteristicTable.TickPrice)).WithType(ColumnDataTypes.Float64)
-            .WithName(nameof(CharacteristicTable.AssetClassTitle)).WithType(ColumnDataTypes.String)
-            .WithName(nameof(CharacteristicTable.BoardCode)).WithType(ColumnDataTypes.Int16)
-            .WithName(nameof(CharacteristicTable.IndustryCode)).WithType(ColumnDataTypes.String)
-            .WithName(nameof(CharacteristicTable.IndustryTitle)).WithType(ColumnDataTypes.String)
-            .WithName(nameof(CharacteristicTable.IndustryColor)).WithType(ColumnDataTypes.String)
-            .WithName(nameof(CharacteristicTable.SubIndustryCode)).WithType(ColumnDataTypes.String)
-            .WithName(nameof(CharacteristicTable.AssetClassColor)).WithType(ColumnDataTypes.String)
-            .WithName(nameof(CharacteristicTable.SubIndustryTitle)).WithType(ColumnDataTypes.String)
-            .WithName(nameof(CharacteristicTable.NumberOfSharesOrBondsOutstanding)).WithType(ColumnDataTypes.Int64)
-            .WithName(nameof(CharacteristicTable.MessageOffset)).WithType(ColumnDataTypes.Int64)
-            .WithName(nameof(CharacteristicTable.RlcCreationDate)).WithType(ColumnDataTypes.String)
-            .WithName(nameof(CharacteristicTable.RlcCreationTime)).WithType(ColumnDataTypes.String)
-            .WithName(nameof(CharacteristicTable.CreationDateTime)).WithType(ColumnDataTypes.DateTime64)
-            .WithName(nameof(CharacteristicTable.CreateDateTime)).WithType(ColumnDataTypes.DateTime)
+            .WithName(nameof(CharacteristicDistributedTable.InstrumentId)).WithType(ColumnDataTypes.String)
+            .WithName(nameof(CharacteristicDistributedTable.IsOption)).WithType(ColumnDataTypes.Bool)
+            .WithName(nameof(CharacteristicDistributedTable.CompanyCode)).WithType(ColumnDataTypes.String)
+            .WithName(nameof(CharacteristicDistributedTable.InstrumentType)).WithType(ColumnDataTypes.String)
+            .WithName(nameof(CharacteristicDistributedTable.MarketPlace)).WithType(ColumnDataTypes.String)
+            .WithName(nameof(CharacteristicDistributedTable.BoardName)).WithType(ColumnDataTypes.String)
+            .WithName(nameof(CharacteristicDistributedTable.LowestAllowedVolume)).WithType(ColumnDataTypes.Float64)
+            .WithName(nameof(CharacteristicDistributedTable.HighestAllowedVolume)).WithType(ColumnDataTypes.Float64)
+            .WithName(nameof(CharacteristicDistributedTable.TickQuantity)).WithType(ColumnDataTypes.Int64)
+            .WithName(nameof(CharacteristicDistributedTable.GroupCode)).WithType(ColumnDataTypes.String)
+            .WithName(nameof(CharacteristicDistributedTable.YesterdayClosingPrice)).WithType(ColumnDataTypes.Float64)
+            .WithName(nameof(CharacteristicDistributedTable.TickPrice)).WithType(ColumnDataTypes.Float64)
+            .WithName(nameof(CharacteristicDistributedTable.AssetClassTitle)).WithType(ColumnDataTypes.String)
+            .WithName(nameof(CharacteristicDistributedTable.BoardCode)).WithType(ColumnDataTypes.Int16)
+            .WithName(nameof(CharacteristicDistributedTable.IndustryCode)).WithType(ColumnDataTypes.String)
+            .WithName(nameof(CharacteristicDistributedTable.IndustryTitle)).WithType(ColumnDataTypes.String)
+            .WithName(nameof(CharacteristicDistributedTable.IndustryColor)).WithType(ColumnDataTypes.String)
+            .WithName(nameof(CharacteristicDistributedTable.SubIndustryCode)).WithType(ColumnDataTypes.String)
+            .WithName(nameof(CharacteristicDistributedTable.AssetClassColor)).WithType(ColumnDataTypes.String)
+            .WithName(nameof(CharacteristicDistributedTable.SubIndustryTitle)).WithType(ColumnDataTypes.String)
+            .WithName(nameof(CharacteristicDistributedTable.NumberOfSharesOrBondsOutstanding)).WithType(ColumnDataTypes.Int64)
+            .WithName(nameof(CharacteristicDistributedTable.MessageOffset)).WithType(ColumnDataTypes.Int64)
+            .WithName(nameof(CharacteristicDistributedTable.RlcCreationDate)).WithType(ColumnDataTypes.String)
+            .WithName(nameof(CharacteristicDistributedTable.RlcCreationTime)).WithType(ColumnDataTypes.String)
+            .WithName(nameof(CharacteristicDistributedTable.CreationDateTime)).WithType(ColumnDataTypes.DateTime64)
+            .WithName(nameof(CharacteristicDistributedTable.CreateDateTime)).WithType(ColumnDataTypes.DateTime)
             .Build();
 
         return kafkaTableColumns;
