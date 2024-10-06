@@ -48,7 +48,7 @@ internal class MergeTreeTableMigration(MergeTreeTable table, ClickHouseConfigura
 
         if (table.IsReplicated && table.MergeTreeEngineType == MergeTreeEngineType.ReplicatedReplacingMergeTree)
         {
-            tableBuilder.AppendLine($"ENGINE = {table.MergeTreeEngineType}('/clickhouse/tables/Characteristics/{{shard}}', '{{replica}}',{table.VersionColumn})");
+            tableBuilder.AppendLine($"ENGINE = {table.MergeTreeEngineType}('/clickhouse/tables/{table.TableName}/{{shard}}', '{{replica}}',{table.VersionColumn})");
         }
         else if (table.MergeTreeEngineType == MergeTreeEngineType.ReplacingMergeTree)
         {
