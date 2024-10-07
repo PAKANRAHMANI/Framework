@@ -55,6 +55,10 @@ internal class MergeTreeTableMigration(MergeTreeTable table, ClickHouseConfigura
             tableBuilder.AppendLine($"ENGINE = {table.MergeTreeEngineType}({table.VersionColumn})");
 
         }
+        else if (table.IsReplicated && table.MergeTreeEngineType == MergeTreeEngineType.ReplicatedMergeTree)
+        {
+            tableBuilder.AppendLine($"ENGINE = {table.MergeTreeEngineType}('/clickhouse/tables/{{shard}}/{table.TableName}','{{replica}}', {table.VersionColumn})");
+        }
         else
         {
             tableBuilder.AppendLine($"ENGINE = {table.MergeTreeEngineType}");
