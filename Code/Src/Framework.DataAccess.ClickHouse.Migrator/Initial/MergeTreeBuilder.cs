@@ -79,10 +79,10 @@ public sealed class MergeTreeBuilder :
         return this;
     }
 
-    public IMergeTreeBuilder AsReplicatedMergeTree()
+    public IReplacingMergeTreeBuilder AsReplicatedMergeTree()
     {
         _isReplicated = true;
-        return this; 
+        return this;
     }
 
     public IReplacingMergeTreeBuilder AsReplacingMergeTree()

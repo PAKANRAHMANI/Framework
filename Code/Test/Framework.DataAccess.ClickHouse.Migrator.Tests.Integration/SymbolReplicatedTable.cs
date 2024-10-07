@@ -76,6 +76,7 @@ public class SymbolReplicatedTable : KafkaMergeTreeTemplate
             .SetDatabaseName(ClickHouseTestData.RlcMessages)
             .SetTableName(ClickHouseTestData.Symbol)
             .AsReplicatedMergeTree()
+            .WithVersionColumn(ClickHouseTestData.CreationDateTime)
             .UseTtl()
             .WithTtl(ClickHouseTestData.Day)
             .WithMergeTreeEngineType(MergeTreeEngineType.ReplicatedMergeTree)
