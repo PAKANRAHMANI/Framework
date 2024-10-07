@@ -3,7 +3,7 @@
 public interface IEngineBuilder
 {
     IMergeTreeBuilder AsMergeTree();
-    IReplacingMergeTreeBuilder AsReplicatedMergeTree();
+    IMergeTreeBuilder AsReplicatedMergeTree();
     IReplacingMergeTreeBuilder AsReplacingMergeTree();
     IReplacingMergeTreeBuilder AsReplicatedReplacingMergeTree();
 }

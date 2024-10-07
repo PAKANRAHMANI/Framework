@@ -7,7 +7,7 @@ internal class DistributedTableMigration(DistributedTable table,string replicate
 {
     public void CreateTable()
     {
-        var command = @$"CREATE TABLE {table.TableName} ON CLUSTER {table.ClusterName} AS {table.DatabaseName}.{replicatedTableName} 
+        var command = @$"CREATE TABLE IF NOT EXISTS {table.TableName} ON CLUSTER {table.ClusterName} AS {table.DatabaseName}.{replicatedTableName} 
                   ENGINE = Distributed ({table.ClusterName}, {table.DatabaseName}, {replicatedTableName}, murmurHash3_64({table.HashColumnName}))";
 
         ExecuteCommand.Execute(clickHouseConfiguration, command);

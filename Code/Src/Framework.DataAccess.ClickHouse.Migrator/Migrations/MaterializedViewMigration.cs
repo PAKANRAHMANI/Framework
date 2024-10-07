@@ -7,7 +7,7 @@ internal class MaterializedViewMigration(Table table, ClickHouseConfiguration cl
 {
     public void CreateTable()
     {
-        var command = @$"CREATE MATERIALIZED VIEW {table.DatabaseName}.{table.TableName}_MaterializedView
+        var command = @$"CREATE MATERIALIZED VIEW IF NOT EXISTS {table.DatabaseName}.{table.TableName}_MaterializedView
                          ON CLUSTER {table.ClusterName}
                          TO {table.DatabaseName}.{table.TableName}_Distributed AS
                          SELECT *
