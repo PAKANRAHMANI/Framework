@@ -19,7 +19,7 @@ public static class ClickHouseTestData
     public static int _10 = 10;
     public static string ChsCip = "chscip";
     public static string Characteristics = "Characteristics";
-    public static string Symbol = "Symbol";
+    public static string Symbol = "Symbol3";
     public static string CreationDateTime = "CreationDateTime";
     public static Ttl Day = new()
     {
@@ -52,6 +52,12 @@ public static class ClickHouseTestData
         IsColumnTypeDateTime = true,
         PartitionDateFormat = PartitionDateFormats.ToYYYYMMDD,
         ColumnName = "CreationDateTime"
+
+    };
+    public static PartitionColumn InstrumentIdPartitionColumn = new()
+    {
+        IsColumnTypeDateTime = false,
+        ColumnName = "InstrumentId"
 
     };
 }

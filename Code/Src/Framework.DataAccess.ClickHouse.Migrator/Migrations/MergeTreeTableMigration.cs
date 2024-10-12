@@ -90,7 +90,7 @@ internal class MergeTreeTableMigration(MergeTreeTable table, ClickHouseConfigura
                 }
                 else
                 {
-                    partitionColumnsBuilder.Append($"{column},");
+                    partitionColumnsBuilder.Append($"{column.ColumnName},");
                 }
             }
             var partitionColumns = partitionColumnsBuilder.ToString();

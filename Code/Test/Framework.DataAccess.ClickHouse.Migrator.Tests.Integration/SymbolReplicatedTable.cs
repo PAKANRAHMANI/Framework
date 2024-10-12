@@ -83,7 +83,7 @@ public class SymbolReplicatedTable : KafkaMergeTreeTemplate
             .HasSecondaryIndex()
             .WithSecondaryIndices(ClickHouseTestData.BloomFilter)
             .HasPartition()
-            .WithPartitionColumns(ClickHouseTestData.CreationDateTimePartitionColumn)
+            .WithPartitionColumns(ClickHouseTestData.InstrumentIdPartitionColumn)
             .WithSettings(ClickHouseTestData.IndexGranularity)
             .Build();
     }
