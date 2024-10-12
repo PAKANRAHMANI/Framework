@@ -8,7 +8,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="MassTransit.AspNetCore" />
+		<PackageReference Include="MassTransit" />
 		<PackageReference Include="Newtonsoft.Json" />
 	</ItemGroup>
 
