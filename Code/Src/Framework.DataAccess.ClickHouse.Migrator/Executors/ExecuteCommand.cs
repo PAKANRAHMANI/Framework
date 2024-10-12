@@ -29,7 +29,7 @@ namespace Framework.DataAccess.ClickHouse.Migrator.Executors
             }
             catch (Exception e)
             {
-                //sentryService.CaptureException(e);
+                //TODO:sentryService.CaptureException(e);
                 throw ;
             }
         }

@@ -27,6 +27,9 @@ public abstract class KafkaDistributedTemplate
         tableFactory.CreateDistributedTable(distributedHashColumn, mergeTreeTable.TableName);
 
         tableFactory.CreateMaterializedViewMigration();
+
+        if(mergeTreeTable.UseTtl)
+            tableFactory.ModifyMergeTreeByTtl(mergeTreeTable);
     }
 
     protected abstract List<Column> GetColumns();

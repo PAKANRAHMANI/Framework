@@ -1,4 +1,6 @@
-﻿using Framework.DataAccess.ClickHouse.Migrator.Columns;
+﻿using System.Text;
+using Framework.DataAccess.ClickHouse.Migrator.Columns;
+using Framework.DataAccess.ClickHouse.Migrator.Executors;
 using Framework.DataAccess.ClickHouse.Migrator.KafkaEngine;
 using Framework.DataAccess.ClickHouse.Migrator.Migrations;
 using Framework.DataAccess.ClickHouse.Migrator.Tables;
@@ -23,7 +25,7 @@ internal class TableFactory(MergeTreeTable mergeTreeTable, List<Column> columns,
         mergeTreeMigration.CreateTable();
     }
 
-    public void CreateDistributedTable(string hashColumnName,string replicatedTableName)
+    public void CreateDistributedTable(string hashColumnName, string replicatedTableName)
     {
         var distributedTable = new DistributedTable(hashColumnName, mergeTreeTable.DatabaseName, $"{mergeTreeTable.TableName}_Distributed", mergeTreeTable.ClusterName);
 
@@ -38,5 +40,40 @@ internal class TableFactory(MergeTreeTable mergeTreeTable, List<Column> columns,
         var distributedMigration = new MaterializedViewMigration(table, clickHouseConfiguration);
 
         distributedMigration.CreateTable();
+    }
+
+    public void ModifyMergeTreeByTtl(MergeTreeTable table)
+    {
+        var command = @$"";
+
+        if (table.Ttl.IsGenerateConditionOnDateTimeByFramework && table.Ttl.UseCondition)
+        {
+            command = @$"ALTER TABLE {table.DatabaseName}.{table.TableName}
+                                 MODIFY TTL  {table.Ttl.ColumnName} + INTERVAL {table.Ttl.Interval} {table.Ttl.IntervalType.GetValue()}
+                                 DELETE WHERE({table.Ttl.GroupByColumn} ,  {table.Ttl.ColumnName} ) GLOBAL NOT  IN (
+                                 SELECT {table.Ttl.GroupByColumn} , MAX({table.Ttl.ColumnName}) AS ttlColumnName
+                                 FROM   {table.DatabaseName}.`{table.TableName}`_Distributed
+                                 WHERE toDate({table.Ttl.ColumnName}) = today()
+                                 GROUP BY {table.Ttl.GroupByColumn}
+                                 UNION ALL
+                                 SELECT {table.Ttl.GroupByColumn}, MAX({table.Ttl.ColumnName}) AS ttlColumnName
+                                 FROM   {table.DatabaseName}.`{table.TableName}`_Distributed
+                                 WHERE {table.Ttl.GroupByColumn} GLOBAL NOT IN (
+                                     SELECT DISTINCT {table.Ttl.GroupByColumn}
+                                     FROM  {table.DatabaseName}.`{table.TableName}`_Distributed
+                                     WHERE toDate({table.Ttl.ColumnName}) = today()
+                                    )
+                                 GROUP BY {table.Ttl.GroupByColumn}
+                                 )";
+
+            ExecuteCommand.Execute(clickHouseConfiguration, command);
+
+        }
+        else if (table.Ttl.UseCondition)
+        {
+            command = @$"ALTER TABLE {table.DatabaseName}.{table.TableName} MODIFY TTL {table.Ttl.ColumnName} + INTERVAL {table.Ttl.Interval} {table.Ttl.IntervalType.GetValue()} DELETE WHERE {table.Ttl.Condition}";
+
+            ExecuteCommand.Execute(clickHouseConfiguration, command);
+        }
     }
 }

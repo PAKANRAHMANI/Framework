@@ -14,11 +14,11 @@ public static class ClickHouseTestData
     public static int _5000 = 5000;
     public static int _6000 = 6000;
     public static string CipTraderCharismaTech9092 = "kafka-headless.cip.svc.trader-stage.charisma.tech:9092";
-    public static string CharacteristicsTest2 = "characteristics-testz2";
+    public static string CharacteristicsTest2 = "characteristics_test2";
     public static string ClickhouseCharacteristicsGroupIdTest2 = "clickhouse-characteristics-group-id-test2";
     public static int _10 = 10;
     public static string ChsCip = "chscip";
-    public static string Characteristics = "Characteristics";
+    public static string Characteristics = "characteristics_testz3";
     public static string Symbol = "Symbol3";
     public static string CreationDateTime = "CreationDateTime";
     public static Ttl Day = new()
@@ -26,8 +26,9 @@ public static class ClickHouseTestData
         ColumnName = "CreateDateTime",
         Interval = 1,
         IntervalType = TtlInterval.Day,
-        Condition = "",
-        UseCondition = true
+        UseCondition = true,
+        GroupByColumn = "InstrumentId",
+        IsGenerateConditionOnDateTimeByFramework = true
     };
     public static string InstrumentId = "InstrumentId";
     public static SecondaryIndex MinMax = new()
