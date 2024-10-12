@@ -103,7 +103,37 @@ internal class MergeTreeTableMigration(MergeTreeTable table, ClickHouseConfigura
 
         if (table.UseTtl && table.Columns.Any(a => a.Name.Equals(table.Ttl.ColumnName, StringComparison.OrdinalIgnoreCase)))
         {
-            tableBuilder.AppendLine($"TTL {table.Ttl.ColumnName} + INTERVAL {table.Ttl.Interval} {table.Ttl.IntervalType.GetValue()} DELETE");
+            if (table.Ttl.UseCondition)
+            {
+                if (table.Ttl.IsGenerateConditionOnDateTimeByFramework)
+                {
+                    var condition = @$"({table.Ttl.GroupByColumn} ,  {table.Ttl.ColumnName} ) GLOBAL NOT  IN (
+                                 SELECT {table.Ttl.GroupByColumn} , MAX({table.Ttl.ColumnName}) AS ttlColumnName
+                                 FROM   {table.DatabaseName}.`{table.TableName}`_Distributed
+                                 WHERE toDate({table.Ttl.ColumnName}) = today()
+                                 GROUP BY {table.Ttl.GroupByColumn}
+                                 UNION ALL
+                                 SELECT {table.Ttl.GroupByColumn}, MAX({table.Ttl.ColumnName}) AS ttlColumnName
+                                 FROM   {table.DatabaseName}.`{table.TableName}`_Distributed
+                                 WHERE {table.Ttl.GroupByColumn} GLOBAL  NOT IN (
+                                     SELECT DISTINCT {table.Ttl.GroupByColumn}
+                                     FROM  {table.DatabaseName}.`{table.TableName}`_Distributed
+                                     WHERE toDate({table.Ttl.ColumnName}) = today()
+                                    )
+                                 GROUP BY {table.Ttl.GroupByColumn}
+                                 )";
+
+                    tableBuilder.AppendLine($"TTL {table.Ttl.ColumnName} + INTERVAL {table.Ttl.Interval} {table.Ttl.IntervalType.GetValue()} DELETE WHERE {condition}");
+                }
+                else
+                {
+                    tableBuilder.AppendLine($"TTL {table.Ttl.ColumnName} + INTERVAL {table.Ttl.Interval} {table.Ttl.IntervalType.GetValue()} DELETE WHERE {table.Ttl.Condition}");
+                }
+            }
+            else
+            {
+                tableBuilder.AppendLine($"TTL {table.Ttl.ColumnName} + INTERVAL {table.Ttl.Interval} {table.Ttl.IntervalType.GetValue()} DELETE ");
+            }
         }
 
         var settingBuilder = new StringBuilder();
