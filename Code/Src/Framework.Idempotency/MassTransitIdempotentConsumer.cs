@@ -6,36 +6,40 @@ using Newtonsoft.Json;
 
 namespace Framework.Idempotency;
 
-public abstract class MassTransitIdempotentConsumer<T> : IConsumer<T> where T : class, IEvent
+public abstract class MassTransitIdempotentConsumer<T>(IDuplicateMessageHandler duplicateHandler)
+    : IConsumer<T>
+    where T : class, IEvent
 {
-    private readonly IDuplicateMessageHandler _duplicateHandler;
+    private static readonly SemaphoreSlim Semaphore = new SemaphoreSlim(1, 1);
 
-    protected MassTransitIdempotentConsumer(
-        IDuplicateMessageHandler duplicateHandler
-    )
-    {
-        _duplicateHandler = duplicateHandler;
-    }
     public async Task Consume(ConsumeContext<T> context)
     {
-        var massTransitData = MassTransitMessageFactory.CreateFromMassTransitContext(context);
+        await Semaphore.WaitAsync();
+
         try
         {
+            var massTransitData = MassTransitMessageFactory.CreateFromMassTransitContext(context);
+
             var message = JsonConvert.DeserializeObject<T>(massTransitData.Message.ToString());
 
             if (message != null)
             {
-                if (!await _duplicateHandler.HasMessageBeenProcessedBefore(message.EventId.ToString()))
+
+                if (!await duplicateHandler.HasMessageBeenProcessedBefore(message.EventId.ToString()))
                 {
                     await ConsumeMessage(message);
 
-                    await _duplicateHandler.MarkMessageAsProcessed(message.EventId.ToString());
+                    await duplicateHandler.MarkMessageAsProcessed(message.EventId.ToString());
                 }
             }
         }
         catch (Exception ex)
         {
             Console.WriteLine(ex.Message);
+        }
+        finally
+        {
+            Semaphore.Release();
         }
 
     }
