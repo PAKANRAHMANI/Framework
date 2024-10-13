@@ -25,7 +25,7 @@ public static class ColumnDataTypes
 
     // Date and Time Types
     public static readonly string Date = "Date";
-    public static readonly string DateTime = "DateTime";
+    public static readonly string DateTime = "DateTime('Asia/Tehran')";
     public static readonly string DateTime64 = "DateTime64(9,'Asia/Tehran')";
 
     // Array Type
