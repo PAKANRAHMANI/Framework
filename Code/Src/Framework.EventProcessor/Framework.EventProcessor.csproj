@@ -5,7 +5,7 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>disable</Nullable>
 		<OutputType>Library</OutputType>
-  <Version>8.0.39</Version>
+  <Version>8.0.40</Version>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -16,7 +16,7 @@
 		<PackageReference Include="MongoDB.Driver" />
 		<PackageReference Include="Newtonsoft.Json" />
 		<PackageReference Include="PrivateSetterContractResolver" />
-		<PackageReference Include="Scrutor" Version="4.2.2" />
+		<PackageReference Include="Scrutor" />
 	</ItemGroup>
 
 	<ItemGroup>
