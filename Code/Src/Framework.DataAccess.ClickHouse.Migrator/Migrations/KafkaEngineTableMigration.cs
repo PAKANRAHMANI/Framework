@@ -6,9 +6,9 @@ using System.Text;
 
 namespace Framework.DataAccess.ClickHouse.Migrator.Migrations
 {
-    internal class KafkaEngineTableMigration(Table table,List<Column> clickhouseColumns,KafkaEngineSetting kafkaEngineSetting, ClickHouseConfiguration clickHouseConfiguration) : IMigration
+    internal class KafkaEngineTableMigration(Table table, List<Column> clickhouseColumns, KafkaEngineSetting kafkaEngineSetting, ClickHouseConfiguration clickHouseConfiguration) : IMigration
     {
-        public void CreateTable()
+        public async Task CreateTable()
         {
             var columnsBuilder = new StringBuilder();
 
@@ -55,14 +55,14 @@ namespace Framework.DataAccess.ClickHouse.Migrator.Migrations
 
             var command = tableBuilder.ToString();
 
-            ExecuteCommand.Execute(clickHouseConfiguration, command);
+            await ExecuteCommand.Execute(clickHouseConfiguration, command);
         }
 
-        public void DropTable(string tableName, string clusterName)
+        public async Task DropTable(string tableName, string clusterName)
         {
             var command = $"DROP TABLE IF EXISTS {tableName} ON CLUSTER {clusterName};";
 
-            ExecuteCommand.Execute(clickHouseConfiguration, command);
+            await ExecuteCommand.Execute(clickHouseConfiguration, command);
         }
     }
 }

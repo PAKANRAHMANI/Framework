@@ -4,7 +4,7 @@ namespace Framework.DataAccess.ClickHouse.Migrator.Executors
 {
     internal static class ExecuteCommand
     {
-        public static void Execute(ClickHouseConfiguration clickHouseConfiguration, string command)
+        public static async Task Execute(ClickHouseConfiguration clickHouseConfiguration, string command)
         {
             try
             {
@@ -21,16 +21,16 @@ namespace Framework.DataAccess.ClickHouse.Migrator.Executors
 
                 using var connection = new ClickHouseConnection(connectionString);
 
-                connection.Open();
+                await connection.OpenAsync();
 
                 using var clickHouseCommand = connection.CreateCommand(command);
 
-                clickHouseCommand.ExecuteNonQuery();
+                await clickHouseCommand.ExecuteNonQueryAsync();
             }
             catch (Exception e)
             {
                 //TODO:sentryService.CaptureException(e);
-                throw ;
+                throw;
             }
         }
     }

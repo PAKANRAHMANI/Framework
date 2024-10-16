@@ -11,7 +11,7 @@ namespace Framework.DataAccess.ClickHouse.Migrator.Tests.Integration
 
             var createTables = () => new CharacteristicDistributedTable().Create(distributedHashColumn);
 
-            createTables.Should().NotThrow();
+            createTables.Should().NotThrowAsync();
         }
     }
 }

@@ -6,7 +6,7 @@ namespace Framework.DataAccess.ClickHouse.Migrator;
 
 public abstract class KafkaDistributedTemplate
 {
-    public void Create(string distributedHashColumn)
+    public async Task Create(string distributedHashColumn)
     {
         var columns = GetColumns();
 
@@ -20,16 +20,16 @@ public abstract class KafkaDistributedTemplate
 
         var tableFactory = new TableFactory(mergeTreeTable, columns, clickHouseConfig);
 
-        tableFactory.CreateKafkaEngine(kafkaSetting);
+        await tableFactory.CreateKafkaEngine(kafkaSetting);
 
-        tableFactory.CreateMergeTree();
+        await tableFactory.CreateMergeTree();
 
-        tableFactory.CreateDistributedTable(distributedHashColumn, mergeTreeTable.TableName);
+        await tableFactory.CreateDistributedTable(distributedHashColumn, mergeTreeTable.TableName);
 
-        tableFactory.CreateMaterializedViewMigration();
+        await tableFactory.CreateMaterializedViewMigration();
 
-        if(mergeTreeTable.UseTtl)
-            tableFactory.ModifyMergeTreeByTtl(mergeTreeTable);
+        if (mergeTreeTable.UseTtl)
+            await tableFactory.ModifyMergeTreeByTtl(mergeTreeTable);
     }
 
     protected abstract List<Column> GetColumns();

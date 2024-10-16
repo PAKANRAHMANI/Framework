@@ -9,40 +9,40 @@ namespace Framework.DataAccess.ClickHouse.Migrator;
 
 internal class TableFactory(MergeTreeTable mergeTreeTable, List<Column> columns, ClickHouseConfiguration clickHouseConfiguration)
 {
-    public void CreateKafkaEngine(KafkaEngineSetting setting)
+    public async Task CreateKafkaEngine(KafkaEngineSetting setting)
     {
         var table = new Table(mergeTreeTable.DatabaseName, $"{mergeTreeTable.TableName}_Messages", mergeTreeTable.ClusterName);
 
         var kafkaMigration = new KafkaEngineTableMigration(table, columns, setting, clickHouseConfiguration);
 
-        kafkaMigration.CreateTable();
+        await kafkaMigration.CreateTable();
     }
 
-    public void CreateMergeTree()
+    public async Task CreateMergeTree()
     {
         var mergeTreeMigration = new MergeTreeTableMigration(mergeTreeTable, clickHouseConfiguration);
 
-        mergeTreeMigration.CreateTable();
+        await mergeTreeMigration.CreateTable();
     }
 
-    public void CreateDistributedTable(string hashColumnName, string replicatedTableName)
+    public async Task CreateDistributedTable(string hashColumnName, string replicatedTableName)
     {
         var distributedTable = new DistributedTable(hashColumnName, mergeTreeTable.DatabaseName, $"{mergeTreeTable.TableName}_Distributed", mergeTreeTable.ClusterName);
 
         var distributedMigration = new DistributedTableMigration(distributedTable, replicatedTableName, clickHouseConfiguration);
 
-        distributedMigration.CreateTable();
+        await distributedMigration.CreateTable();
     }
-    public void CreateMaterializedViewMigration()
+    public async Task CreateMaterializedViewMigration()
     {
         var table = new Table(mergeTreeTable.DatabaseName, $"{mergeTreeTable.TableName}", mergeTreeTable.ClusterName);
 
         var distributedMigration = new MaterializedViewMigration(table, clickHouseConfiguration);
 
-        distributedMigration.CreateTable();
+        await distributedMigration.CreateTable();
     }
 
-    public void ModifyMergeTreeByTtl(MergeTreeTable table)
+    public async Task ModifyMergeTreeByTtl(MergeTreeTable table)
     {
         var command = @$"";
 
@@ -66,14 +66,14 @@ internal class TableFactory(MergeTreeTable mergeTreeTable, List<Column> columns,
                                  GROUP BY {table.Ttl.GroupByColumn}
                                  )";
 
-            ExecuteCommand.Execute(clickHouseConfiguration, command);
+            await ExecuteCommand.Execute(clickHouseConfiguration, command);
 
         }
         else if (table.Ttl.UseCondition)
         {
             command = @$"ALTER TABLE {table.DatabaseName}.{table.TableName} MODIFY TTL {table.Ttl.ColumnName} + INTERVAL {table.Ttl.Interval} {table.Ttl.IntervalType.GetValue()} DELETE WHERE {table.Ttl.Condition}";
 
-            ExecuteCommand.Execute(clickHouseConfiguration, command);
+            await ExecuteCommand.Execute(clickHouseConfiguration, command);
         }
     }
 }
