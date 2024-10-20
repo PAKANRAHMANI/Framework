@@ -57,9 +57,6 @@ namespace Framework.DataAccess.ClickHouse.Migrator.Migrations
 
             command = command.Replace("\n", " ");
 
-            if (command.EndsWith(","))
-                command = command.Trim().AsSpan(0, command.Length - 1).ToString();
-
             return command;
         }
 

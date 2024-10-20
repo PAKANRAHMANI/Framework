@@ -3,7 +3,7 @@ using Framework.DataAccess.ClickHouse.Migrator.Tables;
 
 namespace Framework.DataAccess.ClickHouse.Migrator.Migrations;
 
-internal class DistributedTableMigration(DistributedTable table,string replicatedTableName, ClickHouseConfiguration clickHouseConfiguration) : IMigration
+internal class DistributedTableMigration(DistributedTable table, string replicatedTableName, ClickHouseConfiguration clickHouseConfiguration) : IMigration
 {
     public string CreateTable()
     {
@@ -11,9 +11,6 @@ internal class DistributedTableMigration(DistributedTable table,string replicate
                   ENGINE = Distributed ({table.ClusterName}, {table.DatabaseName}, {replicatedTableName}, murmurHash3_64({table.HashColumnName}))";
 
         command = command.Replace("\n", " ");
-
-        if (command.EndsWith(","))
-            command = command.Trim().AsSpan(0, command.Length - 1).ToString();
 
         return command;
     }
