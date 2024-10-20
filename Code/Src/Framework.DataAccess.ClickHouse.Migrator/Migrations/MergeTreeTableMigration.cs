@@ -118,7 +118,7 @@ internal class MergeTreeTableMigration(MergeTreeTable table, ClickHouseConfigura
 
         var settings = settingBuilder.ToString();
 
-        if (settings.EndsWith(",\r\n"))
+        if (settings.EndsWith(",\r\n") || settings.EndsWith(",\n\n"))
             settings = settings.AsSpan(0, settings.Length - 3).ToString();
 
         tableBuilder.AppendLine(settings);
