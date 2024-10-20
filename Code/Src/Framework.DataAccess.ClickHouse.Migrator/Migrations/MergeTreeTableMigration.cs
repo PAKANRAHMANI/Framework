@@ -125,6 +125,11 @@ internal class MergeTreeTableMigration(MergeTreeTable table, ClickHouseConfigura
 
         var command = tableBuilder.ToString();
 
+        command = command.Replace("\n", " ");
+
+        if (command.EndsWith(",") )
+            command = command.AsSpan(0, settings.Length - 1).ToString();
+
         return command;
     }
 
