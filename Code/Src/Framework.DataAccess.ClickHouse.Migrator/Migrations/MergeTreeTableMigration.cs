@@ -131,7 +131,7 @@ internal class MergeTreeTableMigration(MergeTreeTable table, ClickHouseConfigura
         if (command.Trim().EndsWith(","))
             command = command.Trim().AsSpan(0, command.Length - 2).ToString();
 #else
-        command = command.Trim().AsSpan(0, command.Length - 2).ToString();
+        command = command.Trim().AsSpan(0, command.Length - 3).ToString();
 #endif
 
         return command;
