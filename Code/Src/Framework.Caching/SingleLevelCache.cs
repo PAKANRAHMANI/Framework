@@ -25,7 +25,21 @@ public class SingleLevelCache : ICache
 		return data;
 	}
 
-	public void Set<T>(string key, T value, int expirationTimeInSecond) where T : class
+    public async Task<T> Get<T>(string key, Func<Task<T>> query, int expirationTimeInSecond) where T : class
+    {
+        var memoryData = _caching.Get<T>(key);
+
+        if (memoryData is not null)
+            return memoryData;
+
+        var data = await query?.Invoke()!;
+
+        _caching.Set(key, data, expirationTimeInSecond);
+
+        return data;
+    }
+
+    public void Set<T>(string key, T value, int expirationTimeInSecond) where T : class
 	{
 		_caching.Set(key, value, expirationTimeInSecond);
 	}
