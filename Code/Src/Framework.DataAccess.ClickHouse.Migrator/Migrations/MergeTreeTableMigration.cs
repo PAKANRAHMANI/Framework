@@ -7,7 +7,7 @@ namespace Framework.DataAccess.ClickHouse.Migrator.Migrations;
 
 internal class MergeTreeTableMigration(MergeTreeTable table, ClickHouseConfiguration clickHouseConfiguration) : IMigration
 {
-    public async Task CreateTable()
+    public string CreateTable()
     {
         var columnsBuilder = new StringBuilder();
 
@@ -125,8 +125,7 @@ internal class MergeTreeTableMigration(MergeTreeTable table, ClickHouseConfigura
 
         var command = tableBuilder.ToString();
 
-        await ExecuteCommand.Execute(clickHouseConfiguration, command);
-
+        return command;
     }
 
     public async Task DropTable(string tableName, string clusterName)

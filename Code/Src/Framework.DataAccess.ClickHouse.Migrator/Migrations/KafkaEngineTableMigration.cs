@@ -8,7 +8,7 @@ namespace Framework.DataAccess.ClickHouse.Migrator.Migrations
 {
     internal class KafkaEngineTableMigration(Table table, List<Column> clickhouseColumns, KafkaEngineSetting kafkaEngineSetting, ClickHouseConfiguration clickHouseConfiguration) : IMigration
     {
-        public async Task CreateTable()
+        public string CreateTable()
         {
             var columnsBuilder = new StringBuilder();
 
@@ -55,7 +55,7 @@ namespace Framework.DataAccess.ClickHouse.Migrator.Migrations
 
             var command = tableBuilder.ToString();
 
-            await ExecuteCommand.Execute(clickHouseConfiguration, command);
+            return command;
         }
 
         public async Task DropTable(string tableName, string clusterName)

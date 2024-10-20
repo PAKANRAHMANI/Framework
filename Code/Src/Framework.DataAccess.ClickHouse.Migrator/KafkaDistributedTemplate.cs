@@ -32,6 +32,35 @@ public abstract class KafkaDistributedTemplate
             await tableFactory.ModifyMergeTreeByTtl(mergeTreeTable);
     }
 
+    public List<string> GetTables(string distributedHashColumn)
+    {
+        var tables = new List<string>();
+
+        var columns = GetColumns();
+
+        var kafkaSetting = GetKafkaEngineSetting();
+
+        var mergeTreeTable = GetMergeTreeTable();
+
+        mergeTreeTable.Columns.AddRange(columns);
+
+        var clickHouseConfig = GetClickHouseConfiguration();
+
+        var tableFactory = new TableQueryFactory(mergeTreeTable, columns, clickHouseConfig);
+
+        tables.Add(tableFactory.GetKafkaEngine(kafkaSetting));
+
+        tables.Add(tableFactory.GetMergeTree());
+
+        tables.Add(tableFactory.GetDistributedTable(distributedHashColumn, mergeTreeTable.TableName));
+
+        tables.Add(tableFactory.GetMaterializedViewMigration());
+
+        if (mergeTreeTable.UseTtl)
+            tables.Add(tableFactory.ModifyMergeTreeByTtl(mergeTreeTable));
+
+        return tables;
+    }
     protected abstract List<Column> GetColumns();
     protected abstract MergeTreeTable GetMergeTreeTable();
     protected abstract KafkaEngineSetting GetKafkaEngineSetting();

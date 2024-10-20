@@ -2,6 +2,6 @@
 
 public interface IMigration
 {
-    Task CreateTable();
+    string CreateTable();
     Task DropTable(string tableName, string clusterName);
 }

@@ -1,57 +1,46 @@
-﻿using System.Text;
-using Framework.DataAccess.ClickHouse.Migrator.Columns;
-using Framework.DataAccess.ClickHouse.Migrator.Executors;
+﻿using Framework.DataAccess.ClickHouse.Migrator.Columns;
 using Framework.DataAccess.ClickHouse.Migrator.KafkaEngine;
 using Framework.DataAccess.ClickHouse.Migrator.Migrations;
 using Framework.DataAccess.ClickHouse.Migrator.Tables;
 
 namespace Framework.DataAccess.ClickHouse.Migrator;
 
-internal class TableFactory(MergeTreeTable mergeTreeTable, List<Column> columns, ClickHouseConfiguration clickHouseConfiguration)
+internal class TableQueryFactory(MergeTreeTable mergeTreeTable, List<Column> columns, ClickHouseConfiguration clickHouseConfiguration)
 {
-    public async Task CreateKafkaEngine(KafkaEngineSetting setting)
+    public string GetKafkaEngine(KafkaEngineSetting setting)
     {
         var table = new Table(mergeTreeTable.DatabaseName, $"{mergeTreeTable.TableName}_Messages", mergeTreeTable.ClusterName);
 
         var kafkaMigration = new KafkaEngineTableMigration(table, columns, setting, clickHouseConfiguration);
 
-        var command = kafkaMigration.CreateTable();
-
-        await ExecuteCommand.Execute(clickHouseConfiguration, command);
-
+        return kafkaMigration.CreateTable();
     }
 
-    public async Task CreateMergeTree()
+    public string GetMergeTree()
     {
         var mergeTreeMigration = new MergeTreeTableMigration(mergeTreeTable, clickHouseConfiguration);
 
-        var command = mergeTreeMigration.CreateTable();
-
-        await ExecuteCommand.Execute(clickHouseConfiguration, command);
+        return mergeTreeMigration.CreateTable();
     }
 
-    public async Task CreateDistributedTable(string hashColumnName, string replicatedTableName)
+    public string GetDistributedTable(string hashColumnName, string replicatedTableName)
     {
         var distributedTable = new DistributedTable(hashColumnName, mergeTreeTable.DatabaseName, $"{mergeTreeTable.TableName}_Distributed", mergeTreeTable.ClusterName);
 
         var distributedMigration = new DistributedTableMigration(distributedTable, replicatedTableName, clickHouseConfiguration);
 
-        var command = distributedMigration.CreateTable();
-
-        await ExecuteCommand.Execute(clickHouseConfiguration, command);
+        return distributedMigration.CreateTable();
     }
-    public async Task CreateMaterializedViewMigration()
+    public string GetMaterializedViewMigration()
     {
         var table = new Table(mergeTreeTable.DatabaseName, $"{mergeTreeTable.TableName}", mergeTreeTable.ClusterName);
 
         var distributedMigration = new MaterializedViewMigration(table, clickHouseConfiguration);
 
-        var command = distributedMigration.CreateTable();
-
-        await ExecuteCommand.Execute(clickHouseConfiguration, command);
+        return distributedMigration.CreateTable();
     }
 
-    public async Task ModifyMergeTreeByTtl(MergeTreeTable table)
+    public string ModifyMergeTreeByTtl(MergeTreeTable table)
     {
         var command = @$"";
 
@@ -75,14 +64,15 @@ internal class TableFactory(MergeTreeTable mergeTreeTable, List<Column> columns,
                                  GROUP BY {table.Ttl.GroupByColumn}
                                  )";
 
-            await ExecuteCommand.Execute(clickHouseConfiguration, command);
+            return command;
 
         }
         else if (table.Ttl.UseCondition)
         {
             command = @$"ALTER TABLE {table.DatabaseName}.{table.TableName} MODIFY TTL {table.Ttl.ColumnName} + INTERVAL {table.Ttl.Interval} {table.Ttl.IntervalType.GetValue()} DELETE WHERE {table.Ttl.Condition}";
 
-            await ExecuteCommand.Execute(clickHouseConfiguration, command);
+            return command;
         }
+        return command;
     }
 }

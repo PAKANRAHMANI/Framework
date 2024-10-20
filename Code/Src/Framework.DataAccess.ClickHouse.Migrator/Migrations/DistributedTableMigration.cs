@@ -5,12 +5,12 @@ namespace Framework.DataAccess.ClickHouse.Migrator.Migrations;
 
 internal class DistributedTableMigration(DistributedTable table,string replicatedTableName, ClickHouseConfiguration clickHouseConfiguration) : IMigration
 {
-    public async Task CreateTable()
+    public string CreateTable()
     {
         var command = @$"CREATE TABLE IF NOT EXISTS {table.TableName} ON CLUSTER {table.ClusterName} AS {table.DatabaseName}.{replicatedTableName} 
                   ENGINE = Distributed ({table.ClusterName}, {table.DatabaseName}, {replicatedTableName}, murmurHash3_64({table.HashColumnName}))";
 
-       await ExecuteCommand.Execute(clickHouseConfiguration, command);
+        return command;
     }
 
     public async Task DropTable(string tableName, string clusterName)

@@ -5,7 +5,7 @@ namespace Framework.DataAccess.ClickHouse.Migrator.Migrations;
 
 internal class MaterializedViewMigration(Table table, ClickHouseConfiguration clickHouseConfiguration) : IMigration
 {
-    public async Task CreateTable()
+    public string CreateTable()
     {
         var command = @$"CREATE MATERIALIZED VIEW IF NOT EXISTS {table.DatabaseName}.{table.TableName}_MaterializedView
                          ON CLUSTER {table.ClusterName}
@@ -13,7 +13,7 @@ internal class MaterializedViewMigration(Table table, ClickHouseConfiguration cl
                          SELECT *
                          FROM {table.DatabaseName}.{table.TableName}_Messages";
 
-        await ExecuteCommand.Execute(clickHouseConfiguration, command);
+        return command;
     }
 
     public async Task DropTable(string tableName, string clusterName)
