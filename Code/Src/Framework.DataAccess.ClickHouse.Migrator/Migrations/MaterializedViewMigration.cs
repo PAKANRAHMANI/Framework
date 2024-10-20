@@ -13,6 +13,8 @@ internal class MaterializedViewMigration(Table table, ClickHouseConfiguration cl
                          SELECT *
                          FROM {table.DatabaseName}.{table.TableName}_Messages";
 
+        command = command.Replace("\n", " ");
+
         return command;
     }
 

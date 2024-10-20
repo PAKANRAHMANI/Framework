@@ -55,6 +55,11 @@ namespace Framework.DataAccess.ClickHouse.Migrator.Migrations
 
             var command = tableBuilder.ToString();
 
+            command = command.Replace("\n", " ");
+
+            if (command.EndsWith(","))
+                command = command.Trim().AsSpan(0, command.Length - 1).ToString();
+
             return command;
         }
 

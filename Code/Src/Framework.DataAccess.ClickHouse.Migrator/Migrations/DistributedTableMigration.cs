@@ -10,6 +10,11 @@ internal class DistributedTableMigration(DistributedTable table,string replicate
         var command = @$"CREATE TABLE IF NOT EXISTS {table.TableName} ON CLUSTER {table.ClusterName} AS {table.DatabaseName}.{replicatedTableName} 
                   ENGINE = Distributed ({table.ClusterName}, {table.DatabaseName}, {replicatedTableName}, murmurHash3_64({table.HashColumnName}))";
 
+        command = command.Replace("\n", " ");
+
+        if (command.EndsWith(","))
+            command = command.Trim().AsSpan(0, command.Length - 1).ToString();
+
         return command;
     }
 
