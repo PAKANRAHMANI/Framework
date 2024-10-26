@@ -27,28 +27,23 @@ namespace Framework.Idempotency.Mongo
 
         public async Task MarkMessageAsProcessed(string eventId)
         {
-            using (var session = await database.Client.StartSessionAsync())
+            try
             {
-                try
-                {
-                    var messageInboxCollection = database.GetCollection<BsonDocument>(mongoConfiguration.CollectionName);
+                var messageInboxCollection = database.GetCollection<BsonDocument>(mongoConfiguration.CollectionName);
 
-                    await messageInboxCollection.InsertOneAsync(new BsonDocument
+                await messageInboxCollection.InsertOneAsync(new BsonDocument
                     {
                         { "_id" , ObjectId.GenerateNewId()},
                         {mongoConfiguration.FieldName,eventId},
                         {mongoConfiguration.ReceivedDate,DateTime.UtcNow}
                     });
-                }
-                catch (Exception ex)
-                {
-                    await session.AbortTransactionAsync();
+            }
+            catch (Exception ex)
+            {
 
-                    logger.WriteException(ex);
+                logger.WriteException(ex);
 
-                    throw;
-                }
-                await session.CommitTransactionAsync();
+                throw;
             }
         }
 
