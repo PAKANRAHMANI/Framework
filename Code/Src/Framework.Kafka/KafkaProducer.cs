@@ -37,27 +37,27 @@ namespace Framework.Kafka
 
 
         public async Task<DeliveryResult<TKey, TMessage>> ProduceAsync(TKey key, TMessage message, string topicName, int partitionNumber,
-            CancellationToken cancellationToken = default)
+            CancellationToken cancellationToken = default, string eventId = null)
         {
             return await _producer.ProduceAsync(new TopicPartition(topicName, new Partition(partitionNumber)), new Message<TKey, TMessage>
             {
                 Value = message,
                 Key = key,
-                Headers = GetHeaders()
+                Headers = GetHeaders(eventId)
             }, cancellationToken);
         }
 
-        public async Task<DeliveryResult<TKey, TMessage>> ProduceAsync(TKey key, TMessage message, CancellationToken cancellationToken = default)
+        public async Task<DeliveryResult<TKey, TMessage>> ProduceAsync(TKey key, TMessage message, CancellationToken cancellationToken = default, string eventId = default)
         {
             return await _producer.ProduceAsync(_configurations.TopicName, new Message<TKey, TMessage>
             {
                 Value = message,
                 Key = key,
-                Headers = GetHeaders()
+                Headers = GetHeaders(eventId)
             }, cancellationToken);
         }
 
-        public async Task<DeliveryResult<TKey, TMessage>> ProduceAsync(TKey key, TMessage message, KeyValuePair<string, string>[] headers, CancellationToken cancellationToken = default)
+        public async Task<DeliveryResult<TKey, TMessage>> ProduceAsync(TKey key, TMessage message, KeyValuePair<string, string>[] headers, CancellationToken cancellationToken = default, string eventId = null)
         {
             var kafkaHeaders = new Headers();
 
@@ -66,7 +66,7 @@ namespace Framework.Kafka
                 kafkaHeaders.Add(new Header(header.Key, Encoding.UTF8.GetBytes(header.Value)));
             }
 
-            kafkaHeaders.Add(GetHeader());
+            kafkaHeaders.Add(GetHeader(eventId));
 
             return await _producer.ProduceAsync(_configurations.TopicName, new Message<TKey, TMessage>
             {
@@ -76,43 +76,43 @@ namespace Framework.Kafka
             }, cancellationToken);
         }
 
-        public async Task<DeliveryResult<TKey, TMessage>> ProduceAsync(TKey key, TMessage message, int partitionNumber, CancellationToken cancellationToken = default)
+        public async Task<DeliveryResult<TKey, TMessage>> ProduceAsync(TKey key, TMessage message, int partitionNumber, CancellationToken cancellationToken = default, string eventId = default)
         {
             return await _producer.ProduceAsync(new TopicPartition(_configurations.TopicName, new Partition(partitionNumber)), new Message<TKey, TMessage>
             {
                 Value = message,
                 Key = key,
-                Headers = GetHeaders()
+                Headers = GetHeaders(eventId)
             }, cancellationToken);
         }
 
-        public void Produce(TKey key, TMessage message, Action<DeliveryResult<TKey, TMessage>> action)
+        public void Produce(TKey key, TMessage message, Action<DeliveryResult<TKey, TMessage>> action, string eventId = null)
         {
             _producer.Produce(_configurations.TopicName, new Message<TKey, TMessage>
             {
                 Value = message,
                 Key = key,
-                Headers = GetHeaders()
+                Headers = GetHeaders(eventId)
             }, action);
         }
-        public void Produce(TKey key, TMessage message,int partitionNumber, Action<DeliveryResult<TKey, TMessage>> action)
+        public void Produce(TKey key, TMessage message, int partitionNumber, Action<DeliveryResult<TKey, TMessage>> action, string eventId = null)
         {
-            _producer.Produce(new TopicPartition(_configurations.TopicName,new Partition(partitionNumber)), new Message<TKey, TMessage>
+            _producer.Produce(new TopicPartition(_configurations.TopicName, new Partition(partitionNumber)), new Message<TKey, TMessage>
             {
                 Value = message,
                 Key = key,
-                Headers = GetHeaders()
+                Headers = GetHeaders(eventId)
             }, action);
         }
 
         public void Produce(TKey key, TMessage message, string topicName, int partitionNumber,
-            Action<DeliveryResult<TKey, TMessage>> action = null)
+            Action<DeliveryResult<TKey, TMessage>> action = null, string eventId = null)
         {
             _producer.Produce(new TopicPartition(topicName, new Partition(partitionNumber)), new Message<TKey, TMessage>
             {
                 Value = message,
                 Key = key,
-                Headers = GetHeaders()
+                Headers = GetHeaders(eventId)
             }, action);
         }
 
@@ -126,25 +126,26 @@ namespace Framework.Kafka
             _producer.Dispose();
         }
 
-        public void Produce(TKey key, TMessage message, string topicName, Action<DeliveryResult<TKey, TMessage>> action = null)
+        public void Produce(TKey key, TMessage message, string topicName, Action<DeliveryResult<TKey, TMessage>> action = null, string eventId = null)
         {
             _producer.Produce(topicName, new Message<TKey, TMessage>
             {
                 Value = message,
                 Key = key,
-                Headers = GetHeaders()
+                Headers = GetHeaders(eventId)
             }, action);
         }
-        private Headers GetHeaders()
+        private Headers GetHeaders(string eventId = null)
         {
-            return new Headers
-            {
-                GetHeader()
-            };
-        }       
-        private Header GetHeader()
+            return [GetHeader(eventId)];
+        }
+        private Header GetHeader(string eventId = null)
         {
-            return new Header("eventid", Guid.NewGuid().ToByteArray());
+            var kafkaHeaderKey = "eventid";
+
+            return string.IsNullOrEmpty(eventId)
+                ? new Header(kafkaHeaderKey, Encoding.UTF8.GetBytes(Guid.NewGuid().ToString()))
+                : new Header(kafkaHeaderKey, Encoding.UTF8.GetBytes(eventId));
         }
     }
 }

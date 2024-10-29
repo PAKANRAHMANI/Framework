@@ -3,6 +3,7 @@ using Framework.Core.Logging;
 using Framework.Kafka;
 using Framework.Sentry;
 using Microsoft.Extensions.Hosting;
+using static MassTransit.ValidationResultExtensions;
 
 namespace Framework.Idempotency;
 
@@ -112,7 +113,7 @@ public abstract class KafkaIdempotentConsumer(
     {
         try
         {
-            return headers.TryGetLastBytes("eventid", out var eventIdBytes) ? new Guid(eventIdBytes).ToString() : null;
+            return headers.TryGetLastBytes("eventid", out var eventIdBytes) ? System.Text.Encoding.Default.GetString(eventIdBytes) : null;
         }
         catch (Exception e)
         {

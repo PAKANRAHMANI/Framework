@@ -4,22 +4,22 @@
 		<TargetFramework>net8.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>disable</Nullable>
-		  <Version>8.0.42</Version>
+		  <Version>8.0.43</Version>
 	</PropertyGroup>
 
-	<ItemGroup>
-		<PackageReference Include="MassTransit.AspNetCore" />
-	</ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="MassTransit.AspNetCore" />
+  </ItemGroup>
 
-	<ItemGroup>
-		<ProjectReference Include="..\Framework.Core\Framework.Core.csproj" PrivateAssets="contentfiles;build" ReferenceOutputAssembly="True" IsImplicitlyDefined="False" />
-		<ProjectReference Include="..\Framework.Kafka\Framework.Kafka.csproj" />
+  <ItemGroup>
+    <ProjectReference Include="..\Framework.Core\Framework.Core.csproj" PrivateAssets="contentfiles;build" ReferenceOutputAssembly="True" IsImplicitlyDefined="False" />
+    <ProjectReference Include="..\Framework.Kafka\Framework.Kafka.csproj" />
 
-		<ProjectReference Include="..\Framework.MassTransit.Message\Framework.MassTransit.Message.csproj" PrivateAssets="contentfiles;build" ReferenceOutputAssembly="True" IsImplicitlyDefined="False" />
+    <ProjectReference Include="..\Framework.MassTransit.Message\Framework.MassTransit.Message.csproj" PrivateAssets="contentfiles;build" ReferenceOutputAssembly="True" IsImplicitlyDefined="False" />
 
-		<ProjectReference Include="..\Framework.Messages\Framework.Messages.csproj" PrivateAssets="contentfiles;build" ReferenceOutputAssembly="True" IsImplicitlyDefined="False" />
+    <ProjectReference Include="..\Framework.Messages\Framework.Messages.csproj" PrivateAssets="contentfiles;build" ReferenceOutputAssembly="True" IsImplicitlyDefined="False" />
 
-		<ProjectReference Include="..\Framework.Sentry\Framework.Sentry.csproj" />
-	</ItemGroup>
+    <ProjectReference Include="..\Framework.Sentry\Framework.Sentry.csproj" />
+  </ItemGroup>
 
 </Project>
