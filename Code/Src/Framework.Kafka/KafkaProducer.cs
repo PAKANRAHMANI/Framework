@@ -144,7 +144,7 @@ namespace Framework.Kafka
             var kafkaHeaderKey = "eventid";
 
             return string.IsNullOrEmpty(eventId)
-                ? new Header(kafkaHeaderKey, Encoding.UTF8.GetBytes(Guid.NewGuid().ToString()))
+                ? new Header(kafkaHeaderKey,Guid.NewGuid().ToByteArray())
                 : new Header(kafkaHeaderKey, Encoding.UTF8.GetBytes(eventId));
         }
     }

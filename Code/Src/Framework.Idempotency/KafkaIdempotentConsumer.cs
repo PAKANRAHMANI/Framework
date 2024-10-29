@@ -113,7 +113,7 @@ public abstract class KafkaIdempotentConsumer(
     {
         try
         {
-            return headers.TryGetLastBytes("eventid", out var eventIdBytes) ? System.Text.Encoding.Default.GetString(eventIdBytes) : null;
+            return headers.TryGetLastBytes("eventid", out var eventIdBytes) ? new Guid(eventIdBytes).ToString() : null;
         }
         catch (Exception e)
         {
