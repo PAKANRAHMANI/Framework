@@ -137,10 +137,8 @@ public abstract class KafkaIdempotentConsumer(
         }
     }
 
-    bool IsGuid(byte[] byteArray)
+    private static bool IsGuid(byte[] byteArray)
     {
-        if (byteArray.Length != 16)
-            return false;
-        return false;
+        return byteArray.Length == 16;
     }
 }
