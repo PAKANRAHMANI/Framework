@@ -3,6 +3,8 @@ using Framework.Core.Logging;
 using Framework.Kafka;
 using Framework.Sentry;
 using Microsoft.Extensions.Hosting;
+using System.Collections;
+using System.Text;
 using static MassTransit.ValidationResultExtensions;
 
 namespace Framework.Idempotency;
@@ -113,7 +115,17 @@ public abstract class KafkaIdempotentConsumer(
     {
         try
         {
-            return headers.TryGetLastBytes("eventid", out var eventIdBytes) ? new Guid(eventIdBytes).ToString() : null;
+            headers.TryGetLastBytes("eventid", out var eventIdBytes);
+
+            if (eventIdBytes is null)
+                return null;
+
+            if (IsGuid(eventIdBytes))
+                return new Guid(eventIdBytes).ToString();
+
+            return Encoding.UTF8.GetString(eventIdBytes);
+
+
         }
         catch (Exception e)
         {
@@ -123,5 +135,12 @@ public abstract class KafkaIdempotentConsumer(
 
             return null;
         }
+    }
+
+    bool IsGuid(byte[] byteArray)
+    {
+        if (byteArray.Length != 16)
+            return false;
+        return false;
     }
 }
