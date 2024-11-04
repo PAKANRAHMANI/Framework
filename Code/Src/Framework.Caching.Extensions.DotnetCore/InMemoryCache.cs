@@ -4,33 +4,31 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace Framework.Caching.Extensions.DotnetCore;
 
-public class InMemoryCache : IInMemoryCache, ICacheControl
+public class InMemoryCache(IMemoryCache memoryCache, InMemoryCacheConfiguration cacheConfiguration)
+    : IInMemoryCache, ICacheControl
 {
-	private readonly IMemoryCache _memoryCache;
-	private readonly InMemoryCacheConfiguration _cacheConfiguration;
-
-	public InMemoryCache(IMemoryCache memoryCache, InMemoryCacheConfiguration cacheConfiguration)
-	{
-		_memoryCache = memoryCache;
-		_cacheConfiguration = cacheConfiguration;
-	}
-
-	public void Set<T>(string key, T value, int expirationTimeInSecond) where T : class
+    public void Set<T>(string key, T value, int expirationTimeInSecond) where T : class
 	{
 		var cacheEntryOptions = new MemoryCacheEntryOptions()
 				.SetAbsoluteExpiration(TimeSpan.FromSeconds(expirationTimeInSecond))
-				.SetPriority((CacheItemPriority)_cacheConfiguration.CachePriority);
+				.SetPriority((CacheItemPriority)cacheConfiguration.CachePriority);
 
-		_memoryCache.Set(key, value, cacheEntryOptions);
+		memoryCache.Set(key, value, cacheEntryOptions);
 	}
+    public void Set<T>(string key, T value) where T : class
+    {
+        var cacheEntryOptions = new MemoryCacheEntryOptions()
+            .SetPriority((CacheItemPriority)cacheConfiguration.CachePriority);
 
-	public T Get<T>(string key) where T : class
+        memoryCache.Set(key, value, cacheEntryOptions);
+    }
+    public T Get<T>(string key) where T : class
 	{
-		return _memoryCache.TryGetValue(key, out T value) ? value : null;
+		return memoryCache.TryGetValue(key, out T value) ? value : null;
 	}
 
 	public void Remove(string key)
 	{
-		_memoryCache.Remove(key);
+		memoryCache.Remove(key);
 	}
 }

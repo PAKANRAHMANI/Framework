@@ -5,21 +5,17 @@ using StackExchange.Redis;
 
 namespace Framework.Caching.Extensions.Redis;
 
-public class DistributedCache : IDistributedCache
+public class DistributedCache(
+    IRedisDataBaseResolver redisHelper,
+    DistributedCacheConfiguration distributedCacheConfiguration)
+    : IDistributedCache
 {
-	private readonly IDatabase _database;
-	private readonly DistributedCacheConfiguration _distributedCacheConfiguration;
+	private readonly IDatabase _database = redisHelper.GetDatabase(distributedCacheConfiguration.Connection, distributedCacheConfiguration.DbNumber);
 
-	public DistributedCache(IRedisDataBaseResolver redisHelper, DistributedCacheConfiguration distributedCacheConfiguration)
+    public void Set<T>(string key, T value, int expirationTimeInSecond) where T : class
 	{
-		_distributedCacheConfiguration = distributedCacheConfiguration;
-		_database = redisHelper.GetDatabase(distributedCacheConfiguration.Connection, distributedCacheConfiguration.DbNumber);
-	}
-
-	public void Set<T>(string key, T value, int expirationTimeInSecond) where T : class
-	{
-		if (_distributedCacheConfiguration.UseFromInstanceNameInKey)
-			key = _distributedCacheConfiguration.InstanceName + key;
+		if (distributedCacheConfiguration.UseFromInstanceNameInKey)
+			key = distributedCacheConfiguration.InstanceName + key;
 
 		var data = JsonConvert.SerializeObject(value);
 
@@ -28,10 +24,20 @@ public class DistributedCache : IDistributedCache
 		_database.StringSet(key, data, expiresIn);
 	}
 
-	public T Get<T>(string key) where T : class
+    public void Set<T>(string key, T value) where T : class
+    {
+        if (distributedCacheConfiguration.UseFromInstanceNameInKey)
+            key = distributedCacheConfiguration.InstanceName + key;
+
+        var data = JsonConvert.SerializeObject(value);
+
+        _database.StringSet(key, data);
+    }
+
+    public T Get<T>(string key) where T : class
 	{
-		if (_distributedCacheConfiguration.UseFromInstanceNameInKey)
-			key = _distributedCacheConfiguration.InstanceName + key;
+		if (distributedCacheConfiguration.UseFromInstanceNameInKey)
+			key = distributedCacheConfiguration.InstanceName + key;
 
 		string value = _database.StringGet(key);
 
