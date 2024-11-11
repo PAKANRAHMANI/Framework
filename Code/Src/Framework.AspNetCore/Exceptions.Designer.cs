@@ -61,6 +61,24 @@ namespace Framework.AspNetCore {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to موجودیت مورد نظر یافت نشد.
+        /// </summary>
+        internal static string Entity_Not_Found {
+            get {
+                return ResourceManager.GetString("Entity Not Found", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to سرویس مورد نظر در دسترس نمی باشد.
+        /// </summary>
+        internal static string Service_Is_Not_Available {
+            get {
+                return ResourceManager.GetString("Service Is Not Available", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to در انجام درخواست مشکلی رخ داده است.
         /// </summary>
         internal static string There_Was_A_Problem_With_The_Request {
