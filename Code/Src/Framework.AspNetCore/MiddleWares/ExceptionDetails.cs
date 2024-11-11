@@ -17,7 +17,7 @@ namespace Framework.AspNetCore.MiddleWares
 
         public static ExceptionDetails Create(string message, long code, string type)
         {
-            return new ExceptionDetails(message, code, type);
+            return new ExceptionDetails(message, code, "");
         }
 
         public static ExceptionDetails CreateBusinessException(string message, long code, string type)
@@ -25,7 +25,7 @@ namespace Framework.AspNetCore.MiddleWares
             if (type == typeof(EntityNotFoundException<>).FullName)
                 message = Exceptions.Entity_Not_Found;
 
-            return new ExceptionDetails(message, code, type);
+            return new ExceptionDetails(message, code, "");
         }
     }
 }

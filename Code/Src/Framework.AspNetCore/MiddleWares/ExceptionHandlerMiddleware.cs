@@ -58,7 +58,7 @@ public class ExceptionHandlerMiddleware
         var errors = new List<ExceptionDetails>
         {
             ExceptionDetails.Create(Exceptions.Service_Is_Not_Available, infrastructureException.ErrorCode,
-                infrastructureException.GetType().ToString())
+                infrastructureException.GetType().Name)
         };
 
         await WriteExceptionToResponse(context, errors);
@@ -69,7 +69,7 @@ public class ExceptionHandlerMiddleware
         var errors = new List<ExceptionDetails>
         {
             ExceptionDetails.CreateBusinessException(businessException.ExceptionMessage, businessException.ErrorCode,
-                businessException.GetType().FullName)
+                businessException.GetType().Name)
         };
 
         await WriteExceptionToResponse(context, errors);
