@@ -57,8 +57,8 @@ public class ExceptionHandlerMiddleware
     {
         var errors = new List<ExceptionDetails>
         {
-            ExceptionDetails.Create(infrastructureException.ExceptionMessage, infrastructureException.ErrorCode,
-                string.Empty)
+            ExceptionDetails.Create(Exceptions.There_Was_A_Problem_With_The_Request, infrastructureException.ErrorCode,
+                infrastructureException.GetType().ToString())
         };
 
         await WriteExceptionToResponse(context, errors);
@@ -68,7 +68,7 @@ public class ExceptionHandlerMiddleware
     {
         var errors = new List<ExceptionDetails>
         {
-            ExceptionDetails.Create(businessException.ExceptionMessage, businessException.ErrorCode,
+            ExceptionDetails.CreateBusinessException(businessException.ExceptionMessage, businessException.ErrorCode,
                 businessException.GetType().ToString())
         };
 
