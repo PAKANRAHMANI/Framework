@@ -69,7 +69,7 @@ public class ExceptionHandlerMiddleware
         var errors = new List<ExceptionDetails>
         {
             ExceptionDetails.CreateBusinessException(businessException.ExceptionMessage, businessException.ErrorCode,
-                businessException.GetType().ToString())
+                businessException.GetType().FullName)
         };
 
         await WriteExceptionToResponse(context, errors);
