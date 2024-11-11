@@ -120,4 +120,10 @@
   <data name="There Was A Problem With The Request" xml:space="preserve">
     <value>در انجام درخواست مشکلی رخ داده است</value>
   </data>
+  <data name="Service Is Not Available" xml:space="preserve">
+    <value>سرویس مورد نظر در دسترس نمی باشد</value>
+  </data>
+  <data name="Entity Not Found" xml:space="preserve">
+    <value>موجودیت مورد نظر یافت نشد</value>
+  </data>
 </root>

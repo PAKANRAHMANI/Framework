@@ -57,7 +57,7 @@ public class ExceptionHandlerMiddleware
     {
         var errors = new List<ExceptionDetails>
         {
-            ExceptionDetails.Create(Exceptions.There_Was_A_Problem_With_The_Request, infrastructureException.ErrorCode,
+            ExceptionDetails.Create(Exceptions.Service_Is_Not_Available, infrastructureException.ErrorCode,
                 infrastructureException.GetType().ToString())
         };
 

@@ -23,7 +23,7 @@ namespace Framework.AspNetCore.MiddleWares
         public static ExceptionDetails CreateBusinessException(string message, long code, string type)
         {
             if (type == typeof(EntityNotFoundException<>).ToString())
-                message = Exceptions.There_Was_A_Problem_With_The_Request;
+                message = Exceptions.Entity_Not_Found;
 
             return new ExceptionDetails(message, code, type);
         }
