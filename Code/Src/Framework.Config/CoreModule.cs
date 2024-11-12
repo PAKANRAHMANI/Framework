@@ -26,8 +26,14 @@ namespace Framework.Config
             dependencyRegister.RegisterScoped<ICommandBus, CommandBus>();
             dependencyRegister.RegisterScoped<IRequestBus, RequestBus>();
             dependencyRegister.RegisterScoped<IAggregateRootConfigurator, AggregateRootConfigurator>();
-            dependencyRegister.RegisterDecorator(typeof(IRequestHandler<,>), typeof(TransactionalRequestHandlerDecorator<,>));
-            dependencyRegister.RegisterDecorator(typeof(ICommandHandler<>), typeof(TransactionalCommandHandlerDecorator<>));
+
+
+            if (_frameworkConfiguration.UseUnitOfWork)
+            {
+                dependencyRegister.RegisterDecorator(typeof(IRequestHandler<,>), typeof(TransactionalRequestHandlerDecorator<,>));
+
+                dependencyRegister.RegisterDecorator(typeof(ICommandHandler<>), typeof(TransactionalCommandHandlerDecorator<>));
+            }
 
             if (_frameworkConfiguration.EnableLogInRequest)
                 dependencyRegister.RegisterDecorator(typeof(IRequestHandler<,>), typeof(LoggingRequestHandlerDecorator<,>));

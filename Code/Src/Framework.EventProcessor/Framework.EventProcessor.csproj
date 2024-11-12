@@ -5,7 +5,7 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>disable</Nullable>
 		<OutputType>Library</OutputType>
-    <Version>8.0.47</Version>
+    <Version>8.0.48</Version>
 	</PropertyGroup>
 
 	<ItemGroup>
