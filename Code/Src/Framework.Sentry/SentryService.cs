@@ -24,6 +24,7 @@
                    {
                        option.Environment = _sentrySettings.Environment;
                        option.Dsn = _sentrySettings.Dsn;
+                       option.SampleRate = _sentrySettings.SampleRate;
                    }))
             {
                 SentrySdk.CaptureException(exception);
