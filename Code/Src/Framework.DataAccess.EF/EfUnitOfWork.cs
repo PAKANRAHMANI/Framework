@@ -23,8 +23,8 @@ namespace Framework.DataAccess.EF
 
         public async Task Commit()
         {
-            await _dbContext.Database.CurrentTransaction.CommitAsync();
             await _dbContext.SaveChangesAsync();
+            await _dbContext.Database.CurrentTransaction.CommitAsync();
         }
 
         public async Task RollBack()
