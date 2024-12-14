@@ -41,7 +41,8 @@ public static class RateLimitExtensions
                             PermitLimit = rateLimitConfig.PermitLimit,
                             Window = TimeSpan.FromSeconds(rateLimitConfig.Window),
                             QueueLimit = rateLimitConfig.QueueLimit,
-                            QueueProcessingOrder = (QueueProcessingOrder)rateLimitConfig.QueueProcessingOrder
+                            QueueProcessingOrder = (QueueProcessingOrder)rateLimitConfig.QueueProcessingOrder,
+                            AutoReplenishment = rateLimitConfig.AutoReplenishment
                         });
                 });
             });
