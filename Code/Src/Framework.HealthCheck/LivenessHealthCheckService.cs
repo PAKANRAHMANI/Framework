@@ -13,7 +13,7 @@ namespace Framework.HealthCheck
         private readonly HealthCheckConfiguration _healthCheckConfig;
         private readonly TcpListener _livenessListener;
         private readonly ReadinessTcpHealthCheckService _readinessTcpHealthCheckService;
-
+        private bool IsStope = false;
         public LivenessHealthCheckService(
             HealthCheckService healthCheckService,
             ILogger logger,
@@ -36,11 +36,10 @@ namespace Framework.HealthCheck
 
                 try
                 {
+                    _livenessListener.Start();
 
                     while (!stoppingToken.IsCancellationRequested)
                     {
-                        _livenessListener.Start();
-
                         await UpdateHeartbeatAsync(stoppingToken);
 
                         await Task.Delay(TimeSpan.FromSeconds(_healthCheckConfig.LivenessDelay), stoppingToken);
@@ -72,18 +71,20 @@ namespace Framework.HealthCheck
 
                     _livenessListener.Stop();
 
+                    IsStope = true;
+
                     if (_healthCheckConfig.LogIsActive)
                         _logger.Write("Service is unhealthy. Listener has been stopped", LogLevel.Information);
 
                     return;
                 }
 
-                _livenessListener.Start();
 
                 if (_healthCheckConfig.LogIsActive)
                     _logger.Write("LiveNess listener is Listening", LogLevel.Information);
 
-                _readinessTcpHealthCheckService.Start();
+                if (IsStope == false)
+                    _readinessTcpHealthCheckService.Start();
 
             }
             catch (Exception ex)
