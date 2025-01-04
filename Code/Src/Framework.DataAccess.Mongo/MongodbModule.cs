@@ -2,6 +2,7 @@
 using Framework.Config;
 using Framework.Core;
 using MongoDB.Driver;
+using MongoDB.Driver.Core.Configuration;
 
 namespace Framework.DataAccess.Mongo
 {
@@ -28,11 +29,53 @@ namespace Framework.DataAccess.Mongo
         }
 
 
-        private IMongoDatabase CreateMongoDb()
+        public IMongoDatabase CreateMongoDb()
         {
-            var client = new MongoClient(_config.ConnectionString);
+            if (_config.UseUrl)
+            {
+                var client = new MongoClient(_config.ConnectionString);
 
-            return client.GetDatabase(_config.DatabaseName);
+                return client.GetDatabase(_config.DatabaseName);
+            }
+            else
+            {
+                var setting = new MongoClientSettings();
+
+                var identity = new MongoInternalIdentity(_config.DatabaseName, _config.ClientSettings.UserName);
+
+                var evidence = new PasswordEvidence(_config.ClientSettings.Password);
+
+                setting.Credential = new MongoCredential("SCRAM-SHA-256", identity, evidence);
+
+                setting.MaxConnecting = _config.ClientSettings.MaxConnecting;
+
+                setting.MaxConnectionPoolSize = _config.ClientSettings.MaxConnectionPoolSize;
+
+                setting.ReadConcern = new ReadConcern(_config.ClientSettings.ReadConcern);
+
+                if (_config.ClientSettings is { ReadPreference: > 0 })
+                    setting.ReadPreference = new ReadPreference(_config.ClientSettings.ReadPreference.Value, null, TimeSpan.FromSeconds(_config.ClientSettings.MaxStaleness));
+
+                setting.RetryReads = _config.ClientSettings.RetryReads;
+
+                setting.RetryWrites = _config.ClientSettings.RetryWrites;
+
+                setting.Server = new MongoServerAddress(_config.ClientSettings.Host, _config.ClientSettings.Port);
+
+                setting.DirectConnection = _config.ClientSettings.DirectConnection;
+
+                setting.ConnectTimeout = TimeSpan.FromMilliseconds(_config.ClientSettings.ConnectTimeout);
+
+                setting.SocketTimeout = TimeSpan.FromMilliseconds(_config.ClientSettings.SocketTimeout);
+
+                setting.MinConnectionPoolSize = _config.ClientSettings.MinConnectionPoolSize;
+
+                setting.Scheme = ConnectionStringScheme.MongoDB;
+
+                var client = new MongoClient(setting);
+                
+                return client.GetDatabase(_config.DatabaseName);
+            }
         }
     }
 }
