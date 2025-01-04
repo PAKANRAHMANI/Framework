@@ -40,6 +40,8 @@ namespace Framework.HealthCheck
 
                     while (!stoppingToken.IsCancellationRequested)
                     {
+                        IsStope = false;
+
                         await UpdateHeartbeatAsync(stoppingToken);
 
                         await Task.Delay(TimeSpan.FromSeconds(_healthCheckConfig.LivenessDelay), stoppingToken);
@@ -61,7 +63,13 @@ namespace Framework.HealthCheck
             {
                 var result = await _healthCheckService.CheckHealthAsync(token);
 
-                if (result.Status != HealthStatus.Healthy)
+                var filteredEntries = result.Entries
+                    .Where(entry => entry.Key != "masstransit-bus")
+                    .ToDictionary(entry => entry.Key, entry => entry.Value);
+
+                var filteredHealthReport = new HealthReport(filteredEntries, result.TotalDuration);
+
+                if (filteredHealthReport.Status != HealthStatus.Healthy)
                 {
                     foreach (var healthReportEntry in result.Entries)
                     {
