@@ -40,7 +40,7 @@ namespace Framework.HealthCheck
 
                     while (!stoppingToken.IsCancellationRequested)
                     {
-                        //IsStope = false;
+                        IsStope = false;
 
                         await UpdateHeartbeatAsync(stoppingToken);
 
