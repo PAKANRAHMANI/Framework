@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Framework.Config;
 using Framework.Core;
 using MongoDB.Driver;
@@ -60,7 +61,7 @@ namespace Framework.DataAccess.Mongo
 
                 setting.RetryWrites = _config.ClientSettings.RetryWrites;
 
-                setting.Server = new MongoServerAddress(_config.ClientSettings.Host, _config.ClientSettings.Port);
+                setting.Servers = _config.ClientSettings.Servers.Select(server => new MongoServerAddress(server.Host, server.Port)).ToList();
 
                 setting.DirectConnection = _config.ClientSettings.DirectConnection;
 
