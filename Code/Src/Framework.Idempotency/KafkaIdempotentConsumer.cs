@@ -3,9 +3,7 @@ using Framework.Core.Logging;
 using Framework.Kafka;
 using Framework.Sentry;
 using Microsoft.Extensions.Hosting;
-using System.Collections;
 using System.Text;
-using static MassTransit.ValidationResultExtensions;
 
 namespace Framework.Idempotency;
 
@@ -13,7 +11,7 @@ public abstract class KafkaIdempotentConsumer(
     IDuplicateMessageHandler duplicateMessageHandler,
     IKafkaConsumer<string, string> consumer,
     ISentryService sentryService,
-    ILogger logger)
+    ILogger logger, bool useFromInbox = true)
     : BackgroundService
 {
 
@@ -43,6 +41,13 @@ public abstract class KafkaIdempotentConsumer(
             if (consumeResult == null)
             {
                 logger.Write("Consumed Message is null", LogLevel.Warning);
+
+                return;
+            }
+
+            if (useFromInbox == false)
+            {
+                await ProcessMessageAsync(consumeResult);
 
                 return;
             }
