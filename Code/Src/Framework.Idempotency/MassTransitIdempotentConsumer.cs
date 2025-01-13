@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 
 namespace Framework.Idempotency;
 
-public abstract class MassTransitIdempotentConsumer<T>(IDuplicateMessageHandler duplicateHandler)
+public abstract class MassTransitIdempotentConsumer<T>(IDuplicateMessageHandler duplicateHandler, bool useFromInbox = true)
     : IConsumer<T>
     where T : class, IEvent
 {
@@ -24,6 +24,12 @@ public abstract class MassTransitIdempotentConsumer<T>(IDuplicateMessageHandler 
 
             if (message != null)
             {
+                if (useFromInbox == false)
+                {
+                    await ConsumeMessage(message);
+
+                    return;
+                }
 
                 if (!await duplicateHandler.HasMessageBeenProcessedBefore(message.EventId.ToString()))
                 {
