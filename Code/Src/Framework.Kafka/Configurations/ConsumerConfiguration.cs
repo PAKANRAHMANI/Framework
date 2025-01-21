@@ -1,4 +1,5 @@
 ﻿using Confluent.Kafka;
+using System.Collections.Generic;
 
 namespace Framework.Kafka.Configurations;
 public class ConsumerConfiguration
@@ -21,4 +22,8 @@ public class ConsumerConfiguration
     public int? FetchErrorBackoffMs { get; set; }
     public int? FetchWaitMaxMs { get; set; }
     public int? SessionTimeoutMs { get; set; }
+    public bool ReadFromOffset { get; set; }
+    public bool ReadTodayData { get; set; }
+    public int Hour { get; set; }
+    public List<KafkaPartitionOffset> PartitionsOffsets { get; set; }
 }

@@ -2,6 +2,7 @@
 using Framework.Kafka.Configurations;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -38,7 +39,7 @@ namespace Framework.Kafka
 
         public void Consume(Action<ConsumeResult<TKey, TMessage>> action, CancellationToken cancellationToken)
         {
-            _consumer.Subscribe(_configurations.TopicName);
+            ConfigKafkaConsumer();
 
             while (true & !cancellationToken.IsCancellationRequested)
             {
@@ -46,16 +47,15 @@ namespace Framework.Kafka
             }
         }
 
-
         public async Task ConsumeAsync(Func<ConsumeResult<TKey, TMessage>, Task> action, CancellationToken cancellationToken)
         {
-            await Task.Run(() =>
+            await Task.Run(async () =>
             {
-                _consumer.Subscribe(_configurations.TopicName);
+                ConfigKafkaConsumer();
 
                 while (true & !cancellationToken.IsCancellationRequested)
                 {
-                    ConsumeFromKafka(action, cancellationToken);
+                    await ConsumeFromKafkaAsync(action, cancellationToken);
                 }
 
             }, cancellationToken);
@@ -211,6 +211,35 @@ namespace Framework.Kafka
             _consumer.Seek(newOffset);
         }
 
+        private void ConfigKafkaConsumer()
+        {
+            if (_configurations.ReadTodayData)
+            {
+
+                var topicPartitionTimestamps =
+                    _configurations
+                        .PartitionsOffsets
+                        .Select(partitionsOffset => new TopicPartitionTimestamp(_configurations.TopicName,
+                            partitionsOffset.PartitionNumber, new Timestamp(DateTime.Now.AddHours(_configurations.Hour)))).ToList();
+
+                var topicPartitionOffsets = _consumer.OffsetsForTimes(topicPartitionTimestamps, TimeSpan.FromSeconds(10));
+
+                _consumer.Assign(topicPartitionOffsets);
+            }
+            else
+            {
+                if (_configurations.ReadFromOffset)
+                {
+                    foreach (var partitionsOffset in _configurations.PartitionsOffsets)
+                    {
+                        _consumer.Assign(new TopicPartitionOffset(new TopicPartition(_configurations.TopicName, partitionsOffset.PartitionNumber), new Offset(partitionsOffset.Offset)));
+                    }
+                }
+                else
+                    _consumer.Subscribe(_configurations.TopicName);
+            }
+        }
+
         private void ConsumeFromKafka(Action<ConsumeResult<TKey, TMessage>> action, CancellationToken cancellationToken)
         {
             try
@@ -225,7 +254,7 @@ namespace Framework.Kafka
             }
         }
 
-        private async Task ConsumeFromKafka(Func<ConsumeResult<TKey, TMessage>, Task> func, CancellationToken cancellationToken)
+        private async Task ConsumeFromKafkaAsync(Func<ConsumeResult<TKey, TMessage>, Task> func, CancellationToken cancellationToken)
         {
             try
             {
