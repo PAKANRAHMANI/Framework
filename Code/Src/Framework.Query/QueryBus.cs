@@ -1,23 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Threading;
 using System.Threading.Tasks;
 
 namespace Framework.Query
 {
-    public class QueryBus : IQueryBus
+    public class QueryBus(IQueryHandlerResolver handlerResolver) : IQueryBus
     {
-        private readonly IQueryHandlerResolver _handlerResolver;
-
-        public QueryBus(IQueryHandlerResolver handlerResolver)
+        public async Task<TResponse> Execute<TRequest, TResponse>(TRequest request, CancellationToken cancellationToken = default) where TRequest : IQuery
         {
-            _handlerResolver = handlerResolver;
-        }
-        public async Task<TResponse> Execute<TRequest, TResponse>(TRequest request) where TRequest : IQuery
-        {
-            var handler = _handlerResolver.ResolveHandlers<TRequest, TResponse>(request);
-            return await handler.Handle(request);
+            var handler = handlerResolver.ResolveHandlers<TRequest, TResponse>(request);
+            return await handler.Handle(request, cancellationToken);
         }
     }
 }

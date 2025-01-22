@@ -1,9 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 
 namespace Framework.Query
 {
     public interface IQueryHandler<in TRequest, TResponse> where TRequest : IQuery
     {
-        Task<TResponse> Handle(TRequest request);
+        Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken);
     }
 }
