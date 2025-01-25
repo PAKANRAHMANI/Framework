@@ -11,7 +11,12 @@ namespace Framework.Config
     {
         public async Task Handle(T command, CancellationToken cancellationToken = default)
         {
-            logger.Write($"class: {nameof(LoggingCommandHandlerDecorator<T>)} | method: {nameof(Handle)}  | Command is : {{Command}}", LogLevel.Information, command);
+            logger.Write(
+                "class: {className} | method: {methodName} " +
+                "|Command is: {@command}.",
+                LogLevel.Information,
+            nameof(LoggingCommandHandlerDecorator<T>), nameof(Handle), command);
+
             await commandHandler.Handle(command, cancellationToken);
         }
     }
