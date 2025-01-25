@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Framework.Application.Contracts;
 using Framework.Core;
@@ -15,13 +16,13 @@ namespace Framework.Application
             _commandHandler = commandHandler;
             _unitOfWork = unitOfWork;
         }
-        public async Task Handle(T command)
+        public async Task Handle(T command, CancellationToken cancellationToken)
         {
             try
             {
                 await _unitOfWork.Begin();
 
-                await _commandHandler.Handle(command);
+                await _commandHandler.Handle(command, cancellationToken);
 
                 await _unitOfWork.Commit();
             }
