@@ -1,24 +1,18 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using Framework.Application.Contracts;
 using Framework.Core.Logging;
 
 namespace Framework.Config
 {
-    public class LoggingCommandHandlerDecorator<T> : ICommandHandler<T> where T : ICommand
+    public class LoggingCommandHandlerDecorator<T>(ICommandHandler<T> commandHandler, ILogger logger)
+        : ICommandHandler<T>
+        where T : ICommand
     {
-        private readonly ICommandHandler<T> _commandHandler;
-        private readonly ILogger _logger;
-
-        public LoggingCommandHandlerDecorator(ICommandHandler<T> commandHandler, ILogger logger)
+        public async Task Handle(T command, CancellationToken cancellationToken = default)
         {
-            _commandHandler = commandHandler;
-            _logger = logger;
-        }
-
-        public async Task Handle(T command)
-        {
-            _logger.Write("Command is : {@Command}", LogLevel.Information, command);
-            await _commandHandler.Handle(command);
+            logger.Write($"class: {nameof(LoggingCommandHandlerDecorator<T>)} | method: {nameof(Handle)}  | Command is : {{Command}}", LogLevel.Information, command);
+            await commandHandler.Handle(command, cancellationToken);
         }
     }
 }
