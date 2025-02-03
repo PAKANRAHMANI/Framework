@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Framework.Query
+﻿namespace Framework.Query
 {
     public interface IQueryHandlerResolver
     {
