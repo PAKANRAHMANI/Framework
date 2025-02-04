@@ -153,6 +153,10 @@ namespace Framework.EventProcessor.Initial
 
             return this;
         }
+        public IEnableSecondSenderBuilder DisableProduceMessageWithKafka()
+        {
+            return this;
+        }
         public ISecondaryDeliveryEvent EnableSendingMessageToSecondaryBroker()
         {
             return this;

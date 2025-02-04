@@ -2,7 +2,7 @@
 
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
-		 <Version>8.0.61</Version>
+		 <Version>8.0.62</Version>
 		<Nullable>disable</Nullable>
 	</PropertyGroup>
 

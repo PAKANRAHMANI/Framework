@@ -7,4 +7,6 @@ public interface IEventSenderBuilder
 {
     IEnableSecondSenderBuilder PublishEventWithMassTransit(Action<MassTransitConfig> config);
     IEnableSecondSenderBuilder ProduceMessageWithKafka(Action<ProducerConfiguration> config, params KafkaEvent[] kafkaEvents);
+    IEnableSecondSenderBuilder DisableProduceMessageWithKafka();
+
 }
