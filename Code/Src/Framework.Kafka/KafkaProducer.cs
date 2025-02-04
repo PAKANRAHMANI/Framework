@@ -95,6 +95,27 @@ namespace Framework.Kafka
                 Headers = GetHeaders(eventId)
             }, action);
         }
+         
+        public void Produce(TKey key, TMessage message, Action<DeliveryResult<TKey, TMessage>> action, string eventId = null, params KeyValuePair<string, string>[] headers)
+        {
+
+            var kafkaHeaders = new Headers();
+
+            foreach (var header in headers)
+            {
+                kafkaHeaders.Add(new Header(header.Key, Encoding.UTF8.GetBytes(header.Value)));
+            }
+
+            kafkaHeaders.Add(GetHeader(eventId));
+
+            _producer.Produce(_configurations.TopicName, new Message<TKey, TMessage>
+            {
+                Value = message,
+                Key = key,
+                Headers = kafkaHeaders
+            }, action);
+        }
+
         public void Produce(TKey key, TMessage message, int partitionNumber, Action<DeliveryResult<TKey, TMessage>> action, string eventId = null)
         {
             _producer.Produce(new TopicPartition(_configurations.TopicName, new Partition(partitionNumber)), new Message<TKey, TMessage>
