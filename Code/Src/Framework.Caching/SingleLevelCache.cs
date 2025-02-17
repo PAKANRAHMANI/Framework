@@ -5,18 +5,18 @@ namespace Framework.Caching;
 public class SingleLevelCache(ICacheControl caching) : ICache
 {
     public T Get<T>(string key, Func<T> query, int expirationTimeInSecond) where T : class
-	{
-		var memoryData = caching.Get<T>(key);
+    {
+        var memoryData = caching.Get<T>(key);
 
-		if (memoryData is not null)
-			return memoryData;
+        if (memoryData is not null)
+            return memoryData;
 
-		var data = query?.Invoke();
+        var data = query?.Invoke();
 
-		caching.Set(key, data, expirationTimeInSecond);
+        caching.Set(key, data, expirationTimeInSecond);
 
-		return data;
-	}
+        return data;
+    }
 
     public async Task<T> Get<T>(string key, Func<Task<T>> query, int expirationTimeInSecond) where T : class
     {
@@ -61,17 +61,24 @@ public class SingleLevelCache(ICacheControl caching) : ICache
     }
 
     public void Set<T>(string key, T value, int expirationTimeInSecond) where T : class
-	{
-		caching.Set(key, value, expirationTimeInSecond);
-	}
+    {
+        caching.Set(key, value, expirationTimeInSecond);
+    }
 
     public void Set<T>(string key, T value) where T : class
     {
         caching.Set(key, value);
     }
 
+    public async Task Set<T>(string key, T value, Func<Task<T>> command) where T : class
+    {
+        caching.Set(key, value);
+
+        await command.Invoke();
+    }
+
     public void Remove(string key)
-	{
-		caching.Remove(key);
-	}
+    {
+        caching.Remove(key);
+    }
 }

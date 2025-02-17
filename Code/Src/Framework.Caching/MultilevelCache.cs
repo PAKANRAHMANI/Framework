@@ -48,7 +48,7 @@ public class MultilevelCache(IInMemoryCache memoryCache, IDistributedCache redis
             return redisData;
         }
 
-        var data =await query?.Invoke()!;
+        var data = await query?.Invoke()!;
 
         if (data is null) return null;
 
@@ -125,6 +125,15 @@ public class MultilevelCache(IInMemoryCache memoryCache, IDistributedCache redis
         memoryCache.Set(key, value);
 
         redisCache.Set(key, value);
+    }
+
+    public async Task Set<T>(string key, T value, Func<Task<T>> command) where T : class
+    {
+        memoryCache.Set(key, value);
+
+        redisCache.Set(key, value);
+
+        await command.Invoke();
     }
 
     public void Remove(string key)
