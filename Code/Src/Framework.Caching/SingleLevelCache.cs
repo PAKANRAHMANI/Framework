@@ -70,11 +70,11 @@ public class SingleLevelCache(ICacheControl caching) : ICache
         caching.Set(key, value);
     }
 
-    public async Task Set<T>(string key, T value, Func<Task<T>> command) where T : class
+    public async Task Set<T>(string key, T value, Func<T, Task> command) where T : class
     {
         caching.Set(key, value);
 
-        await command.Invoke();
+        await command.Invoke(value);
     }
 
     public void Remove(string key)

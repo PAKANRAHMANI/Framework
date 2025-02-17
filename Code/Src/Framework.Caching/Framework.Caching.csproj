@@ -1,14 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup>
-		<TargetFramework>net8.0</TargetFramework>
-		<ImplicitUsings>enable</ImplicitUsings>
-		<Nullable>disable</Nullable>
-		<Version>1.0.12</Version>
-	</PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+    <Version>1.0.13</Version>
+  </PropertyGroup>
 
-	<ItemGroup>
-		<ProjectReference Include="..\Framework.Caching.Extensions.Abstractions\Framework.Caching.Extensions.Abstractions.csproj" PrivateAssets="contentfiles;build" ReferenceOutputAssembly="True" IsImplicitlyDefined="False" />
-	</ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Framework.Caching.Extensions.Abstractions\Framework.Caching.Extensions.Abstractions.csproj" PrivateAssets="contentfiles;build" ReferenceOutputAssembly="True" IsImplicitlyDefined="False" />
+  </ItemGroup>
 
 </Project>

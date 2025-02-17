@@ -127,13 +127,13 @@ public class MultilevelCache(IInMemoryCache memoryCache, IDistributedCache redis
         redisCache.Set(key, value);
     }
 
-    public async Task Set<T>(string key, T value, Func<Task<T>> command) where T : class
+    public async Task Set<T>(string key, T value, Func<T, Task> command) where T : class
     {
         memoryCache.Set(key, value);
 
         redisCache.Set(key, value);
 
-        await command.Invoke();
+        await command.Invoke(value);
     }
 
     public void Remove(string key)
