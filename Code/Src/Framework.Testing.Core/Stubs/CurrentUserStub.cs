@@ -56,5 +56,10 @@ namespace Framework.Testing.Core.Stubs
 
             return (TKey)Convert.ChangeType(sub, typeof(TKey));
         }
+
+        public string GetUserIp()
+        {
+            return "192.168.1.1";
+        }
     }
 }

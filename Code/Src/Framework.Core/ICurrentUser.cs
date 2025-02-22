@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Security.Claims;
-using System.Text;
+﻿using System.Security.Claims;
 
 namespace Framework.Core
 {
@@ -10,5 +7,6 @@ namespace Framework.Core
         ClaimsPrincipal Get();
         TKey GetUserIdFromNameIdentifier<TKey>();
         TKey GetUserIdFromSub<TKey>();
+        string  GetUserIp();
     }
 }

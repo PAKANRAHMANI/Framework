@@ -3,28 +3,27 @@ using Framework.Core;
 
 namespace Framework.AspNetCore
 {
-    public class HttpContextUserResolverAdapter : ICurrentUser
+    public class HttpContextUserResolverAdapter(IHttpContextAccessor httpContextAccessor) : ICurrentUser
     {
-        private readonly IHttpContextAccessor _httpContextAccessor;
-
-        public HttpContextUserResolverAdapter(IHttpContextAccessor httpContextAccessor)
-        {
-            _httpContextAccessor = httpContextAccessor;
-        }
         public ClaimsPrincipal Get()
         {
-            return _httpContextAccessor.HttpContext?.User;
+            return httpContextAccessor.HttpContext?.User;
         }
 
         public TKey GetUserIdFromNameIdentifier<TKey>()
         {
-           var sub = _httpContextAccessor.HttpContext?.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+           var sub = httpContextAccessor.HttpContext?.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
            return (TKey)Convert.ChangeType(sub, typeof(TKey));
         }
         public TKey GetUserIdFromSub<TKey>()
         {
-            var sub = _httpContextAccessor.HttpContext?.User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+            var sub = httpContextAccessor.HttpContext?.User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
             return (TKey)Convert.ChangeType(sub, typeof(TKey));
+        }
+
+        public string GetUserIp()
+        {
+            return httpContextAccessor.HttpContext.Request.Headers["X-Forwarded-For"];
         }
     }
 }
