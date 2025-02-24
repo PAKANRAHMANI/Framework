@@ -9,7 +9,7 @@ namespace Framework.EventProcessor.Operations;
 internal sealed class PublishEventToKafka(
     MessageProducer producer,
     ProducerConfiguration producerConfiguration,
-    Dictionary<Type, KafkaTopicKey> kafkaKeys,
+    Dictionary<Type, List<KafkaTopicKey>> kafkaKeys,
     ILogger logger) : IOperation<IEvent>
 {
     public async Task<IEvent> Apply(IEvent input)
@@ -20,10 +20,14 @@ internal sealed class PublishEventToKafka(
 
             if (kafkaKeys.TryGetValue(eventType, out var kafkaTopicKey))
             {
-                await producer.ProduceAsync(kafkaTopicKey, input);
+                foreach (var topicKey in kafkaTopicKey)
+                {
+                    await producer.ProduceAsync(topicKey, input);
+                }
             }
             else
-                await producer.ProduceAsync(new KafkaTopicKey { Key = producerConfiguration.TopicKey, Topic = producerConfiguration.TopicName }, input);
+                await producer.ProduceAsync(new KafkaTopicKey
+                { Key = producerConfiguration.TopicKey, Topic = producerConfiguration.TopicName }, input);
 
             return input;
         }

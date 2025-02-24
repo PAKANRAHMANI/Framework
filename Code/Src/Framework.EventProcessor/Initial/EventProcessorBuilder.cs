@@ -32,7 +32,7 @@ namespace Framework.EventProcessor.Initial
     {
         private readonly IServiceCollection _services;
         private readonly Dictionary<int, Type> _operations = new();
-        private Dictionary<Type, KafkaTopicKey> _kafkaKeys = new();
+        private Dictionary<Type, List<KafkaTopicKey>> _kafkaKeys = new();
         private int _operationPriority = 0;
         private List<Receiver> _observers = new();
         private readonly ILogger _logger;

@@ -1,6 +1,7 @@
 ﻿using System;
 using Framework.Config;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Framework.Redis;
 
@@ -17,13 +18,13 @@ public static class RedisCacheExtensions
             RedisCacheConfiguration = redisCacheConfiguration
         };
 
-        services.AddSingleton(cacheConfig);
+        services.TryAddSingleton(cacheConfig);
 
-        services.AddSingleton(redisCacheConfiguration);
+        services.TryAddSingleton(redisCacheConfiguration);
 
-		services.AddSingleton<IRedisDataBaseResolver, RedisDataBaseResolver>();
+		services.TryAddSingleton<IRedisDataBaseResolver, RedisDataBaseResolver>();
 
-		services.AddSingleton<IRedisCache, RedisCache>();
+		services.TryAddSingleton<IRedisCache, RedisCache>();
 
 		return services;
 	}
@@ -39,13 +40,13 @@ public static class RedisCacheExtensions
             RedisHashsetCacheConfiguration = redisCacheConfiguration
         };
 
-        services.AddSingleton(cacheConfig);
+        services.TryAddSingleton(cacheConfig);
 
-        services.AddSingleton(redisCacheConfiguration);
+        services.TryAddSingleton(redisCacheConfiguration);
 
-		services.AddSingleton<IRedisDataBaseResolver, RedisDataBaseResolver>();
+		services.TryAddSingleton<IRedisDataBaseResolver, RedisDataBaseResolver>();
 
-		services.AddSingleton<IRedisHashsetCache, RedisHashsetCache>();
+		services.TryAddSingleton<IRedisHashsetCache, RedisHashsetCache>();
 
 		return services;
 	}
