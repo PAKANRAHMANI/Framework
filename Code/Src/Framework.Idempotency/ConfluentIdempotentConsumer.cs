@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Framework.Idempotency;
 
-public abstract class KafkaMainIdempotentConsumer(
+public abstract class ConfluentIdempotentConsumer(
     IDuplicateMessageHandler duplicateMessageHandler,
     ISentryService sentryService,
     ILogger logger,

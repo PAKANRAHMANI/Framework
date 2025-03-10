@@ -116,6 +116,25 @@ namespace Framework.Kafka
             }, action);
         }
 
+        public void Produce(TKey key, TMessage message, string topicName, Action<DeliveryResult<TKey, TMessage>> action = null, string eventId = null, params KeyValuePair<string, string>[] headers)
+        {
+            var kafkaHeaders = new Headers();
+
+            foreach (var header in headers)
+            {
+                kafkaHeaders.Add(new Header(header.Key, Encoding.UTF8.GetBytes(header.Value)));
+            }
+
+            kafkaHeaders.Add(GetHeader(eventId));
+
+            _producer.Produce(topicName, new Message<TKey, TMessage>
+            {
+                Value = message,
+                Key = key,
+                Headers = kafkaHeaders
+            }, action);
+        }
+
         public void Produce(TKey key, TMessage message, int partitionNumber, Action<DeliveryResult<TKey, TMessage>> action, string eventId = null)
         {
             _producer.Produce(new TopicPartition(_configurations.TopicName, new Partition(partitionNumber)), new Message<TKey, TMessage>
@@ -168,5 +187,7 @@ namespace Framework.Kafka
                 ? new Header(kafkaHeaderKey, Encoding.UTF8.GetBytes(Guid.NewGuid().ToString()))
                 : new Header(kafkaHeaderKey, Encoding.UTF8.GetBytes(eventId));
         }
+
+        
     }
 }
