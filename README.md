@@ -1,11 +1,11 @@
-# Framework Project / پروژه فریمورک
+# مسی Project / پروژه مسی
 
 [English](#english) | [فارسی](#فارسی)
 
 ## English
 
 ### Overview
-This is a .NET-based framework project that includes a comprehensive build system and Azure pipeline integration. The project is structured to provide a robust development environment with automated builds and testing capabilities.
+This is a .NET-based framework project named "مسی" that includes a comprehensive build system and Azure pipeline integration. The project is structured to provide a robust development environment with automated builds and testing capabilities.
 
 ### Project Structure
 ```
@@ -53,7 +53,7 @@ The project includes Azure Pipeline configuration (`Framework-Azure-Pipeline.yam
 ## فارسی
 
 ### معرفی
-این یک پروژه فریمورک مبتنی بر .NET است که شامل سیستم ساخت جامع و یکپارچه‌سازی با Azure Pipeline می‌باشد. پروژه به گونه‌ای ساختار یافته است که یک محیط توسعه قوی با قابلیت‌های ساخت و تست خودکار را فراهم می‌کند.
+این یک پروژه فریمورک مبتنی بر .NET با نام "مسی" است که شامل سیستم ساخت جامع و یکپارچه‌سازی با Azure Pipeline می‌باشد. پروژه به گونه‌ای ساختار یافته است که یک محیط توسعه قوی با قابلیت‌های ساخت و تست خودکار را فراهم می‌کند.
 
 ### ساختار پروژه
 ```
